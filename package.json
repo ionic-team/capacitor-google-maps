@@ -22,7 +22,8 @@
     "typescript": "^5.4.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=8"
   },
   "dependencies": {},
   "workspaces": [

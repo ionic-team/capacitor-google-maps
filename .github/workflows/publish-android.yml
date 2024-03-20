@@ -17,27 +17,7 @@ on:
         required: true
       CAP_GH_RELEASE_TOKEN:
         required: true
-    inputs:
-      plugins:
-        description: 'Specify an optional subset of plugins to publish (space delimited)'
-        type: string
-        required: false
-        default: ''
-      capacitor-version:
-        description: 'Optional. Specify the version of Capacitor the plugins should depend on. Must be in mathematical notation, eg: [4.0,5.0) for 4.x versions only, or [4.0,) for 4.x versions and higher'
-        type: string
-        required: false
-        default: ''
   workflow_dispatch:
-    inputs:
-      plugins:
-        description: 'Specify an optional subset of plugins to publish (space delimited)'
-        required: false
-        default: ''
-      capacitor-version:
-        description: 'Optional. Specify the version of Capacitor the plugins should depend on. Must be in mathematical notation, eg: [4.0,5.0) for 4.x versions only, or [4.0,) for 4.x versions and higher'
-        required: false
-        default: ''
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -60,7 +40,6 @@ jobs:
     - name: Run publish script
       working-directory: ./scripts
       env:
-        GITHUB_PLUGINS: ${{ github.event.inputs.plugins }}
         GITHUB_CAPACITOR_VERSION: ${{ github.event.inputs.capacitor-version }}
         ANDROID_OSSRH_USERNAME: ${{ secrets.ANDROID_OSSRH_USERNAME }}
         ANDROID_OSSRH_PASSWORD: ${{ secrets.ANDROID_OSSRH_PASSWORD }}
