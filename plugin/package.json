@@ -1,0 +1,100 @@
+{
+  "name": "@capacitor/google-maps",
+  "version": "6.0.0-rc.0",
+  "description": "Google maps on Capacitor",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/typings/index.d.ts",
+  "typesVersions": {
+    "<4.1": {
+      "dist/typings/index.d.ts": [
+        "dist/typings/ts_old/index.d.ts"
+      ]
+    }
+  },
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Plugin/",
+    "CapacitorGoogleMaps.podspec"
+  ],
+  "author": "Ionic <hi@ionicframework.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionic-team/capacitor-google-maps.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/capacitor-google-maps/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native",
+    "google-maps"
+  ],
+  "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -sdk iphonesimulator && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
+    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "node-swiftlint",
+    "docgen": "docgen --api GoogleMapInterface --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js && npm run downlevel-dts",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "publish:cocoapod": "pod trunk push ./CapacitorGoogleMaps.podspec --allow-warnings",
+    "downlevel-dts": "npx downlevel-dts dist/typings dist/typings/ts_old --to=3.5",
+    "pack-local": "npm run build && npm pack && find . -name 'capacitor-google-maps-*tgz' -exec bash -c 'mv $0 capacitor-google-maps.tgz' {} \\; ",
+    "unittest:ios": "xcodebuild test -project ./unit-tests/ios/GoogleMapsPlugin/GoogleMapsPlugin.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2' | xcpretty && exit ${PIPESTATUS[0]}",
+    "unittest:android": "cd ./unit-tests/android && ./gradlew testDebugUnitTest"
+  },
+  "devDependencies": {
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
+    "@capacitor/docgen": "0.2.2",
+    "@capacitor/ios": "next",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^1.0.1",
+    "@types/resize-observer-browser": "^0.1.7",
+    "@types/supercluster": "^7.1.0",
+    "downlevel-dts": "^0.7.0",
+    "eslint-plugin-import": "^2.25.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^8.8.0",
+    "prettier": "^2.8.8",
+    "prettier-plugin-java": "~2.1.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.78.1",
+    "swiftlint": "^1.0.2",
+    "typescript": "^5.4.2"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "next"
+  },
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "~1.13.7",
+    "@googlemaps/markerclusterer": "~2.0.7",
+    "@types/google.maps": "~3.50.5"
+  }
+}

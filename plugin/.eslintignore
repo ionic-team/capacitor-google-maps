@@ -1,0 +1,7 @@
+build
+dist
+e2e-tests
+unit-tests
+android
+ios
+types

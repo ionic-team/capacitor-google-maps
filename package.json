@@ -1,0 +1,31 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "build": "lerna run build && yes | cp ./plugin/README.md ./README.md",
+    "lint": "pnpm lerna run lint",
+    "fmt": "pnpm lerna run fmt",
+    "publish:cocoapod": "lerna run publish:cocoapod --concurrency 1",
+    "ci:publish:nightly": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid nightly-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag nightly --no-push --yes",
+    "ci:publish:alpha": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid alpha --force-publish --dist-tag next --yes",
+    "ci:publish:beta": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid beta --force-publish --dist-tag next --yes",
+    "ci:publish:rc": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid rc --force-publish --dist-tag next --yes",
+    "ci:publish:latest": "lerna publish --conventional-commits --dist-tag latest-6 --no-verify-access --yes",
+    "ci:publish:latest-from-pre": "lerna publish --conventional-graduate --conventional-commits --dist-tag latest-6 --no-verify-access --force-publish --yes",
+    "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev --no-push --yes"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.25",
+    "husky": "^9.0.1",
+    "lerna": "^8.1.2",
+    "typescript": "^5.4.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "workspaces": [
+    "plugin"
+  ]
+}
