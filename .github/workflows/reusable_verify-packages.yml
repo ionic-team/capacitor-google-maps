@@ -1,0 +1,66 @@
+name: "Verify Packages"
+
+on: 
+  workflow_call:
+    secrets:
+      CAP_GH_RELEASE_TOKEN:
+        required: true
+
+jobs:
+
+  verify-ios:
+    runs-on: macos-14
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        xcode:
+        - /Applications/Xcode_15.0.app
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
+
+      - name: 'Setup Tools'
+        uses: ./.github/actions/setup-tools
+
+      - run: sudo xcode-select --switch ${{ matrix.xcode }}
+
+      - run: pnpm run verify:ios
+        working-directory: ./plugin
+
+  verify-android:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
+
+      - name: 'Setup Tools'
+        uses: ./.github/actions/setup-tools
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+      
+      - run: npm run verify:android
+        working-directory: ./plugin
+
+  verify-web:
+    runs-on: uubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
+
+      - name: 'Setup Tools'
+        uses: ./.github/actions/setup-tools
+      
+      - run: npm run verify:web
+        working-directory: ./plugin
