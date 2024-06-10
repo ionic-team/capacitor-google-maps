@@ -155,6 +155,58 @@ await newMap.destroy();
 
 ## Full Examples
 
+
+### Vue
+
+```vue
+<script lang="ts" setup>
+import { ref, shallowRef } from 'vue'
+import { GoogleMap } from '@capacitor/google-maps'
+
+const mapRef = ref<HTMLElement>()
+const newMap = shallowRef<GoogleMap>()
+
+async function createMap() {
+  if (!mapRef.value) return
+
+  newMap.value = await GoogleMap.create({
+    id: 'my-cool-map',
+    element: mapRef.value,
+    apiKey: import.meta.env.VITE_YOUR_API_KEY_HERE,
+    config: {
+      center: {
+        lat: 33.6,
+        lng: -117.9,
+      },
+      zoom: 8,
+    },
+  })
+}
+</script>
+
+<template>
+  <capacitor-google-map
+    ref="mapRef"
+    style="display: inline-block; width: 275px; height: 400px"
+  ></capacitor-google-map>
+  <button @click="createMap()">Create Map</button>
+</template>
+
+```
+
+make sure you need enable [recognize native custom elements](https://vuejs.org/guide/extras/web-components.html#using-custom-elements-in-vue) like 
+
+```ts
+// vite.config.mts > plugins
+Vue({
+  template: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag.startsWith('capacitor-')
+    },
+  },
+}),
+```
+
 ### Angular
 
 ```typescript
