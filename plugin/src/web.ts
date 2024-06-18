@@ -30,7 +30,7 @@ import type {
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
-  private gMapsRef: typeof google.maps | undefined = undefined;
+  private gMapsRef: google.maps.MapsLibrary | undefined = undefined;
   private maps: {
     [id: string]: {
       element: HTMLElement;
@@ -113,12 +113,10 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       const loader = new lib.Loader({
         apiKey: apiKey ?? '',
         version: 'weekly',
-        libraries: ['places'],
         language,
         region,
       });
-      const google = await loader.load();
-      this.gMapsRef = google.maps;
+      this.gMapsRef = await loader.importLibrary('maps');
       console.log('Loaded google maps API');
     }
   }
