@@ -2,8 +2,8 @@ import { WebPlugin } from '@capacitor/core';
 import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
 import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 
-import type { Marker } from './definitions';
-import { MapType, LatLngBounds } from './definitions';
+import type { LatLngBoundsInterface, LatLng, Marker } from './definitions';
+import { FeatureType, MapType, LatLngBounds } from './definitions';
 import type {
   AddMarkerArgs,
   CameraArgs,
@@ -27,6 +27,9 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  AddFeatureArgs,
+  GetFeatureBoundsArgs,
+  RemoveFeatureArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
@@ -380,6 +383,79 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       map.polylines[id].setMap(null);
       delete map.polylines[id];
     }
+  }
+
+  async addFeatures(args: AddFeatureArgs): Promise<{ ids: string[] }> {
+    const featureIds: string[] = [];
+    const map = this.maps[args.id];
+
+    if (args.type === FeatureType.GeoJSON) {
+      featureIds.push(
+        ...(map.map.data
+          .addGeoJson(args.data, args.idPropertyName ? { idPropertyName: args.idPropertyName } : null)
+          .map((f) => f.getId())
+          .filter((f) => f !== undefined)
+          .map((f) => f?.toString()) as string[])
+      );
+    } else {
+      const featureId = map.map.data.add(args.data).getId();
+      if (featureId) {
+        featureIds.push(featureId.toString());
+      }
+    }
+
+    if (args.styles) {
+      map.map.data.setStyle((feature) => {
+        const featureId = feature.getId();
+        return featureId ? (args.styles?.[featureId] as any) : null;
+      });
+    }
+
+    return {
+      ids: featureIds,
+    };
+  }
+
+  async getFeatureBounds(args: GetFeatureBoundsArgs): Promise<{ bounds: LatLngBounds }> {
+    if (!args.featureId) {
+      throw new Error('Feature id not set.');
+    }
+
+    const map = this.maps[args.id];
+    const feature = map.map.data.getFeatureById(args.featureId);
+
+    if (!feature) {
+      throw new Error(`Feature '${args.featureId}' could not be found.`);
+    }
+
+    const bounds = new google.maps.LatLngBounds();
+
+    feature?.getGeometry()?.forEachLatLng((latLng) => {
+      bounds.extend(latLng);
+    });
+
+    return {
+      bounds: new LatLngBounds({
+        southwest: bounds.getSouthWest().toJSON() as LatLng,
+        center: bounds.getCenter().toJSON() as LatLng,
+        northeast: bounds.getNorthEast().toJSON() as LatLng,
+      } as LatLngBoundsInterface),
+    };
+  }
+
+  async removeFeature(args: RemoveFeatureArgs): Promise<void> {
+    if (!args.featureId) {
+      throw new Error('Feature id not set.');
+    }
+
+    const map = this.maps[args.id];
+
+    const feature = map.map.data.getFeatureById(args.featureId);
+    if (!feature) {
+      throw new Error(`Feature '${args.featureId}' could not be found.`);
+    }
+
+    map.map.data.remove(feature);
   }
 
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
