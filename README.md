@@ -310,6 +310,9 @@ export default MyMap;
 * [`removeCircles(...)`](#removecircles)
 * [`addPolylines(...)`](#addpolylines)
 * [`removePolylines(...)`](#removepolylines)
+* [`addFeatures(...)`](#addfeatures)
+* [`getFeatureBounds(...)`](#getfeaturebounds)
+* [`removeFeature(...)`](#removefeature)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -319,6 +322,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`getMapBounds()`](#getmapbounds)
 * [`fitBounds(...)`](#fitbounds)
 * [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
@@ -541,6 +545,52 @@ removePolylines(ids: string[]) => Promise<void>
 --------------------
 
 
+### addFeatures(...)
+
+```typescript
+addFeatures(type: FeatureType, data: any, idPropertyName?: string | undefined, styles?: FeatureStyles | undefined) => Promise<string[]>
+```
+
+| Param                | Type                                                    |
+| -------------------- | ------------------------------------------------------- |
+| **`type`**           | <code><a href="#featuretype">FeatureType</a></code>     |
+| **`data`**           | <code>any</code>                                        |
+| **`idPropertyName`** | <code>string</code>                                     |
+| **`styles`**         | <code><a href="#featurestyles">FeatureStyles</a></code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### getFeatureBounds(...)
+
+```typescript
+getFeatureBounds(featureId: string) => Promise<LatLngBounds>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
+
+--------------------
+
+
+### removeFeature(...)
+
+```typescript
+removeFeature(featureId: string) => Promise<void>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
+
+--------------------
+
+
 ### destroy()
 
 ```typescript
@@ -650,6 +700,19 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### getMapBounds()
+
+```typescript
+getMapBounds() => Promise<LatLngBounds>
+```
+
+Get the map's current viewport latitude and longitude bounds.
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
 
 --------------------
 
@@ -1030,6 +1093,11 @@ Describes the style for some region of a polyline.
 | **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
 
 
+#### FeatureStyles
+
+Feature styles, identified by the feature id
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -1169,7 +1237,22 @@ but the current specification only allows X, Y, and (optionally) Z to be defined
 <code>number[]</code>
 
 
+#### Marker
+
+Supports markers of either either "legacy" or "advanced" types.
+
+<code>google.maps.<a href="#marker">Marker</a> | google.maps.marker.AdvancedMarkerElement</code>
+
+
 ### Enums
+
+
+#### FeatureType
+
+| Members       | Value                  | Description |
+| ------------- | ---------------------- | ----------- |
+| **`Default`** | <code>'Default'</code> | Default     |
+| **`GeoJSON`** | <code>'GeoJSON'</code> | GeoJSON     |
 
 
 #### MapType
