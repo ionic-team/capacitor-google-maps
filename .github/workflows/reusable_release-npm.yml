@@ -17,6 +17,10 @@ on:
       NPM_TOKEN:
         required: true
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   build:
     runs-on: 'ubuntu-22.04'
