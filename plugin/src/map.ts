@@ -58,6 +58,12 @@ export interface GoogleMapInterface {
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
   /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  getMapBounds(): Promise<LatLngBounds>;
+  /**
    * Sets the map viewport to contain the given bounds.
    * @param bounds The bounds to fit in the viewport.
    * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
