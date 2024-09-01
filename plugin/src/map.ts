@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
@@ -57,6 +58,12 @@ export interface GoogleMapInterface {
   enableAccessibilityElements(enabled: boolean): Promise<void>;
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
+  /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  getMapBounds(): Promise<LatLngBounds>;
   /**
    * Sets the map viewport to contain the given bounds.
    * @param bounds The bounds to fit in the viewport.

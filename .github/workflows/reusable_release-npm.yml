@@ -17,6 +17,10 @@ on:
       NPM_TOKEN:
         required: true
 
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   build:
     runs-on: 'ubuntu-22.04'
@@ -53,7 +57,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
-          pnpm run publish:dev
+          pnpm ci:publish:dev
       
       - name: 'RC Release'
         if: "!inputs.create-dev-release && inputs.create-rc-release"
@@ -62,7 +66,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
-          pnpm run publish:rc
+          pnpm run ci:publish:rc
       
       - name: 'Release from PreRelease'
         if: ${{ !inputs.create-dev-release && !inputs.create-rc-release && env.releasetype == 'prerelease' }}
@@ -71,7 +75,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
-          pnpm run publish:release-from-prerelease
+          pnpm run ci:publish:latest-from-pre
 
       - name: 'Release from Release'
         if: ${{ !inputs.create-dev-release && !inputs.create-rc-release && env.releasetype == 'release' }}
@@ -80,4 +84,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
-          pnpm run publish:latest
+          pnpm run ci:publish:latest
