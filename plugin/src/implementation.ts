@@ -135,6 +135,7 @@ export interface PaddingArgs {
 export interface CurrentLocArgs {
   id: string;
   enabled: boolean;
+  enableButton: boolean;
 }
 export interface AddMarkersArgs {
   id: string;

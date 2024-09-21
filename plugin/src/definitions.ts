@@ -458,6 +458,10 @@ export interface CircleClickCallbackData {
   tag?: string;
 }
 
+export interface EnableCurrentLocationOptions {
+  enableButton?: boolean;
+}
+
 export interface MyLocationButtonClickCallbackData {
   mapId: string;
 }
