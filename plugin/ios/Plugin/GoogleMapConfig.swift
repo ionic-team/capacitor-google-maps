@@ -8,6 +8,8 @@ public struct GoogleMapConfig: Codable {
     let y: Double
     let center: LatLng
     let zoom: Double
+    let minZoom: Float?
+    let maxZoom: Float?
     let styles: String?
     var mapId: String?
 
@@ -45,6 +47,8 @@ public struct GoogleMapConfig: Codable {
         self.x = x
         self.y = y
         self.zoom = zoom
+        self.minZoom = fromJSObject["minZoom"] as? Float
+        self.maxZoom = fromJSObject["maxZoom"] as? Float
         self.center = LatLng(lat: lat, lng: lng)
         if let stylesArray = fromJSObject["styles"] as? JSArray, let jsonData = try? JSONSerialization.data(withJSONObject: stylesArray, options: []) {
             self.styles = String(data: jsonData, encoding: .utf8)

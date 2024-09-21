@@ -122,6 +122,10 @@ public class Map {
                 self.mapViewController.GMapView.delegate = self.delegate
             }
 
+            let minZoom = self.config.minZoom ?? self.mapViewController.GMapView.minZoom
+            let maxZoom = self.config.maxZoom ?? self.mapViewController.GMapView.maxZoom
+            self.mapViewController.GMapView.setMinZoom(minZoom, maxZoom: maxZoom)
+
             if let styles = self.config.styles {
                 do {
                     self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
