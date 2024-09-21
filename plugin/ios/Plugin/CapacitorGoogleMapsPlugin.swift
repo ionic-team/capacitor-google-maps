@@ -686,8 +686,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             if enabled && checkLocationPermission() != "granted" {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
+            
+            let enableButton = call.getBool("enableButton") ?? false
 
-            try map.enableCurrentLocation(enabled: enabled)
+            try map.enableCurrentLocation(enabled: enabled, enableButton: enableButton)
 
             call.resolve()
         } catch {
