@@ -617,12 +617,13 @@ enableAccessibilityElements(enabled: boolean) => Promise<void>
 ### enableCurrentLocation(...)
 
 ```typescript
-enableCurrentLocation(enabled: boolean) => Promise<void>
+enableCurrentLocation(enabled: boolean, options: EnableCurrentLocationOptions) => Promise<void>
 ```
 
-| Param         | Type                 |
-| ------------- | -------------------- |
-| **`enabled`** | <code>boolean</code> |
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`enabled`** | <code>boolean</code>                                                                  |
+| **`options`** | <code><a href="#enablecurrentlocationoptions">EnableCurrentLocationOptions</a></code> |
 
 --------------------
 
@@ -1028,6 +1029,13 @@ Configuration properties for a Google Map Camera
 | **`angle`**             | <code>number</code>                       | The angle, in degrees, of the camera from the nadir (directly facing the Earth). The only allowed values are 0 and 45. | <code>0</code>     |
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
 | **`animationDuration`** | <code>number</code>                       | This configuration option is not being used.                                                                           |                    |
+
+
+#### EnableCurrentLocationOptions
+
+| Prop               | Type                 |
+| ------------------ | -------------------- |
+| **`enableButton`** | <code>boolean</code> |
 
 
 #### MapPadding
