@@ -1017,7 +1017,9 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val enabled =
                     call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
-            map.enableCurrentLocation(enabled) { err ->
+            val enableButton = call.getBoolean("enableButton") ?: false
+
+            map.enableCurrentLocation(enabled, enableButton) { err ->
                 if (err != null) {
                     throw err
                 }
