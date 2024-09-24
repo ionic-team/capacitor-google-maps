@@ -28,7 +28,7 @@ Version 6 of this plugin has a minimum deployment target of iOS 14.0. You will n
 platform :ios, '14.0'
 ```
 
-Additionally, you will need to open your project in XCode and in the `Build Settings` tab select `Targets` > `App` (or the name of your target) and set the `iOS Deployment Target` to `iOS 14` or higher.
+Additionally, you will need to open your project in XCode and in the `Build Settings` tab for your `Project` and for each `Target` set the `iOS Deployment Target` to `iOS 14` or higher.
 
 ### Typescript Configuration
 
