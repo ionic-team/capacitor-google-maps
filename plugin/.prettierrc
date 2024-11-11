@@ -1,5 +1,5 @@
 {
-  "plugins": ["./node_modules/prettier-plugin-java"],
+  "plugins": ["../node_modules/prettier-plugin-java"],
   "printWidth":120,
   "tabWidth":2,
   "useTabs":false,
