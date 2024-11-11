@@ -5,6 +5,7 @@ import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markercluste
 import type { Marker } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
+  AddTileOverlayArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -28,6 +29,44 @@ import type {
   AddPolylinesArgs,
   RemovePolylinesArgs,
 } from './implementation';
+
+class CoordMapType implements google.maps.MapType {
+  tileSize: google.maps.Size;
+  alt: string | null = null;
+  maxZoom = 17;
+  minZoom = 0;
+  name: string | null = null;
+  projection: google.maps.Projection | null = null;
+  radius = 6378137;
+
+  constructor(tileSize: google.maps.Size) {
+    this.tileSize = tileSize;
+  }
+  getTile(
+    coord: google.maps.Point,
+    zoom: number,
+    ownerDocument: Document
+  ): HTMLElement {
+    const div = ownerDocument.createElement('div');
+    const pElement = ownerDocument.createElement('p');
+    pElement.innerHTML = `x = ${coord.x}, y = ${coord.y}, zoom = ${zoom}`;
+    pElement.style.color = 'rgba(0, 0, 0, 0.5)';
+    pElement.style.padding = '0 20px';
+    div.appendChild(pElement);
+
+    div.style.width = this.tileSize.width + 'px';
+    div.style.height = this.tileSize.height + 'px';
+    div.style.fontSize = '10';
+    div.style.borderStyle = 'solid';
+    div.style.borderWidth = '1px';
+    div.style.borderColor = 'rgba(0, 0, 0, 0.5)';
+    return div;
+  }
+  releaseTile(): void {
+    // placeholder or not implemented?
+  }
+}
+
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
   private gMapsRef: typeof google.maps | undefined = undefined;
@@ -244,6 +283,47 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     const map = this.maps[_args.id].map;
     const bounds = this.getLatLngBounds(_args.bounds);
     map.fitBounds(bounds, _args.padding);
+  }
+
+  async addTileOverlay(_args: AddTileOverlayArgs): Promise<any> {
+    const map = this.maps[_args.id].map;
+
+    const tileSize = new google.maps.Size(256, 256); // Create a google.maps.Size instance
+    const coordMapType = new CoordMapType(tileSize);
+
+    // Create a TileOverlay object
+    const customMapOverlay = new google.maps.ImageMapType({
+      getTileUrl: function(coord, zoom) {
+        return _args.getTile(coord.x, coord.y, zoom);
+      },
+      tileSize: new google.maps.Size(256, 256),
+      opacity: _args?.opacity,
+      name: 'tileoverlay',
+    });
+
+    // Draw Tiles
+    map.overlayMapTypes.insertAt(0, coordMapType); // insert coordMapType at the first position
+
+    // Add the TileOverlay to the map
+    map.overlayMapTypes.push(customMapOverlay);
+
+    // Optionally, you can set debug mode if needed
+    if (_args?.debug) {
+      map.addListener('mousemove', function(event: any) {
+        console.log('Mouse Coordinates: ', event.latLng.toString());
+      });
+    }
+
+    // Set visibility based on the 'visible' property
+    if (!_args?.visible) {
+      map.overlayMapTypes.pop(); // Remove the last overlay (customMapOverlay) from the stack
+    }
+
+    // Set zIndex based on the 'zIndex' property
+    if (_args?.zIndex !== undefined) {
+      // Move the customMapOverlay to the specified index in the overlay stack
+      map.overlayMapTypes.setAt(map.overlayMapTypes.getLength() - 1, customMapOverlay);
+    }
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
