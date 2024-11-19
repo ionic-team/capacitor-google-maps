@@ -184,6 +184,31 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func addTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileObj = call.getObject("tile") else {
+                throw GoogleMapErrors.invalidArguments("tile object is missing")
+            }
+
+            // let marker = try Marker(fromJSObject: markerObj)
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let tileId = try map.addTileOverlay(tile: tileObj)
+
+            call.resolve(["id": String(tileId)])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {

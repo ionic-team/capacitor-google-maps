@@ -220,6 +220,26 @@ public class Map {
         }
     }
 
+    func addTileOverlay(tile: Tile) {
+        let floor = 1
+
+        // Implement GMSTileURLConstructor
+        // Returns a Tile based on the x,y,zoom coordinates, and the requested floor
+        let urls: GMSTileURLConstructor = { (x, y, zoom) in
+            // FIXME: this needs to be configurable
+            let url = "/\(floor)_\(zoom)_\(x)_\(y).png"
+            return URL(string: url)
+        }
+
+        // Create the GMSTileLayer
+        let layer = GMSURLTileLayer(urlConstructor: urls)
+
+        // Display on the map at a specific zIndex
+        // TODO: check if this should be configurable
+        layer.zIndex = 100
+        layer.map = mapView
+    }
+
     func addMarker(marker: Marker) throws -> Int {
         var markerHash = 0
 
