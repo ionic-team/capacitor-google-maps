@@ -300,6 +300,7 @@ export default MyMap;
 * [`disableTouch()`](#disabletouch)
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
+* [`addTileOverlay(...)`](#addtileoverlay)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
@@ -398,6 +399,19 @@ enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```typescript
 disableClustering() => Promise<void>
 ```
+
+--------------------
+
+
+### addTileOverlay(...)
+
+```typescript
+addTileOverlay(tiles: TileOverlay) => Promise<void>
+```
+
+| Param       | Type                                                |
+| ----------- | --------------------------------------------------- |
+| **`tiles`** | <code><a href="#tileoverlay">TileOverlay</a></code> |
 
 --------------------
 
@@ -947,6 +961,20 @@ An interface representing a pair of latitude and longitude coordinates.
 | Prop        | Type                |
 | ----------- | ------------------- |
 | **`mapId`** | <code>string</code> |
+
+
+#### TileOverlay
+
+For web, all the javascript <a href="#tileoverlay">TileOverlay</a> options are available as
+For iOS and Android only the config options declared on <a href="#tileoverlay">TileOverlay</a> are available.
+
+| Prop          | Type                                                           |
+| ------------- | -------------------------------------------------------------- |
+| **`getTile`** | <code>(x: number, y: number, zoom: number) =&gt; string</code> |
+| **`opacity`** | <code>number</code>                                            |
+| **`visible`** | <code>boolean</code>                                           |
+| **`zIndex`**  | <code>number</code>                                            |
+| **`debug`**   | <code>boolean</code>                                           |
 
 
 #### Marker
