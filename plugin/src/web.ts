@@ -42,11 +42,7 @@ class CoordMapType implements google.maps.MapType {
   constructor(tileSize: google.maps.Size) {
     this.tileSize = tileSize;
   }
-  getTile(
-    coord: google.maps.Point,
-    zoom: number,
-    ownerDocument: Document
-  ): HTMLElement {
+  getTile(coord: google.maps.Point, zoom: number, ownerDocument: Document): HTMLElement {
     const div = ownerDocument.createElement('div');
     const pElement = ownerDocument.createElement('p');
     pElement.innerHTML = `x = ${coord.x}, y = ${coord.y}, zoom = ${zoom}`;
@@ -66,7 +62,6 @@ class CoordMapType implements google.maps.MapType {
     // placeholder or not implemented?
   }
 }
-
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
   private gMapsRef: typeof google.maps | undefined = undefined;
@@ -293,7 +288,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
     // Create a TileOverlay object
     const customMapOverlay = new google.maps.ImageMapType({
-      getTileUrl: function(coord, zoom) {
+      getTileUrl: function (coord, zoom) {
         return _args.getTile(coord.x, coord.y, zoom);
       },
       tileSize: new google.maps.Size(256, 256),
@@ -309,7 +304,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
     // Optionally, you can set debug mode if needed
     if (_args?.debug) {
-      map.addListener('mousemove', function(event: any) {
+      map.addListener('mousemove', function (event: any) {
         console.log('Mouse Coordinates: ', event.latLng.toString());
       });
     }
