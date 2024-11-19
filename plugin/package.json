@@ -2,23 +2,23 @@
   "name": "@capacitor/google-maps",
   "version": "7.0.0-alpha.0",
   "description": "Google maps on Capacitor",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "typings": "dist/typings/index.d.ts",
+  "main": "plugin/dist/plugin.cjs.js",
+  "module": "plugin/dist/esm/index.js",
+  "typings": "plugin/dist/typings/index.d.ts",
   "typesVersions": {
     "<4.1": {
       "dist/typings/index.d.ts": [
-        "dist/typings/ts_old/index.d.ts"
+        "plugin/dist/typings/ts_old/index.d.ts"
       ]
     }
   },
-  "unpkg": "dist/plugin.js",
+  "unpkg": "plugin/dist/plugin.js",
   "files": [
-    "android/src/main/",
-    "android/build.gradle",
-    "dist/",
-    "ios/Plugin/",
-    "CapacitorGoogleMaps.podspec"
+    "plugin/android/src/main/",
+    "plugin/android/build.gradle",
+    "plugin/dist/",
+    "plugin/ios/Plugin/",
+    "plugin/CapacitorGoogleMaps.podspec"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
