@@ -1,0 +1,1896 @@
+{
+  "api": {
+    "name": "GoogleMapInterface",
+    "slug": "googlemapinterface",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "create",
+        "signature": "(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackData> | undefined) => Promise<GoogleMap>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "CreateMapArgs"
+          },
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MapReadyCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<GoogleMap>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "GoogleMap",
+          "CreateMapArgs",
+          "MapListenerCallback",
+          "MapReadyCallbackData"
+        ],
+        "slug": "create"
+      },
+      {
+        "name": "enableTouch",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enabletouch"
+      },
+      {
+        "name": "disableTouch",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disabletouch"
+      },
+      {
+        "name": "enableClustering",
+        "signature": "(minClusterSize?: number | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "minClusterSize",
+            "docs": "The minimum number of markers that can be clustered together. The default is 4 markers.",
+            "type": "number | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enableclustering"
+      },
+      {
+        "name": "disableClustering",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "disableclustering"
+      },
+      {
+        "name": "addTileOverlay",
+        "signature": "(tiles: TileOverlay) => Promise<void>",
+        "parameters": [
+          {
+            "name": "tiles",
+            "docs": "",
+            "type": "TileOverlay"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "TileOverlay"
+        ],
+        "slug": "addtileoverlay"
+      },
+      {
+        "name": "addMarker",
+        "signature": "(marker: Marker) => Promise<string>",
+        "parameters": [
+          {
+            "name": "marker",
+            "docs": "",
+            "type": "Marker"
+          }
+        ],
+        "returns": "Promise<string>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Marker"
+        ],
+        "slug": "addmarker"
+      },
+      {
+        "name": "addMarkers",
+        "signature": "(markers: Marker[]) => Promise<string[]>",
+        "parameters": [
+          {
+            "name": "markers",
+            "docs": "",
+            "type": "Marker[]"
+          }
+        ],
+        "returns": "Promise<string[]>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Marker"
+        ],
+        "slug": "addmarkers"
+      },
+      {
+        "name": "removeMarker",
+        "signature": "(id: string) => Promise<void>",
+        "parameters": [
+          {
+            "name": "id",
+            "docs": "",
+            "type": "string"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "removemarker"
+      },
+      {
+        "name": "removeMarkers",
+        "signature": "(ids: string[]) => Promise<void>",
+        "parameters": [
+          {
+            "name": "ids",
+            "docs": "",
+            "type": "string[]"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "removemarkers"
+      },
+      {
+        "name": "addPolygons",
+        "signature": "(polygons: Polygon[]) => Promise<string[]>",
+        "parameters": [
+          {
+            "name": "polygons",
+            "docs": "",
+            "type": "Polygon[]"
+          }
+        ],
+        "returns": "Promise<string[]>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Polygon"
+        ],
+        "slug": "addpolygons"
+      },
+      {
+        "name": "removePolygons",
+        "signature": "(ids: string[]) => Promise<void>",
+        "parameters": [
+          {
+            "name": "ids",
+            "docs": "",
+            "type": "string[]"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "removepolygons"
+      },
+      {
+        "name": "addCircles",
+        "signature": "(circles: Circle[]) => Promise<string[]>",
+        "parameters": [
+          {
+            "name": "circles",
+            "docs": "",
+            "type": "Circle[]"
+          }
+        ],
+        "returns": "Promise<string[]>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Circle"
+        ],
+        "slug": "addcircles"
+      },
+      {
+        "name": "removeCircles",
+        "signature": "(ids: string[]) => Promise<void>",
+        "parameters": [
+          {
+            "name": "ids",
+            "docs": "",
+            "type": "string[]"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "removecircles"
+      },
+      {
+        "name": "addPolylines",
+        "signature": "(polylines: Polyline[]) => Promise<string[]>",
+        "parameters": [
+          {
+            "name": "polylines",
+            "docs": "",
+            "type": "Polyline[]"
+          }
+        ],
+        "returns": "Promise<string[]>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "Polyline"
+        ],
+        "slug": "addpolylines"
+      },
+      {
+        "name": "removePolylines",
+        "signature": "(ids: string[]) => Promise<void>",
+        "parameters": [
+          {
+            "name": "ids",
+            "docs": "",
+            "type": "string[]"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "removepolylines"
+      },
+      {
+        "name": "destroy",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "destroy"
+      },
+      {
+        "name": "setCamera",
+        "signature": "(config: CameraConfig) => Promise<void>",
+        "parameters": [
+          {
+            "name": "config",
+            "docs": "",
+            "type": "CameraConfig"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "CameraConfig"
+        ],
+        "slug": "setcamera"
+      },
+      {
+        "name": "getMapType",
+        "signature": "() => Promise<MapType>",
+        "parameters": [],
+        "returns": "Promise<MapType>",
+        "tags": [],
+        "docs": "Get current map type",
+        "complexTypes": [
+          "MapType"
+        ],
+        "slug": "getmaptype"
+      },
+      {
+        "name": "setMapType",
+        "signature": "(mapType: MapType) => Promise<void>",
+        "parameters": [
+          {
+            "name": "mapType",
+            "docs": "",
+            "type": "MapType"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapType"
+        ],
+        "slug": "setmaptype"
+      },
+      {
+        "name": "enableIndoorMaps",
+        "signature": "(enabled: boolean) => Promise<void>",
+        "parameters": [
+          {
+            "name": "enabled",
+            "docs": "",
+            "type": "boolean"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enableindoormaps"
+      },
+      {
+        "name": "enableTrafficLayer",
+        "signature": "(enabled: boolean) => Promise<void>",
+        "parameters": [
+          {
+            "name": "enabled",
+            "docs": "",
+            "type": "boolean"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enabletrafficlayer"
+      },
+      {
+        "name": "enableAccessibilityElements",
+        "signature": "(enabled: boolean) => Promise<void>",
+        "parameters": [
+          {
+            "name": "enabled",
+            "docs": "",
+            "type": "boolean"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enableaccessibilityelements"
+      },
+      {
+        "name": "enableCurrentLocation",
+        "signature": "(enabled: boolean) => Promise<void>",
+        "parameters": [
+          {
+            "name": "enabled",
+            "docs": "",
+            "type": "boolean"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "enablecurrentlocation"
+      },
+      {
+        "name": "setPadding",
+        "signature": "(padding: MapPadding) => Promise<void>",
+        "parameters": [
+          {
+            "name": "padding",
+            "docs": "",
+            "type": "MapPadding"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapPadding"
+        ],
+        "slug": "setpadding"
+      },
+      {
+        "name": "getMapBounds",
+        "signature": "() => Promise<LatLngBounds>",
+        "parameters": [],
+        "returns": "Promise<LatLngBounds>",
+        "tags": [
+          {
+            "name": "returns"
+          }
+        ],
+        "docs": "Get the map's current viewport latitude and longitude bounds.",
+        "complexTypes": [
+          "LatLngBounds"
+        ],
+        "slug": "getmapbounds"
+      },
+      {
+        "name": "fitBounds",
+        "signature": "(bounds: LatLngBounds, padding?: number | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "bounds",
+            "docs": "The bounds to fit in the viewport.",
+            "type": "LatLngBounds"
+          },
+          {
+            "name": "padding",
+            "docs": "Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.",
+            "type": "number | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "bounds The bounds to fit in the viewport."
+          },
+          {
+            "name": "param",
+            "text": "padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed."
+          }
+        ],
+        "docs": "Sets the map viewport to contain the given bounds.",
+        "complexTypes": [
+          "LatLngBounds"
+        ],
+        "slug": "fitbounds"
+      },
+      {
+        "name": "setOnBoundsChangedListener",
+        "signature": "(callback?: MapListenerCallback<CameraIdleCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<CameraIdleCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "CameraIdleCallbackData"
+        ],
+        "slug": "setonboundschangedlistener"
+      },
+      {
+        "name": "setOnCameraIdleListener",
+        "signature": "(callback?: MapListenerCallback<CameraIdleCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<CameraIdleCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "CameraIdleCallbackData"
+        ],
+        "slug": "setoncameraidlelistener"
+      },
+      {
+        "name": "setOnCameraMoveStartedListener",
+        "signature": "(callback?: MapListenerCallback<CameraMoveStartedCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<CameraMoveStartedCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "CameraMoveStartedCallbackData"
+        ],
+        "slug": "setoncameramovestartedlistener"
+      },
+      {
+        "name": "setOnClusterClickListener",
+        "signature": "(callback?: MapListenerCallback<ClusterClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<ClusterClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "ClusterClickCallbackData"
+        ],
+        "slug": "setonclusterclicklistener"
+      },
+      {
+        "name": "setOnClusterInfoWindowClickListener",
+        "signature": "(callback?: MapListenerCallback<ClusterClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<ClusterClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "ClusterClickCallbackData"
+        ],
+        "slug": "setonclusterinfowindowclicklistener"
+      },
+      {
+        "name": "setOnInfoWindowClickListener",
+        "signature": "(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MarkerClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MarkerClickCallbackData"
+        ],
+        "slug": "setoninfowindowclicklistener"
+      },
+      {
+        "name": "setOnMapClickListener",
+        "signature": "(callback?: MapListenerCallback<MapClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MapClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MapClickCallbackData"
+        ],
+        "slug": "setonmapclicklistener"
+      },
+      {
+        "name": "setOnMarkerClickListener",
+        "signature": "(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MarkerClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MarkerClickCallbackData"
+        ],
+        "slug": "setonmarkerclicklistener"
+      },
+      {
+        "name": "setOnPolygonClickListener",
+        "signature": "(callback?: MapListenerCallback<PolygonClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<PolygonClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "PolygonClickCallbackData"
+        ],
+        "slug": "setonpolygonclicklistener"
+      },
+      {
+        "name": "setOnCircleClickListener",
+        "signature": "(callback?: MapListenerCallback<CircleClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<CircleClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "CircleClickCallbackData"
+        ],
+        "slug": "setoncircleclicklistener"
+      },
+      {
+        "name": "setOnPolylineClickListener",
+        "signature": "(callback?: MapListenerCallback<PolylineCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<PolylineCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "PolylineCallbackData"
+        ],
+        "slug": "setonpolylineclicklistener"
+      },
+      {
+        "name": "setOnMarkerDragStartListener",
+        "signature": "(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MarkerClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MarkerClickCallbackData"
+        ],
+        "slug": "setonmarkerdragstartlistener"
+      },
+      {
+        "name": "setOnMarkerDragListener",
+        "signature": "(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MarkerClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MarkerClickCallbackData"
+        ],
+        "slug": "setonmarkerdraglistener"
+      },
+      {
+        "name": "setOnMarkerDragEndListener",
+        "signature": "(callback?: MapListenerCallback<MarkerClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MarkerClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MarkerClickCallbackData"
+        ],
+        "slug": "setonmarkerdragendlistener"
+      },
+      {
+        "name": "setOnMyLocationButtonClickListener",
+        "signature": "(callback?: MapListenerCallback<MyLocationButtonClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MyLocationButtonClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MyLocationButtonClickCallbackData"
+        ],
+        "slug": "setonmylocationbuttonclicklistener"
+      },
+      {
+        "name": "setOnMyLocationClickListener",
+        "signature": "(callback?: MapListenerCallback<MapClickCallbackData> | undefined) => Promise<void>",
+        "parameters": [
+          {
+            "name": "callback",
+            "docs": "",
+            "type": "MapListenerCallback<MapClickCallbackData> | undefined"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "MapListenerCallback",
+          "MapClickCallbackData"
+        ],
+        "slug": "setonmylocationclicklistener"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "CreateMapArgs",
+      "slug": "createmapargs",
+      "docs": "An interface containing the options used when creating a map.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "A unique identifier for the map instance.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "apiKey",
+          "tags": [],
+          "docs": "The Google Maps SDK API Key.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "config",
+          "tags": [],
+          "docs": "The initial configuration settings for the map.",
+          "complexTypes": [
+            "GoogleMapConfig"
+          ],
+          "type": "GoogleMapConfig"
+        },
+        {
+          "name": "element",
+          "tags": [],
+          "docs": "The DOM element that the Google Map View will be mounted on which determines size and positioning.",
+          "complexTypes": [
+            "HTMLElement"
+          ],
+          "type": "HTMLElement"
+        },
+        {
+          "name": "forceCreate",
+          "tags": [
+            {
+              "text": "false",
+              "name": "default"
+            }
+          ],
+          "docs": "Destroy and re-create the map instance if a map with the supplied id already exists",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "region",
+          "tags": [],
+          "docs": "The region parameter alters your application to serve different map tiles or bias the application (such as biasing geocoding results towards the region).\n\nOnly available for web.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "language",
+          "tags": [],
+          "docs": "The language parameter affects the names of controls, copyright notices, driving directions, and control labels, as well as the responses to service requests.\n\nOnly available for web.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "GoogleMapConfig",
+      "slug": "googlemapconfig",
+      "docs": "For web, all the javascript Google Maps options are available as\nGoogleMapConfig extends google.maps.MapOptions.\nFor iOS and Android only the config options declared on GoogleMapConfig are available.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "Override width for native map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "height",
+          "tags": [],
+          "docs": "Override height for native map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "x",
+          "tags": [],
+          "docs": "Override absolute x coordinate position for native map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "y",
+          "tags": [],
+          "docs": "Override absolute y coordinate position for native map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "center",
+          "tags": [],
+          "docs": "Default location on the Earth towards which the camera points.",
+          "complexTypes": [
+            "LatLng"
+          ],
+          "type": "LatLng"
+        },
+        {
+          "name": "zoom",
+          "tags": [],
+          "docs": "Sets the zoom of the map.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "androidLiteMode",
+          "tags": [
+            {
+              "text": "false",
+              "name": "default"
+            }
+          ],
+          "docs": "Enables image-based lite mode on Android.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "devicePixelRatio",
+          "tags": [],
+          "docs": "Override pixel ratio for native map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "styles",
+          "tags": [
+            {
+              "text": "4.3.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Styles to apply to each of the default map types. Note that for\nsatellite, hybrid and terrain modes,\nthese styles will only apply to labels and geometry.",
+          "complexTypes": [
+            "google"
+          ],
+          "type": "MapTypeStyle[] | null | undefined"
+        },
+        {
+          "name": "mapId",
+          "tags": [
+            {
+              "text": "5.4.0",
+              "name": "since"
+            }
+          ],
+          "docs": "A map id associated with a specific map style or feature.\n\n[Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)\n\nOnly for Web.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "androidMapId",
+          "tags": [
+            {
+              "text": "5.4.0",
+              "name": "since"
+            }
+          ],
+          "docs": "A map id associated with a specific map style or feature.\n\n[Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)\n\nOnly for Android.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "iOSMapId",
+          "tags": [
+            {
+              "text": "5.4.0",
+              "name": "since"
+            }
+          ],
+          "docs": "A map id associated with a specific map style or feature.\n\n[Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)\n\nOnly for iOS.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "LatLng",
+      "slug": "latlng",
+      "docs": "An interface representing a pair of latitude and longitude coordinates.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "lat",
+          "tags": [],
+          "docs": "Coordinate latitude, in degrees. This value is in the range [-90, 90].",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "lng",
+          "tags": [],
+          "docs": "Coordinate longitude, in degrees. This value is in the range [-180, 180].",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "MapReadyCallbackData",
+      "slug": "mapreadycallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "TileOverlay",
+      "slug": "tileoverlay",
+      "docs": "For web, all the javascript TileOverlay options are available as\nFor iOS and Android only the config options declared on TileOverlay are available.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "getTile",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "(x: number, y: number, zoom: number) => string"
+        },
+        {
+          "name": "opacity",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "visible",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "zIndex",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "debug",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "Marker",
+      "slug": "marker",
+      "docs": "A marker is an icon placed at a particular point on the map's surface.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "coordinate",
+          "tags": [],
+          "docs": "Marker position",
+          "complexTypes": [
+            "LatLng"
+          ],
+          "type": "LatLng"
+        },
+        {
+          "name": "opacity",
+          "tags": [
+            {
+              "text": "1",
+              "name": "default"
+            }
+          ],
+          "docs": "Sets the opacity of the marker, between 0 (completely transparent) and 1 inclusive.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "title",
+          "tags": [],
+          "docs": "Title, a short description of the overlay.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "snippet",
+          "tags": [],
+          "docs": "Snippet text, shown beneath the title in the info window when selected.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "isFlat",
+          "tags": [
+            {
+              "text": "false",
+              "name": "default"
+            }
+          ],
+          "docs": "Controls whether this marker should be flat against the Earth's surface or a billboard facing the camera.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "iconUrl",
+          "tags": [
+            {
+              "text": "```typescript\n{\n...\n iconUrl: 'assets/icon/pin.png',\n ...\n}\n```",
+              "name": "usage"
+            },
+            {
+              "text": "4.2.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Path to a marker icon to render. It can be relative to the web app public directory,\nor a https url of a remote marker icon.\n\n**SVGs are not supported on native platforms.**",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "iconSize",
+          "tags": [
+            {
+              "text": "4.2.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Controls the scaled size of the marker image set in `iconUrl`.",
+          "complexTypes": [
+            "Size"
+          ],
+          "type": "Size"
+        },
+        {
+          "name": "iconOrigin",
+          "tags": [
+            {
+              "text": "4.2.0",
+              "name": "since"
+            }
+          ],
+          "docs": "The position of the image within a sprite, if any. By default, the origin is located at the top left corner of the image .",
+          "complexTypes": [
+            "Point"
+          ],
+          "type": "Point"
+        },
+        {
+          "name": "iconAnchor",
+          "tags": [
+            {
+              "text": "4.2.0",
+              "name": "since"
+            }
+          ],
+          "docs": "The position at which to anchor an image in correspondence to the location of the marker on the map. By default, the anchor is located along the center point of the bottom of the image.",
+          "complexTypes": [
+            "Point"
+          ],
+          "type": "Point"
+        },
+        {
+          "name": "tintColor",
+          "tags": [
+            {
+              "text": "4.2.0",
+              "name": "since"
+            }
+          ],
+          "docs": "Customizes the color of the default marker image.  Each value must be between 0 and 255.\n\nOnly for iOS and Android.",
+          "complexTypes": [],
+          "type": "{ r: number; g: number; b: number; a: number; } | undefined"
+        },
+        {
+          "name": "draggable",
+          "tags": [
+            {
+              "text": "false",
+              "name": "default"
+            }
+          ],
+          "docs": "Controls whether this marker can be dragged interactively",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "zIndex",
+          "tags": [
+            {
+              "text": "0",
+              "name": "default"
+            }
+          ],
+          "docs": "Specifies the stack order of this marker, relative to other markers on the map.\nA marker with a high z-index is drawn on top of markers with lower z-indexes",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "Size",
+      "slug": "size",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "width",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "height",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "Point",
+      "slug": "point",
+      "docs": "Point geometry object.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.2",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "Specifies the type of GeoJSON object.",
+          "complexTypes": [],
+          "type": "'Point'"
+        },
+        {
+          "name": "coordinates",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Position"
+          ],
+          "type": "Position"
+        }
+      ]
+    },
+    {
+      "name": "Polygon",
+      "slug": "polygon",
+      "docs": "Polygon geometry object.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.6",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "Specifies the type of GeoJSON object.",
+          "complexTypes": [],
+          "type": "'Polygon'"
+        },
+        {
+          "name": "coordinates",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Position"
+          ],
+          "type": "Position[][]"
+        }
+      ]
+    },
+    {
+      "name": "Circle",
+      "slug": "circle",
+      "docs": "For web, all the javascript Circle options are available as\nPolygon extends google.maps.CircleOptions.\nFor iOS and Android only the config options declared on Circle are available.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "fillColor",
+          "tags": [],
+          "docs": "The fill color. All CSS3 colors are supported except for extended named\ncolors.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "fillOpacity",
+          "tags": [],
+          "docs": "The fill opacity between 0.0 and 1.0.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "strokeColor",
+          "tags": [],
+          "docs": "The stroke color. All CSS3 colors are supported except for extended named\ncolors.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "strokeWeight",
+          "tags": [],
+          "docs": "The stroke width in pixels.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "geodesic",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "clickable",
+          "tags": [],
+          "docs": "Indicates whether this <code>Circle</code> handles mouse events.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "title",
+          "tags": [],
+          "docs": "Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text.\n\nOnly available on iOS.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "tag",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "Polyline",
+      "slug": "polyline",
+      "docs": "For web, all the javascript Polyline options are available as\nPolyline extends google.maps.PolylineOptions.\nFor iOS and Android only the config options declared on Polyline are available.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "strokeColor",
+          "tags": [],
+          "docs": "The stroke color. All CSS3 colors are supported except for extended named\ncolors.",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "strokeOpacity",
+          "tags": [],
+          "docs": "The stroke opacity between 0.0 and 1.0.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "strokeWeight",
+          "tags": [],
+          "docs": "The stroke width in pixels.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "geodesic",
+          "tags": [],
+          "docs": "When <code>true</code>, edges of the polygon are interpreted as geodesic\nand will follow the curvature of the Earth. When <code>false</code>,\nedges of the polygon are rendered as straight lines in screen space. Note\nthat the shape of a geodesic polygon may appear to change when dragged,\nas the dimensions are maintained relative to the surface of the earth.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "clickable",
+          "tags": [],
+          "docs": "Indicates whether this <code>Polyline</code> handles mouse events.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "tag",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "styleSpans",
+          "tags": [],
+          "docs": "Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of StyleSpan objects.\nSetting the spans property is the preferred way to change the color of a polyline.\n\nOnly on iOS and Android.",
+          "complexTypes": [
+            "StyleSpan"
+          ],
+          "type": "StyleSpan[] | undefined"
+        }
+      ]
+    },
+    {
+      "name": "StyleSpan",
+      "slug": "stylespan",
+      "docs": "Describes the style for some region of a polyline.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "color",
+          "tags": [],
+          "docs": "The stroke color. All CSS3 colors are supported except for extended named colors.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "segments",
+          "tags": [],
+          "docs": "The length of this span in number of segments.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "CameraConfig",
+      "slug": "cameraconfig",
+      "docs": "Configuration properties for a Google Map Camera",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "coordinate",
+          "tags": [],
+          "docs": "Location on the Earth towards which the camera points.",
+          "complexTypes": [
+            "LatLng"
+          ],
+          "type": "LatLng"
+        },
+        {
+          "name": "zoom",
+          "tags": [],
+          "docs": "Sets the zoom of the map.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "bearing",
+          "tags": [
+            {
+              "text": "0",
+              "name": "default"
+            }
+          ],
+          "docs": "Bearing of the camera, in degrees clockwise from true north.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "angle",
+          "tags": [
+            {
+              "text": "0",
+              "name": "default"
+            }
+          ],
+          "docs": "The angle, in degrees, of the camera from the nadir (directly facing the Earth).\n\nThe only allowed values are 0 and 45.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "animate",
+          "tags": [
+            {
+              "text": "false",
+              "name": "default"
+            }
+          ],
+          "docs": "Animate the transition to the new Camera properties.",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "animationDuration",
+          "tags": [],
+          "docs": "This configuration option is not being used.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        }
+      ]
+    },
+    {
+      "name": "MapPadding",
+      "slug": "mappadding",
+      "docs": "Controls for setting padding on the 'visible' region of the view.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "top",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "left",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "right",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "bottom",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "CameraIdleCallbackData",
+      "slug": "cameraidlecallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "bounds",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "LatLngBounds"
+          ],
+          "type": "LatLngBounds"
+        },
+        {
+          "name": "bearing",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "latitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "longitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "tilt",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "zoom",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "CameraMoveStartedCallbackData",
+      "slug": "cameramovestartedcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "isGesture",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "ClusterClickCallbackData",
+      "slug": "clusterclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "latitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "longitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "size",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "items",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "MarkerCallbackData"
+          ],
+          "type": "MarkerCallbackData[]"
+        }
+      ]
+    },
+    {
+      "name": "MarkerCallbackData",
+      "slug": "markercallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "markerId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "latitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "longitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "title",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "snippet",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "MarkerClickCallbackData",
+      "slug": "markerclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "MapClickCallbackData",
+      "slug": "mapclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "latitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "longitude",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "PolygonClickCallbackData",
+      "slug": "polygonclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "polygonId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "tag",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "CircleClickCallbackData",
+      "slug": "circleclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "circleId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "tag",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PolylineCallbackData",
+      "slug": "polylinecallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "polylineId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "tag",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "MyLocationButtonClickCallbackData",
+      "slug": "mylocationbuttonclickcallbackdata",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "mapId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "MapType",
+      "slug": "maptype",
+      "members": [
+        {
+          "name": "Normal",
+          "value": "'Normal'",
+          "tags": [],
+          "docs": "Basic map."
+        },
+        {
+          "name": "Hybrid",
+          "value": "'Hybrid'",
+          "tags": [],
+          "docs": "Satellite imagery with roads and labels."
+        },
+        {
+          "name": "Satellite",
+          "value": "'Satellite'",
+          "tags": [],
+          "docs": "Satellite imagery with no labels."
+        },
+        {
+          "name": "Terrain",
+          "value": "'Terrain'",
+          "tags": [],
+          "docs": "Topographic data."
+        },
+        {
+          "name": "None",
+          "value": "'None'",
+          "tags": [],
+          "docs": "No base map tiles."
+        }
+      ]
+    }
+  ],
+  "typeAliases": [
+    {
+      "name": "MapListenerCallback",
+      "slug": "maplistenercallback",
+      "docs": "The callback function to be called when map events are emitted.",
+      "types": [
+        {
+          "text": "(data: T): void",
+          "complexTypes": [
+            "T"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Position",
+      "slug": "position",
+      "docs": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
+      "types": [
+        {
+          "text": "number[]",
+          "complexTypes": []
+        }
+      ]
+    }
+  ],
+  "pluginConfigs": []
+}
