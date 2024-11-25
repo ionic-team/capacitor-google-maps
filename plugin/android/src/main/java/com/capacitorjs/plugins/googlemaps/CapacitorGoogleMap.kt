@@ -20,7 +20,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
 import java.net.URL
-
+import java.net.HttpURLConnection
 
 class CapacitorGoogleMap(
         val id: String,
