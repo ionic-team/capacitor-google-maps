@@ -13,6 +13,8 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var center: LatLng = LatLng(0.0, 0.0)
     var googleMapOptions: GoogleMapOptions? = null
     var zoom: Int = 0
+    var minZoom: Float? = null
+    var maxZoom: Float? = null
     var liteMode: Boolean = false
     var devicePixelRatio: Float = 1.00f
     var styles: String? = null
@@ -77,6 +79,13 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         y = fromJSONObject.getInt("y")
         zoom = fromJSONObject.getInt("zoom")
 
+        if (fromJSONObject.has("minZoom")) {
+            minZoom = fromJSONObject.getDouble("minZoom").toFloat()
+        }
+        if (fromJSONObject.has("maxZoom")) {
+            maxZoom = fromJSONObject.getDouble("maxZoom").toFloat()
+        }
+
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
         center = LatLng(lat, lng)
@@ -90,6 +99,14 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
         if (mapId != null) {
             googleMapOptions?.mapId(mapId!!)
+        }
+
+        if (minZoom != null) {
+            googleMapOptions?.minZoomPreference(fromJSONObject.getDouble("minZoom").toFloat())
+        }
+        
+        if (maxZoom != null) {
+            googleMapOptions?.maxZoomPreference(fromJSONObject.getDouble("maxZoom").toFloat())
         }
     }
 }
