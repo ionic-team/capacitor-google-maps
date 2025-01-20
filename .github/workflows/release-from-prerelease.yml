@@ -21,7 +21,7 @@ jobs:
 
       - name: "NPM Identity"
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" >> ~/.npmrc
           npm whoami
           
       - name: "Git Config"
@@ -31,7 +31,7 @@ jobs:
 
       - name: Version & Publish
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
           pnpm run ci:publish:latest-from-pre
