@@ -210,6 +210,87 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
         }
     }
 
+    private val getTileCallbackRegistry = HashMap<String, GetTileCallback>()
+
+    @PluginMethod
+    fun getTileCallbackResponse(call: PluginCall) {
+        try {
+            val callbackId = call.getString("callbackId")
+            callbackId ?: throw InvalidArgumentsError("callbackId is invalid or missing")
+
+            if (!getTileCallbackRegistry.containsKey(callbackId)) {
+                throw InvalidArgumentsError("callbackId does not match an existing callback in the registry")
+            }
+
+            getTileCallbackRegistry[callbackId]!!(call.getString("result"))
+
+            call.resolve()
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun addTileOverlay(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val tileOverlayObj = call.getObject("tileOverlay", null)
+            tileOverlayObj ?: throw InvalidArgumentsError("tileOverlay object is missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val tileOverlay = CapacitorGoogleMapTileOverlay(tileOverlayObj)
+            map.addTileOverlay(tileOverlay, { x, y, zoom, handler ->
+                getTileCallbackRegistry[tileOverlay.getTileCallbackId] = handler
+                val eventData = JSObject()
+                eventData.put("callbackId", tileOverlay.getTileCallbackId)
+                eventData.put("x", x)
+                eventData.put("y", y)
+                eventData.put("zoom", zoom)
+                notifyListeners("getTileCallback", eventData)
+            }) { result ->
+                val tileOverlayId = result.getOrThrow()
+
+                val res = JSObject()
+                res.put("id", tileOverlayId)
+                call.resolve(res)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeTileOverlay(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val tileOverlayId = call.getString("tileOverlayId")
+            tileOverlayId ?: throw InvalidArgumentsError("tileOverlayId is invalid or missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.removeTileOverlay(tileOverlayId) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
     @PluginMethod
     fun addMarker(call: PluginCall) {
         try {

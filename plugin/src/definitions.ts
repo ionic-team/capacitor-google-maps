@@ -296,6 +296,54 @@ export interface MapPadding {
   bottom: number;
 }
 
+export type GetTileCallback = (x: number, y: number, zoom: number) => string | undefined;
+
+/**
+ * A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
+ */
+export interface TileOverlay {
+  /**
+   * A callback function that returns the tile url. Available on iOS, Android and Web
+   *
+   * @type {GetTileCallback}
+   */
+  getTile: GetTileCallback;
+
+  /**
+   * The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web
+   *
+   * @type {number | undefined}
+   * @default undefined
+   */
+  opacity?: number;
+
+  /**
+   * Controls whether this tile overlay should be visible. Available only on Android
+   *
+   * @type {boolean | undefined}
+   * @default undefined
+   */
+  visible?: boolean;
+
+  /**
+   * The zIndex of the tile overlay. Available on iOS and Android
+   *
+   * @type {number | undefined}
+   * @default undefined
+   */
+  zIndex?: number;
+}
+
+/**
+ * @ignore
+ */
+export interface NativeTileOverlay {
+  getTileCallbackId: string;
+  opacity?: number;
+  visible?: boolean;
+  zIndex?: number;
+}
+
 /**
  * A marker is an icon placed at a particular point on the map's surface.
  */

@@ -4,7 +4,7 @@ import org.json.JSONObject
 import kotlin.Exception
 
 enum class GoogleMapErrors {
-    UNHANDLED_ERROR, INVALID_MAP_ID, MAP_NOT_FOUND, MARKER_NOT_FOUND, INVALID_ARGUMENTS, PERMISSIONS_DENIED_LOCATION, GOOGLE_MAP_NOT_AVAILABLE, BOUNDS_NOT_FOUND
+    UNHANDLED_ERROR, INVALID_MAP_ID, MAP_NOT_FOUND, MARKER_NOT_FOUND, TILE_OVERLAY_NOT_FOUND, INVALID_ARGUMENTS, PERMISSIONS_DENIED_LOCATION, GOOGLE_MAP_NOT_AVAILABLE, BOUNDS_NOT_FOUND
 }
 
 class GoogleMapErrorObject(val code: Int, val message: String, val extra: HashMap<String,Any> = HashMap()) {
@@ -77,6 +77,12 @@ class MapNotFoundError(message: String? = ""): GoogleMapsError(message) {
 class MarkerNotFoundError(message: String? = ""): GoogleMapsError(message) {
     override fun getErrorCode(): Int {
         return GoogleMapErrors.MARKER_NOT_FOUND.ordinal
+    }
+}
+
+class TileOverlayNotFoundError(message: String? = ""): GoogleMapsError(message) {
+    override fun getErrorCode(): Int {
+        return GoogleMapErrors.TILE_OVERLAY_NOT_FOUND.ordinal
     }
 }
 
