@@ -75,6 +75,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var tileOverlays = [Int: GMSURLTileLayer]()
     var polygons = [Int: GMSPolygon]()
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
@@ -209,6 +210,51 @@ public class Map {
             if let target = self.targetViewController, let itemIndex = WKWebView.disabledTargets.firstIndex(of: target) {
                 WKWebView.disabledTargets.remove(at: itemIndex)
             }
+        }
+    }
+
+    func addTileOverlay(
+        tileOverlay: TileOverlay,
+        getTile: @escaping (Int, Int, Int, @escaping (String) -> Void) -> Void
+    ) throws -> Int {
+        var tileOverlayHash = 0
+
+        DispatchQueue.main.async {
+            let urlConstructor: GMSTileURLConstructor = { x, y, zoom in
+                let semaphore = DispatchSemaphore(value: 0)
+                var resultURL: URL?
+
+                getTile(Int(x), Int(y), Int(zoom)) { result in
+                    resultURL = URL(string: result)
+                    semaphore.signal()
+                }
+
+                _ = semaphore.wait(timeout: .now() + 5)
+
+                return resultURL
+            }
+            let layer = GMSURLTileLayer(urlConstructor: urlConstructor)
+            layer.opacity = tileOverlay.opacity ?? 1
+            layer.zIndex = tileOverlay.zIndex
+            layer.map = self.mapViewController.GMapView
+
+            self.tileOverlays[layer.hash.hashValue] = layer
+
+            tileOverlayHash = layer.hash.hashValue
+        }
+
+        return tileOverlayHash
+    }
+
+    func removeTileOverlay(id: Int) throws {
+        if let tileOverlay = self.tileOverlays[id] {
+            DispatchQueue.main.async {
+                tileOverlay.map = nil
+                self.tileOverlays.removeValue(forKey: id)
+
+            }
+        } else {
+            throw GoogleMapErrors.tileOverlayNotFound
         }
     }
 

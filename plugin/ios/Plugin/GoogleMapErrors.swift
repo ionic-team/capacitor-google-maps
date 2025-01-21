@@ -4,6 +4,7 @@ public enum GoogleMapErrors: Error {
     case invalidMapId
     case mapNotFound
     case markerNotFound
+    case tileOverlayNotFound
     case invalidArguments(_ description: String)
     case invalidAPIKey
     case permissionsDeniedLocation
