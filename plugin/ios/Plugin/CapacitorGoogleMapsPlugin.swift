@@ -183,6 +183,84 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    private var getTileCallbackRegistry: [String: GetTileCallback] = [:]
+
+    @objc func getTileCallbackResponse(_ call: CAPPluginCall) {
+        do {
+            guard let callbackId = call.getString("callbackId") else {
+                throw GoogleMapErrors.invalidArguments("callbackId is missing")
+            }
+
+            guard getTileCallbackRegistry.keys.contains(where: { $0 == callbackId }) else {
+                throw GoogleMapErrors.invalidArguments("callbackId does not match an existing callback in the registry")
+            }
+
+            getTileCallbackRegistry[callbackId]?(call.getString("result"))
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func addTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayObj = call.getObject("tileOverlay") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlay object is missing")
+            }
+
+            let tileOverlay = try TileOverlay(fromJSObject: tileOverlayObj)
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let tileOverlayId = try map.addTileOverlay(tileOverlay: tileOverlay) { [weak self] x, y, zoom, handler in
+                guard let self else { return }
+
+                getTileCallbackRegistry[tileOverlay.getTileCallbackId] = handler
+                notifyListeners("getTileCallback", data: [
+                    "callbackId": tileOverlay.getTileCallbackId,
+                    "x": x, "y": y, "zoom": zoom
+                ])
+            }
+
+            call.resolve(["id": String(tileOverlayId)])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayIdString = call.getString("tileOverlayId") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let tileOverlayId = Int(tileOverlayIdString) else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeTileOverlay(id: tileOverlayId)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
