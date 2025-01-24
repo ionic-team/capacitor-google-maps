@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
-import type {
+import {
   CameraConfig,
   Marker,
   MapPadding,
@@ -19,6 +19,7 @@ import type {
   CircleClickCallbackData,
   Polyline,
   PolylineCallbackData,
+  EnableCurrentLocationOptions,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -55,7 +56,7 @@ export interface GoogleMapInterface {
   enableIndoorMaps(enabled: boolean): Promise<void>;
   enableTrafficLayer(enabled: boolean): Promise<void>;
   enableAccessibilityElements(enabled: boolean): Promise<void>;
-  enableCurrentLocation(enabled: boolean): Promise<void>;
+  enableCurrentLocation(enabled: boolean, options: EnableCurrentLocationOptions): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
   /**
    * Get the map's current viewport latitude and longitude bounds.
@@ -532,12 +533,14 @@ export class GoogleMap {
    * Set whether the My Location dot and accuracy circle is enabled.
    *
    * @param enabled
+   * @param options
    * @returns
    */
-  async enableCurrentLocation(enabled: boolean): Promise<void> {
+  async enableCurrentLocation(enabled: boolean, options: EnableCurrentLocationOptions = {}): Promise<void> {
     return CapacitorGoogleMaps.enableCurrentLocation({
       id: this.id,
       enabled,
+      enableButton: options.enableButton ?? false,
     });
   }
 
