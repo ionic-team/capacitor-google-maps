@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
-import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
+import { DefaultRenderer, MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 
 import type { Marker } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
@@ -382,7 +382,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     }
   }
 
-  async enableClustering(_args: EnableClusteringArgs): Promise<void> {
+  async enableClustering(_args: EnableClusteringArgs, _renderer = new DefaultRenderer): Promise<void> {
     const markers: google.maps.Marker[] = [];
 
     for (const id in this.maps[_args.id].markers) {
@@ -396,6 +396,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
         minPoints: _args.minClusterSize ?? 4,
       }),
       onClusterClick: this.onClusterClickHandler,
+      renderer: _renderer,
     });
   }
 
