@@ -21,15 +21,6 @@ The Google Maps SDK supports the use of showing the users current location via `
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
-### Minimum Deployment Target
-
-Version 6 of this plugin has a minimum deployment target of iOS 14.0. You will need to edit `ios/App/Podfile` and change the following line from 13.0 to 14.0:
-```
-platform :ios, '14.0'
-```
-
-Additionally, you will need to open your project in XCode and in the `Build Settings` tab for your `Project` and for each `Target` set the `iOS Deployment Target` to `iOS 14.0` or higher.
-
 ### Typescript Configuration
 
 Your project will also need have `skipLibCheck` set to `true` in `tsconfig.json`.
@@ -319,6 +310,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`getMapBounds()`](#getmapbounds)
 * [`fitBounds(...)`](#fitbounds)
 * [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
@@ -650,6 +642,19 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### getMapBounds()
+
+```typescript
+getMapBounds() => Promise<LatLngBounds>
+```
+
+Get the map's current viewport latitude and longitude bounds.
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
 
 --------------------
 
