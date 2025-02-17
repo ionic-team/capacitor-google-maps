@@ -2,9 +2,10 @@ import { WebPlugin } from '@capacitor/core';
 import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
 import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 
-import type { Marker } from './definitions';
+import type { Marker, TileOverlay } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
+  _AddTileOverlayArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -27,6 +28,8 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  GetTileCallbackResponse,
+  RemoveTileOverlayArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
@@ -37,6 +40,9 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       map: google.maps.Map;
       markers: {
         [id: string]: google.maps.Marker;
+      };
+      tileOverlays: {
+        [id: string]: google.maps.ImageMapType;
       };
       polygons: {
         [id: string]: google.maps.Polygon;
@@ -52,6 +58,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     };
   } = {};
   private currMarkerId = 0;
+  private currTileOverlayId = 0;
   private currPolygonId = 0;
   private currCircleId = 0;
   private currPolylineId = 0;
@@ -246,6 +253,47 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     map.fitBounds(bounds, _args.padding);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  async getTileCallbackResponse(_args: GetTileCallbackResponse): Promise<void> {}
+
+  async addTileOverlay(_args: _AddTileOverlayArgs): Promise<{ id: string }> {
+    const tileOverlay = _args.tileOverlay as TileOverlay;
+
+    if (tileOverlay.getTile === undefined) {
+      throw new Error('getTile is required');
+    }
+
+    const map = this.maps[_args.id].map;
+
+    const id = '' + this.currTileOverlayId;
+
+    const customMapOverlay = new google.maps.ImageMapType({
+      getTileUrl: function (coord, zoom) {
+        return tileOverlay.getTile(coord.x, coord.y, zoom) ?? null;
+      },
+      tileSize: new google.maps.Size(256, 256),
+      opacity: tileOverlay.opacity,
+    });
+
+    this.maps[_args.id].tileOverlays[id] = customMapOverlay;
+
+    map.overlayMapTypes.push(customMapOverlay);
+
+    this.currTileOverlayId++;
+
+    return { id: id };
+  }
+
+  async removeTileOverlay(_args: RemoveTileOverlayArgs): Promise<void> {
+    const map = this.maps[_args.id].map;
+    for (let i = 0; i < map.overlayMapTypes.getLength(); i++) {
+      if (map.overlayMapTypes.getAt(i) === this.maps[_args.id].tileOverlays[_args.tileOverlayId]) {
+        map.overlayMapTypes.removeAt(i);
+      }
+    }
+    delete this.maps[_args.id].tileOverlays[_args.tileOverlayId];
+  }
+
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     const markerIds: string[] = [];
     const map = this.maps[_args.id];
@@ -424,6 +472,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       map: new window.google.maps.Map(_args.element, { ..._args.config }),
       element: _args.element,
       markers: {},
+      tileOverlays: {},
       polygons: {},
       circles: {},
       polylines: {},

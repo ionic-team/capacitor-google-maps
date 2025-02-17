@@ -300,6 +300,8 @@ export default MyMap;
 * [`disableTouch()`](#disabletouch)
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
+* [`addTileOverlay(...)`](#addtileoverlay)
+* [`removeTileOverlay(...)`](#removetileoverlay)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
@@ -319,6 +321,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`getMapBounds()`](#getmapbounds)
 * [`fitBounds(...)`](#fitbounds)
 * [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
@@ -397,6 +400,34 @@ enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```typescript
 disableClustering() => Promise<void>
 ```
+
+--------------------
+
+
+### addTileOverlay(...)
+
+```typescript
+addTileOverlay(tileOverlay: TileOverlay) => Promise<{ id: string; }>
+```
+
+| Param             | Type                                                |
+| ----------------- | --------------------------------------------------- |
+| **`tileOverlay`** | <code><a href="#tileoverlay">TileOverlay</a></code> |
+
+**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+
+--------------------
+
+
+### removeTileOverlay(...)
+
+```typescript
+removeTileOverlay(id: string) => Promise<void>
+```
+
+| Param    | Type                |
+| -------- | ------------------- |
+| **`id`** | <code>string</code> |
 
 --------------------
 
@@ -650,6 +681,19 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### getMapBounds()
+
+```typescript
+getMapBounds() => Promise<LatLngBounds>
+```
+
+Get the map's current viewport latitude and longitude bounds.
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
 
 --------------------
 
@@ -935,6 +979,18 @@ An interface representing a pair of latitude and longitude coordinates.
 | **`mapId`** | <code>string</code> |
 
 
+#### TileOverlay
+
+A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
+
+| Prop          | Type                                                        | Description                                                                                                            | Default                |
+| ------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **`getTile`** | <code><a href="#gettilecallback">GetTileCallback</a></code> | A callback function that returns the tile url. Available on iOS, Android and Web                                       |                        |
+| **`opacity`** | <code>number</code>                                         | The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web | <code>undefined</code> |
+| **`visible`** | <code>boolean</code>                                        | Controls whether this tile overlay should be visible. Available only on Android                                        | <code>undefined</code> |
+| **`zIndex`**  | <code>number</code>                                         | The zIndex of the tile overlay. Available on iOS and Android                                                           | <code>undefined</code> |
+
+
 #### Marker
 
 A marker is an icon placed at a particular point on the map's surface.
@@ -1156,6 +1212,11 @@ Controls for setting padding on the 'visible' region of the view.
 The callback function to be called when map events are emitted.
 
 <code>(data: T): void</code>
+
+
+#### GetTileCallback
+
+<code>(x: number, y: number, zoom: number): string</code>
 
 
 #### Position
