@@ -125,12 +125,14 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       });
       const google = await loader.load();
       this.gMapsRef = google.maps;
-      
+
       // Import marker library once
-      const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary('marker') as google.maps.MarkerLibrary;
+      const { AdvancedMarkerElement, PinElement } = (await google.maps.importLibrary(
+        'marker'
+      )) as google.maps.MarkerLibrary;
       this.AdvancedMarkerElement = AdvancedMarkerElement;
       this.PinElement = PinElement;
-      
+
       console.log('Loaded google maps API');
     }
   }
@@ -416,7 +418,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     const mapInstance = this.maps[_args.id];
     if (mapInstance.markerClusterer) {
       const markers = Object.values(mapInstance.markers);
-      
+
       mapInstance.markerClusterer.setMap(null);
       mapInstance.markerClusterer = undefined;
 
@@ -531,7 +533,11 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     });
   }
 
-  async setMarkerListeners(mapId: string, markerId: string, marker: google.maps.marker.AdvancedMarkerElement): Promise<void> {
+  async setMarkerListeners(
+    mapId: string,
+    markerId: string,
+    marker: google.maps.marker.AdvancedMarkerElement
+  ): Promise<void> {
     marker.addListener('click', () => {
       const position = marker.position as google.maps.LatLngLiteral;
       this.notifyListeners('onMarkerClick', {
@@ -638,7 +644,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     }
 
     let content: HTMLElement | undefined = undefined;
-    
+
     if (marker.iconUrl) {
       const img = document.createElement('img');
       img.src = marker.iconUrl;
@@ -651,7 +657,9 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       const pinOptions: google.maps.marker.PinElementOptions = {
         scale: marker.opacity ?? 1,
         glyph: marker.title,
-        background: marker.tintColor ? `rgb(${marker.tintColor.r}, ${marker.tintColor.g}, ${marker.tintColor.b})` : undefined,
+        background: marker.tintColor
+          ? `rgb(${marker.tintColor.r}, ${marker.tintColor.g}, ${marker.tintColor.b})`
+          : undefined,
       };
 
       const pin = new this.PinElement(pinOptions);
