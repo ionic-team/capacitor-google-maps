@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import com.getcapacitor.Bridge
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
+import com.google.android.gms.common.util.Base64Utils
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.*
@@ -786,6 +787,9 @@ class CapacitorGoogleMap(
                     var stream: InputStream? = null
                     if (marker.iconUrl!!.startsWith("https:")) {
                         stream = URL(marker.iconUrl).openConnection().getInputStream()
+                    } else if (marker.iconUrl!!.startsWith("data:image/")) {// png, jpeg ...
+                        val decoded = Base64Utils.decode(marker.iconUrl!!.substring(marker.iconUrl!!.indexOf(",") + 1))
+                        stream = decoded.inputStream()
                     } else {
                         stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
                     }
