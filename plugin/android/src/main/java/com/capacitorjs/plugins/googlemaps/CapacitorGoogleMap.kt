@@ -18,9 +18,16 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.TimeoutException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
+typealias GetTileCallback = (String?) -> Unit
 
 class CapacitorGoogleMap(
         val id: String,
@@ -43,6 +50,7 @@ class CapacitorGoogleMap(
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
+    private val tileOverlays = HashMap<String, CapacitorGoogleMapTileOverlay>()
     private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
     private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
     private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()        
@@ -170,6 +178,73 @@ class CapacitorGoogleMap(
                     }
 
             job.join()
+        }
+    }
+
+    fun addTileOverlay(
+        tileOverlay: CapacitorGoogleMapTileOverlay,
+        getTile: (x: Int, y: Int, zoom: Int, callback: GetTileCallback) -> Unit,
+        callback: (Result<String>) -> Unit
+    ) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val tileProvider = object : UrlTileProvider(256, 256) {
+                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+                        suspend fun getTileSuspend(): String? {
+                            return withTimeoutOrNull(5000L) {
+                                suspendCoroutine { continuation ->
+                                    getTile(x, y, zoom) { continuation.resume(it) }
+                                }
+                            } ?: throw TimeoutException("getTile $id timed out")
+                        }
+
+                        return try {
+                            runBlocking { URL(getTileSuspend() ?: "") }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }
+                var tileOverlayOptions = TileOverlayOptions().tileProvider(tileProvider)
+                if (tileOverlay.zIndex != null) {
+                    tileOverlayOptions.zIndex(tileOverlay.zIndex!!)
+                }
+                if (tileOverlay.visible != null) {
+                    tileOverlayOptions.visible(tileOverlay.visible!!)
+                }
+                if (tileOverlay.opacity != null) {
+                    tileOverlayOptions.transparency(tileOverlay.opacity!!)
+                }
+
+                val googleMapTileOverlay = googleMap?.addTileOverlay(tileOverlayOptions)
+
+                tileOverlay.googleMapTileOverlay = googleMapTileOverlay
+                tileOverlays[googleMapTileOverlay!!.id] = tileOverlay
+
+                callback(Result.success(googleMapTileOverlay.id))
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
+    fun removeTileOverlay(id: String, callback: (error: GoogleMapsError?) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+
+            val tileOverlay = tileOverlays[id]
+            tileOverlay ?: throw TileOverlayNotFoundError()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                tileOverlay.googleMapTileOverlay?.remove()
+                tileOverlays.remove(id)
+
+                callback(null)
+            }
+        } catch (e: GoogleMapsError) {
+            callback(e)
         }
     }
 
