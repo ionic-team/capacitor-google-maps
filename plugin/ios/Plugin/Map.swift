@@ -133,6 +133,33 @@ public class Map {
                 }
             }
 
+            let minZoom = self.config.minZoom.map { Float($0) } ?? self.mapViewController.GMapView.minZoom
+            let maxZoom = self.config.maxZoom.map { Float($0) } ?? self.mapViewController.GMapView.maxZoom
+            self.mapViewController.GMapView.setMinZoom(minZoom, maxZoom: maxZoom)
+
+            if let mapTypeId = self.config.mapTypeId {
+                switch mapTypeId {
+                case "hybrid":
+                    self.mapViewController.GMapView.mapType = .hybrid
+                case "roadmap":
+                    self.mapViewController.GMapView.mapType = .normal
+                case "satellite":
+                    self.mapViewController.GMapView.mapType = .satellite
+                case "terrain":
+                    self.mapViewController.GMapView.mapType = .terrain
+                default:
+                    break
+                }
+            }
+
+            if let restriction = self.config.restriction {
+                self.mapViewController.GMapView.cameraTargetBounds = restriction.latLngBounds
+            }
+
+            if let heading = self.config.heading {
+                self.mapViewController.GMapView.animate(toBearing: heading)
+            }
+
             self.delegate.notifyListeners("onMapReady", data: [
                 "mapId": self.id
             ])
