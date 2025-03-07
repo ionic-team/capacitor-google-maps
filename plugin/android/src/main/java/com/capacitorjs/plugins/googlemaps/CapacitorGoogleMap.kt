@@ -113,6 +113,38 @@ class CapacitorGoogleMap(
                 if (config.styles != null) {
                     googleMap?.setMapStyle(MapStyleOptions(config.styles!!))
                 }
+
+                if (config.maxZoom != null) {
+                    googleMap?.setMaxZoomPreference(config.maxZoom!!.toFloat())
+                }
+
+                if (config.minZoom != null) {
+                    googleMap?.setMinZoomPreference((config.minZoom!!.toFloat()))
+                }
+
+                if (config.mapTypeId != null) {
+                    when (config.mapTypeId!!) {
+                        "hybrid" -> googleMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
+                        "roadmap" -> googleMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+                        "satellite" -> googleMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                        "terrain" -> googleMap?.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                    }
+                }
+
+                if (config.restriction != null) {
+                    googleMap?.setLatLngBoundsForCameraTarget(config.restriction!!.latLngBounds)
+                }
+
+                if (config.heading != null) {
+                    googleMap?.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.Builder(googleMap!!.cameraPosition)
+                                .bearing(config.heading!!.toFloat())
+                                .build()
+                        )
+                    )
+
+                }
             }
         }
     }
