@@ -170,8 +170,6 @@ export class GoogleMap {
     }
 
     if (Capacitor.isNativePlatform()) {
-      (options.element as any) = {};
-
       const getMapBounds = () => {
         const mapRect = newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
         return {
@@ -217,21 +215,22 @@ export class GoogleMap {
       };
       newMap.resizeObserver = new ResizeObserver(() => {
         if (newMap.element != null) {
-          const mapRect = newMap.element.getBoundingClientRect();
+          const { width, height } = newMap.element.getBoundingClientRect();
 
-          const isHidden = mapRect.width === 0 && mapRect.height === 0;
+          const isHidden = width === 0 && height === 0;
           if (!isHidden) {
             if (lastState.isHidden) {
               if (Capacitor.getPlatform() === 'ios' && !ionicPage) {
                 onDisplay();
               }
-            } else if (lastState.width !== mapRect.width || lastState.height !== mapRect.height) {
+            } else if (lastState.width !== width || lastState.height !== height) {
               onResize();
             }
+            onResize();
           }
 
-          lastState.width = mapRect.width;
-          lastState.height = mapRect.height;
+          lastState.width = width;
+          lastState.height = height;
           lastState.isHidden = isHidden;
         }
       });

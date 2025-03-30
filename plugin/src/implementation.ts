@@ -206,6 +206,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
 
 const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>('CapacitorGoogleMaps', {
   web: () => import('./web').then((m) => new m.CapacitorGoogleMapsWeb()),
+  android: () => import('./android').then((m) => new m.CapacitorGoogleMapsAndroid()),
 });
 
 CapacitorGoogleMaps.addListener('isMapInFocus', (data) => {
