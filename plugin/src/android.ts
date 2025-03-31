@@ -244,25 +244,24 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
   async enableCurrentLocation(_args: CurrentLocArgs): Promise<void> {
     if (_args.enabled) {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position: GeolocationPosition) => {
-            const pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            };
+        navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
 
-            this.maps[_args.id].map.setCenter(pos);
+          this.maps[_args.id].map.setCenter(pos);
 
-            this.notifyListeners('onMyLocationButtonClick', {});
+          this.notifyListeners('onMyLocationButtonClick', {});
 
-            this.notifyListeners('onMyLocationClick', {});
-          },
-        );
+          this.notifyListeners('onMyLocationClick', {});
+        });
       } else {
         throw new Error('Geolocation not supported on android.');
       }
     }
   }
+
   async setPadding(_args: PaddingArgs): Promise<void> {
     const bounds = this.maps[_args.id].map.getBounds();
 
@@ -476,11 +475,11 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
         console.error(`Map with ID ${_args.id} not found.`);
         return;
       }
-  
+
       const { x, y, width, height } = _args.mapBounds;
-  
+
       const bounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(y, x), 
+        new google.maps.LatLng(y, x),
         new google.maps.LatLng(y + height, x + width)
       );
 
@@ -489,7 +488,6 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
       console.error('Error updating map bounds:', error);
     }
   }
-  
 
   async onResize(_args: MapBoundsArgs): Promise<void> {
     try {
@@ -498,7 +496,7 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
         console.error(`Map with ID ${_args.id} not found.`);
         return;
       }
-  
+
       google.maps.event.trigger(mapInstance, 'resize');
 
       this.onScroll(_args);
@@ -506,7 +504,6 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
       console.error('Error resizing map:', error);
     }
   }
-  
 
   async onDisplay(_args: MapBoundsArgs): Promise<void> {
     try {
@@ -515,7 +512,7 @@ export class CapacitorGoogleMapsAndroid extends WebPlugin implements CapacitorGo
         console.error(`Map with ID ${_args.id} not found.`);
         return;
       }
-  
+
       google.maps.event.trigger(mapInstance, 'resize');
 
       this.onScroll(_args);
