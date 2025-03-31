@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Capacitor } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 
@@ -226,7 +227,6 @@ export class GoogleMap {
             } else if (lastState.width !== width || lastState.height !== height) {
               onResize();
             }
-            onResize();
           }
 
           lastState.width = width;
