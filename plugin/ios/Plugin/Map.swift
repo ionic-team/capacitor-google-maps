@@ -455,9 +455,10 @@ public class Map {
         }
     }
 
-    func enableCurrentLocation(enabled: Bool) throws {
+    func enableCurrentLocation(enabled: Bool, showButton: Bool) throws {
         DispatchQueue.main.sync {
             self.mapViewController.GMapView.isMyLocationEnabled = enabled
+            self.mapViewController.GMapView.settings.myLocationButton = showButton
         }
     }
 
