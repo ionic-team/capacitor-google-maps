@@ -319,6 +319,7 @@ export default MyMap;
 * [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
 * [`enableCurrentLocation(...)`](#enablecurrentlocation)
 * [`setPadding(...)`](#setpadding)
+* [`getMapBounds()`](#getmapbounds)
 * [`fitBounds(...)`](#fitbounds)
 * [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
 * [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
@@ -650,6 +651,19 @@ setPadding(padding: MapPadding) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
+
+--------------------
+
+
+### getMapBounds()
+
+```typescript
+getMapBounds() => Promise<LatLngBounds>
+```
+
+Get the map's current viewport latitude and longitude bounds.
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
 
 --------------------
 
@@ -1166,7 +1180,26 @@ Array should contain between two and three elements.
 The previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),
 but the current specification only allows X, Y, and (optionally) Z to be defined.
 
+Note: the type will not be narrowed down to `[number, number] | [number, number, number]` due to
+marginal benefits and the large impact of breaking change.
+
+See previous discussions on the type narrowing:
+- {@link https://github.com/DefinitelyTyped/DefinitelyTyped/pull/21590|Nov 2017}
+- {@link https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/67773|Dec 2023}
+- {@link https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/71441| Dec 2024}
+
+One can use a
+{@link https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates|user-defined type guard that returns a type predicate}
+to determine if a position is a 2D or 3D position.
+
 <code>number[]</code>
+
+
+#### Marker
+
+Supports markers of either either "legacy" or "advanced" types.
+
+<code>google.maps.<a href="#marker">Marker</a> | google.maps.marker.AdvancedMarkerElement</code>
 
 
 ### Enums
