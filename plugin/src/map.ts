@@ -19,6 +19,7 @@ import type {
   CircleClickCallbackData,
   Polyline,
   PolylineCallbackData,
+  GoogleMapConfig,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -26,6 +27,8 @@ import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
   create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackData>): Promise<GoogleMap>;
+  update(config: GoogleMapConfig): Promise<void>;
+  getOptions(): GoogleMapConfig | null;
   enableTouch(): Promise<void>;
   disableTouch(): Promise<void>;
   enableClustering(
@@ -49,13 +52,32 @@ export interface GoogleMapInterface {
   setCamera(config: CameraConfig): Promise<void>;
   /**
    * Get current map type
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    */
   getMapType(): Promise<MapType>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   setMapType(mapType: MapType): Promise<void>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   enableIndoorMaps(enabled: boolean): Promise<void>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   enableTrafficLayer(enabled: boolean): Promise<void>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   enableAccessibilityElements(enabled: boolean): Promise<void>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   enableCurrentLocation(enabled: boolean): Promise<void>;
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   setPadding(padding: MapPadding): Promise<void>;
   /**
    * Get the map's current viewport latitude and longitude bounds.
@@ -113,6 +135,7 @@ export class GoogleMap {
   private id: string;
   private element: HTMLElement | null = null;
   private resizeObserver: ResizeObserver | null = null;
+  private config: GoogleMapConfig | null = null;
 
   private onBoundsChangedListener?: PluginListenerHandle;
   private onCameraIdleListener?: PluginListenerHandle;
@@ -146,6 +169,7 @@ export class GoogleMap {
     callback?: MapListenerCallback<MapReadyCallbackData>
   ): Promise<GoogleMap> {
     const newMap = new GoogleMap(options.id);
+    newMap.config = options.config;
 
     if (!options.element) {
       throw new Error('container element is required');
@@ -283,6 +307,34 @@ export class GoogleMap {
         resolve(elementBounds);
       }
     });
+  }
+
+  /**
+   * Update map options
+   *
+   * @returns void
+   */
+  async update(config: GoogleMapConfig): Promise<void> {
+    Object.assign(this.config as any, config);
+
+    // Convert restriction latLngBounds to LatLngBoundsLiteral if its in LatLngBounds format
+    if (config.restriction?.latLngBounds && (config.restriction.latLngBounds as any)?.toJSON) {
+      config.restriction.latLngBounds = (config.restriction.latLngBounds as google.maps.LatLngBounds).toJSON();
+    }
+
+    return CapacitorGoogleMaps.update({
+      id: this.id,
+      config,
+    });
+  }
+
+  /**
+   * Get map options
+   *
+   * @returns void
+   */
+  getOptions(): GoogleMapConfig | null {
+    return this.config;
   }
 
   /**
@@ -469,52 +521,64 @@ export class GoogleMap {
     });
   }
 
+  /**
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
+   */
   async getMapType(): Promise<MapType> {
-    const { type } = await CapacitorGoogleMaps.getMapType({ id: this.id });
-    return MapType[type as keyof typeof MapType];
+    return Promise.resolve(MapType[this.getOptions()?.mapTypeId as keyof typeof MapType]);
   }
 
   /**
    * Sets the type of map tiles that should be displayed.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * @param mapType
    * @returns
    */
   async setMapType(mapType: MapType): Promise<void> {
-    return CapacitorGoogleMaps.setMapType({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      mapType,
+      config: {
+        mapTypeId: mapType,
+      },
     });
   }
 
   /**
    * Sets whether indoor maps are shown, where available.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * @param enabled
    * @returns
    */
   async enableIndoorMaps(enabled: boolean): Promise<void> {
-    return CapacitorGoogleMaps.enableIndoorMaps({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      enabled,
+      config: {
+        isIndoorMapsEnabled: enabled,
+      },
     });
   }
 
   /**
    * Controls whether the map is drawing traffic data, if available.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * @param enabled
    * @returns
    */
   async enableTrafficLayer(enabled: boolean): Promise<void> {
-    return CapacitorGoogleMaps.enableTrafficLayer({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      enabled,
+      config: {
+        isTrafficLayerEnabled: enabled,
+      },
     });
   }
 
   /**
    * Show accessibility elements for overlay objects, such as Marker and Polyline.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * Only available on iOS.
    *
@@ -522,35 +586,43 @@ export class GoogleMap {
    * @returns
    */
   async enableAccessibilityElements(enabled: boolean): Promise<void> {
-    return CapacitorGoogleMaps.enableAccessibilityElements({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      enabled,
+      config: {
+        isAccessibilityElementsEnabled: enabled,
+      },
     });
   }
 
   /**
    * Set whether the My Location dot and accuracy circle is enabled.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * @param enabled
    * @returns
    */
   async enableCurrentLocation(enabled: boolean): Promise<void> {
-    return CapacitorGoogleMaps.enableCurrentLocation({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      enabled,
+      config: {
+        isMyLocationEnabled: enabled,
+      },
     });
   }
 
   /**
    * Set padding on the 'visible' region of the view.
+   * @deprecated This method will be removed in v7. Use {@link #update()} instead.
    *
    * @param padding
    * @returns
    */
   async setPadding(padding: MapPadding): Promise<void> {
-    return CapacitorGoogleMaps.setPadding({
+    return CapacitorGoogleMaps.update({
       id: this.id,
-      padding,
+      config: {
+        padding,
+      },
     });
   }
 
