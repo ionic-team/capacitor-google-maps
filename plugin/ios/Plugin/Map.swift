@@ -8,8 +8,6 @@ public struct LatLng: Codable {
     let lng: Double
 }
 
-typealias GetTileCallback = (String?) -> Void
-
 class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
@@ -242,27 +240,16 @@ public class Map {
         }
     }
 
-    func addTileOverlay(
-        tileOverlay: TileOverlay,
-        getTile: @escaping (Int, Int, Int, @escaping GetTileCallback) -> Void
-    ) throws -> Int {
+    func addTileOverlay(tileOverlay: TileOverlay) throws -> Int {
         var tileOverlayHash = 0
 
         DispatchQueue.main.async {
             let urlConstructor: GMSTileURLConstructor = { x, y, zoom in
-                let semaphore = DispatchSemaphore(value: 0)
-                var resultURL: URL?
-
-                getTile(Int(x), Int(y), Int(zoom)) { result in
-                    if let result {
-                        resultURL = URL(string: result)
-                    }
-                    semaphore.signal()
-                }
-
-                _ = semaphore.wait(timeout: .now() + 5)
-
-                return resultURL
+                URL(string: tileOverlay.url
+                        .replacingOccurrences(of: "{x}", with: "\(x)")
+                        .replacingOccurrences(of: "{y}", with: "\(y)")
+                        .replacingOccurrences(of: "{z}", with: "\(zoom)")
+                )
             }
             let layer = GMSURLTileLayer(urlConstructor: urlConstructor)
             layer.opacity = tileOverlay.opacity ?? 1

@@ -1,17 +1,15 @@
 import type { Plugin } from '@capacitor/core';
-import { Capacitor, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
 
 import type {
   CameraConfig,
   Circle,
-  GetTileCallback,
   GoogleMapConfig,
   LatLng,
   LatLngBounds,
   MapPadding,
   MapType,
   Marker,
-  NativeTileOverlay,
   Polygon,
   Polyline,
   TileOverlay,
@@ -120,11 +118,6 @@ export interface IndoorMapArgs {
   enabled: boolean;
 }
 
-export interface GetTileCallbackResponse {
-  callbackId: string;
-  result: string | undefined;
-}
-
 export interface RemoveTileOverlayArgs {
   id: string;
   tileOverlayId: string;
@@ -133,11 +126,6 @@ export interface RemoveTileOverlayArgs {
 export interface AddTileOverlayArgs {
   id: string;
   tileOverlay: TileOverlay;
-}
-
-export interface _AddTileOverlayArgs {
-  id: string;
-  tileOverlay: TileOverlay | NativeTileOverlay;
 }
 
 export interface TrafficLayerArgs {
@@ -196,8 +184,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   enableTouch(args: { id: string }): Promise<void>;
   disableTouch(args: { id: string }): Promise<void>;
-  getTileCallbackResponse(args: GetTileCallbackResponse): Promise<void>;
-  addTileOverlay(args: _AddTileOverlayArgs): Promise<{ id: string }>;
+  addTileOverlay(args: AddTileOverlayArgs): Promise<{ id: string }>;
   removeTileOverlay(args: RemoveTileOverlayArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
@@ -245,42 +232,4 @@ CapacitorGoogleMaps.addListener('isMapInFocus', (data) => {
   CapacitorGoogleMaps.dispatchMapEvent({ id: data.mapId, focus: mapInFocus });
 });
 
-const getTileCallbackRegistry: Record<string, GetTileCallback> = {};
-
-CapacitorGoogleMaps.addListener(
-  'getTileCallback',
-  (data: { callbackId: string; x: number; y: number; zoom: number }) => {
-    const { callbackId, x, y, zoom } = data;
-
-    if (getTileCallbackRegistry[callbackId]) {
-      const result = getTileCallbackRegistry[callbackId](x, y, zoom);
-      CapacitorGoogleMaps.getTileCallbackResponse({ callbackId, result }).catch((error) =>
-        console.error(`Failed to send getTile callback response: ${error}`)
-      );
-    } else {
-      console.error(`Callback with id ${callbackId} does not exist in the registry`);
-    }
-  }
-);
-
-const addTileOverlay = async (args: AddTileOverlayArgs): Promise<{ id: string }> => {
-  const callbackId = `callback-${Date.now()}-${Math.random()}`;
-  getTileCallbackRegistry[callbackId] = args.tileOverlay.getTile;
-
-  const nativePlatform = Capacitor.getPlatform() === 'android' || Capacitor.getPlatform() === 'ios';
-  if (nativePlatform) {
-    const { tileOverlay, ...argsRest } = args;
-    const tileOverlayRest = Object.fromEntries(Object.entries(tileOverlay).filter(([key]) => key !== 'getTile'));
-    return await CapacitorGoogleMaps.addTileOverlay({
-      ...argsRest,
-      tileOverlay: {
-        ...tileOverlayRest,
-        getTileCallbackId: callbackId,
-      },
-    });
-  } else {
-    return await CapacitorGoogleMaps.addTileOverlay(args);
-  }
-};
-
-export { CapacitorGoogleMaps, addTileOverlay };
+export { CapacitorGoogleMaps };

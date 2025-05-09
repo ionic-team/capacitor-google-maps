@@ -23,7 +23,7 @@ import type {
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
-import { addTileOverlay, CapacitorGoogleMaps } from './implementation';
+import { CapacitorGoogleMaps } from './implementation';
 
 export interface GoogleMapInterface {
   create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackData>): Promise<GoogleMap>;
@@ -343,7 +343,7 @@ export class GoogleMap {
    * @returns created tile overlay id
    */
   async addTileOverlay(tileOverlay: TileOverlay): Promise<string> {
-    const res = await addTileOverlay({
+    const res = await CapacitorGoogleMaps.addTileOverlay({
       id: this.id,
       tileOverlay,
     });

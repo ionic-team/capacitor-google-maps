@@ -183,26 +183,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
-    private var getTileCallbackRegistry: [String: GetTileCallback] = [:]
-
-    @objc func getTileCallbackResponse(_ call: CAPPluginCall) {
-        do {
-            guard let callbackId = call.getString("callbackId") else {
-                throw GoogleMapErrors.invalidArguments("callbackId is missing")
-            }
-
-            guard getTileCallbackRegistry.keys.contains(where: { $0 == callbackId }) else {
-                throw GoogleMapErrors.invalidArguments("callbackId does not match an existing callback in the registry")
-            }
-
-            getTileCallbackRegistry[callbackId]?(call.getString("result"))
-
-            call.resolve()
-        } catch {
-            handleError(call, error: error)
-        }
-    }
-
     @objc func addTileOverlay(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -219,15 +199,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            let tileOverlayId = try map.addTileOverlay(tileOverlay: tileOverlay) { [weak self] x, y, zoom, handler in
-                guard let self else { return }
-
-                getTileCallbackRegistry[tileOverlay.getTileCallbackId] = handler
-                notifyListeners("getTileCallback", data: [
-                    "callbackId": tileOverlay.getTileCallbackId,
-                    "x": x, "y": y, "zoom": zoom
-                ])
-            }
+            let tileOverlayId = try map.addTileOverlay(tileOverlay: tileOverlay)
 
             call.resolve(["id": String(tileOverlayId)])
         } catch {
