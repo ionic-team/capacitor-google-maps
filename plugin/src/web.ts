@@ -5,7 +5,7 @@ import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markercluste
 import type { Marker, TileOverlay } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
-  _AddTileOverlayArgs,
+  AddTileOverlayArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -28,7 +28,6 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
-  GetTileCallbackResponse,
   RemoveTileOverlayArgs,
 } from './implementation';
 
@@ -267,15 +266,8 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     map.fitBounds(bounds, _args.padding);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  async getTileCallbackResponse(_args: GetTileCallbackResponse): Promise<void> {}
-
-  async addTileOverlay(_args: _AddTileOverlayArgs): Promise<{ id: string }> {
+  async addTileOverlay(_args: AddTileOverlayArgs): Promise<{ id: string }> {
     const tileOverlay = _args.tileOverlay as TileOverlay;
-
-    if (tileOverlay.getTile === undefined) {
-      throw new Error('getTile is required');
-    }
 
     const map = this.maps[_args.id].map;
 
@@ -283,7 +275,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
     const customMapOverlay = new google.maps.ImageMapType({
       getTileUrl: function (coord, zoom) {
-        return tileOverlay.getTile(coord.x, coord.y, zoom) ?? null;
+        return tileOverlay.url.replace('{x}', `${coord.x}`).replace('{y}', `${coord.y}`).replace('{z}', `${zoom}`);
       },
       tileSize: new google.maps.Size(256, 256),
       opacity: tileOverlay.opacity,

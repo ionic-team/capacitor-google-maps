@@ -983,12 +983,12 @@ An interface representing a pair of latitude and longitude coordinates.
 
 A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
 
-| Prop          | Type                                                        | Description                                                                                                            | Default                |
-| ------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| **`getTile`** | <code><a href="#gettilecallback">GetTileCallback</a></code> | A callback function that returns the tile url. Available on iOS, Android and Web                                       |                        |
-| **`opacity`** | <code>number</code>                                         | The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web | <code>undefined</code> |
-| **`visible`** | <code>boolean</code>                                        | Controls whether this tile overlay should be visible. Available only on Android                                        | <code>undefined</code> |
-| **`zIndex`**  | <code>number</code>                                         | The zIndex of the tile overlay. Available on iOS and Android                                                           | <code>undefined</code> |
+| Prop          | Type                 | Description                                                                                                                                                               | Default                |
+| ------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **`url`**     | <code>string</code>  | A string representing the tile url. Should contain `{x}`, `{y}` and `{z}` so they can be replaced with actual values for x, y and zoom. Available on iOS, Android and Web |                        |
+| **`opacity`** | <code>number</code>  | The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web                                                    | <code>undefined</code> |
+| **`visible`** | <code>boolean</code> | Controls whether this tile overlay should be visible. Available only on Android                                                                                           | <code>undefined</code> |
+| **`zIndex`**  | <code>number</code>  | The zIndex of the tile overlay. Available on iOS and Android                                                                                                              | <code>undefined</code> |
 
 
 #### Marker
@@ -1212,11 +1212,6 @@ Controls for setting padding on the 'visible' region of the view.
 The callback function to be called when map events are emitted.
 
 <code>(data: T): void</code>
-
-
-#### GetTileCallback
-
-<code>(x: number, y: number, zoom: number): string</code>
 
 
 #### Position

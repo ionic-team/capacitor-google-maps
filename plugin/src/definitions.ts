@@ -296,18 +296,16 @@ export interface MapPadding {
   bottom: number;
 }
 
-export type GetTileCallback = (x: number, y: number, zoom: number) => string | undefined;
-
 /**
  * A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
  */
 export interface TileOverlay {
   /**
-   * A callback function that returns the tile url. Available on iOS, Android and Web
+   * A string representing the tile url. Should contain `{x}`, `{y}` and `{z}` so they can be replaced with actual values for x, y and zoom. Available on iOS, Android and Web
    *
-   * @type {GetTileCallback}
+   * @type {string}
    */
-  getTile: GetTileCallback;
+  url: string;
 
   /**
    * The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web
@@ -331,16 +329,6 @@ export interface TileOverlay {
    * @type {number | undefined}
    * @default undefined
    */
-  zIndex?: number;
-}
-
-/**
- * @ignore
- */
-export interface NativeTileOverlay {
-  getTileCallbackId: string;
-  opacity?: number;
-  visible?: boolean;
   zIndex?: number;
 }
 

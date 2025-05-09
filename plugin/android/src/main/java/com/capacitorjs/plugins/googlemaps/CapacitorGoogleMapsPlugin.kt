@@ -210,26 +210,6 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
         }
     }
 
-    private val getTileCallbackRegistry = HashMap<String, GetTileCallback>()
-
-    @PluginMethod
-    fun getTileCallbackResponse(call: PluginCall) {
-        try {
-            val callbackId = call.getString("callbackId")
-            callbackId ?: throw InvalidArgumentsError("callbackId is invalid or missing")
-
-            if (!getTileCallbackRegistry.containsKey(callbackId)) {
-                throw InvalidArgumentsError("callbackId does not match an existing callback in the registry")
-            }
-
-            getTileCallbackRegistry[callbackId]!!(call.getString("result"))
-
-            call.resolve()
-        } catch (e: Exception) {
-            handleError(call, e)
-        }
-    }
-
     @PluginMethod
     fun addTileOverlay(call: PluginCall) {
         try {
@@ -243,15 +223,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val tileOverlay = CapacitorGoogleMapTileOverlay(tileOverlayObj)
-            map.addTileOverlay(tileOverlay, { x, y, zoom, handler ->
-                getTileCallbackRegistry[tileOverlay.getTileCallbackId] = handler
-                val eventData = JSObject()
-                eventData.put("callbackId", tileOverlay.getTileCallbackId)
-                eventData.put("x", x)
-                eventData.put("y", y)
-                eventData.put("zoom", zoom)
-                notifyListeners("getTileCallback", eventData)
-            }) { result ->
+            map.addTileOverlay(tileOverlay) { result ->
                 val tileOverlayId = result.getOrThrow()
 
                 val res = JSObject()

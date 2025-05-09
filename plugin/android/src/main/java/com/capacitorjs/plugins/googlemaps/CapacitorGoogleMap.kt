@@ -18,16 +18,8 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.io.InputStream
-import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.TimeoutException
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
-
-typealias GetTileCallback = (String?) -> Unit
 
 class CapacitorGoogleMap(
         val id: String,
@@ -215,7 +207,6 @@ class CapacitorGoogleMap(
 
     fun addTileOverlay(
         tileOverlay: CapacitorGoogleMapTileOverlay,
-        getTile: (x: Int, y: Int, zoom: Int, callback: GetTileCallback) -> Unit,
         callback: (Result<String>) -> Unit
     ) {
         try {
@@ -224,19 +215,11 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val tileProvider = object : UrlTileProvider(256, 256) {
                     override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
-                        suspend fun getTileSuspend(): String? {
-                            return withTimeoutOrNull(5000L) {
-                                suspendCoroutine { continuation ->
-                                    getTile(x, y, zoom) { continuation.resume(it) }
-                                }
-                            } ?: throw TimeoutException("getTile $id timed out")
-                        }
-
-                        return try {
-                            runBlocking { URL(getTileSuspend() ?: "") }
-                        } catch (e: Exception) {
-                            null
-                        }
+                        return URL(tileOverlay.url
+                            .replace("{x}", "$x")
+                            .replace("{y}", "$y")
+                            .replace("{z}", "$zoom")
+                        )
                     }
                 }
                 var tileOverlayOptions = TileOverlayOptions().tileProvider(tileProvider)

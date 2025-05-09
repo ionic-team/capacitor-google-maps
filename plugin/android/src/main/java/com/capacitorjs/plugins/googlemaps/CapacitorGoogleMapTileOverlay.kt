@@ -4,17 +4,17 @@ import com.google.android.gms.maps.model.TileOverlay
 import org.json.JSONObject
 
 class CapacitorGoogleMapTileOverlay(fromJSONObject: JSONObject) {
-    var getTileCallbackId: String
+    var url: String
     var opacity: Float? = null
     var zIndex: Float? = null
     var visible: Boolean? = null
     var googleMapTileOverlay: TileOverlay? = null
 
     init {
-        if (!fromJSONObject.has("getTileCallbackId")) {
-            throw InvalidArgumentsError("TileOverlay object is missing the required 'getTileCallbackId' property")
+        if (!fromJSONObject.has("url")) {
+            throw InvalidArgumentsError("TileOverlay object is missing the required 'url' property")
         }
-        getTileCallbackId = fromJSONObject.getString("getTileCallbackId")
+        url = fromJSONObject.getString("url")
         if (fromJSONObject.has("opacity")) {
             opacity = fromJSONObject.optDouble("opacity").toFloat()
         }
