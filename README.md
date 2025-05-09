@@ -300,6 +300,8 @@ export default MyMap;
 * [`disableTouch()`](#disabletouch)
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
+* [`addTileOverlay(...)`](#addtileoverlay)
+* [`removeTileOverlay(...)`](#removetileoverlay)
 * [`addMarker(...)`](#addmarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
@@ -398,6 +400,34 @@ enableClustering(minClusterSize?: number | undefined) => Promise<void>
 ```typescript
 disableClustering() => Promise<void>
 ```
+
+--------------------
+
+
+### addTileOverlay(...)
+
+```typescript
+addTileOverlay(tileOverlay: TileOverlay) => Promise<{ id: string; }>
+```
+
+| Param             | Type                                                |
+| ----------------- | --------------------------------------------------- |
+| **`tileOverlay`** | <code><a href="#tileoverlay">TileOverlay</a></code> |
+
+**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+
+--------------------
+
+
+### removeTileOverlay(...)
+
+```typescript
+removeTileOverlay(id: string) => Promise<void>
+```
+
+| Param    | Type                |
+| -------- | ------------------- |
+| **`id`** | <code>string</code> |
 
 --------------------
 
@@ -947,6 +977,18 @@ An interface representing a pair of latitude and longitude coordinates.
 | Prop        | Type                |
 | ----------- | ------------------- |
 | **`mapId`** | <code>string</code> |
+
+
+#### TileOverlay
+
+A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
+
+| Prop          | Type                 | Description                                                                                                                                                               | Default                |
+| ------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **`url`**     | <code>string</code>  | A string representing the tile url. Should contain `{x}`, `{y}` and `{z}` so they can be replaced with actual values for x, y and zoom. Available on iOS, Android and Web |                        |
+| **`opacity`** | <code>number</code>  | The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web                                                    | <code>undefined</code> |
+| **`visible`** | <code>boolean</code> | Controls whether this tile overlay should be visible. Available only on Android                                                                                           | <code>undefined</code> |
+| **`zIndex`**  | <code>number</code>  | The zIndex of the tile overlay. Available on iOS and Android                                                                                                              | <code>undefined</code> |
 
 
 #### Marker
