@@ -2,6 +2,7 @@ import Foundation
 import GoogleMaps
 import Capacitor
 import GoogleMapsUtils
+import QuartzCore
 
 public struct LatLng: Codable {
     let lat: Double
@@ -238,6 +239,21 @@ public class Map {
         }
 
         return markerHash
+    }
+
+    func animateMarker( markerId: Int, to target: LatLng, duration: Double) throws {
+        guard let marker = markers[markerId] else {
+            throw GoogleMapErrors.markerNotFound
+        }
+        DispatchQueue.main.async {
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(duration)
+            marker.position = CLLocationCoordinate2D(
+                latitude: target.lat,
+                longitude: target.lng
+            )
+            CATransaction.commit()
+        }
     }
 
     func addMarkers(markers: [Marker]) throws -> [Int] {

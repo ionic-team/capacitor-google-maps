@@ -238,6 +238,40 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     }
 
     @PluginMethod
+    fun animateMarker(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerId = call.getString("markerId")
+            markerId ?: throw InvalidArgumentsError("markerId is missing")
+
+            val lat = call.getDouble("lat")
+            val lng = call.getDouble("lng")
+            if (lat == null || lng == null) {
+                throw InvalidArgumentsError("lat or lng is missing")
+            }
+            val duration = call.getLong("duration", 1000L)
+
+            val map = maps[id] ?: throw MapNotFoundError()
+
+            map.animateMarker(markerId, lat, lng, duration) { result ->
+                result
+                    .onSuccess {
+                        call.resolve()
+                    }
+                    .onFailure { error ->
+                        handleError(call, error)
+                    }
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun addMarkers(call: PluginCall) {
         try {
             val id = call.getString("id")

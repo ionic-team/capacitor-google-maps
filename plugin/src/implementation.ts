@@ -2,6 +2,7 @@ import type { Plugin } from '@capacitor/core';
 import { registerPlugin } from '@capacitor/core';
 
 import type {
+  AnimateMarkerOptions,
   CameraConfig,
   Circle,
   GoogleMapConfig,
@@ -71,6 +72,14 @@ export interface RemoveMarkersArgs {
 export interface AddMarkerArgs {
   id: string;
   marker: Marker;
+}
+
+export interface AnimateMarkerArgs {
+  id: string;
+  markerId: string;
+  lat: number;
+  lng: number;
+  duration?: number;
 }
 
 export interface AddPolygonsArgs {
@@ -174,6 +183,7 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   enableTouch(args: { id: string }): Promise<void>;
   disableTouch(args: { id: string }): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
+  animateMarker(options: AnimateMarkerOptions): Promise<void>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
   removeMarkers(args: RemoveMarkersArgs): Promise<void>;
