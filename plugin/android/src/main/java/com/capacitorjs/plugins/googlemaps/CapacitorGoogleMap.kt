@@ -20,6 +20,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
 import java.net.URL
+import android.animation.ValueAnimator
+import android.animation.AnimatorListenerAdapter
+import android.animation.Animator
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class CapacitorGoogleMap(
@@ -241,6 +248,47 @@ class CapacitorGoogleMap(
             }
         } catch (e: GoogleMapsError) {
             callback(Result.failure(e))
+        }
+    }
+
+    fun animateMarker(markerId: String,lat: Double,lng: Double,duration: Long, callback: (Result<Unit>) -> Unit
+    ) {
+        try {
+        googleMap ?: throw GoogleMapNotAvailable()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+            val wrapper = markers[markerId] ?: throw MarkerNotFoundError()
+            val marker = wrapper.googleMapMarker
+                ?: throw GoogleMapsError("GoogleMap Marker not available")
+
+            val startPos = marker.position
+            val endPos = LatLng(lat, lng)
+
+            ValueAnimator.ofFloat(0f, 1f).apply {
+                this.duration = duration
+                addUpdateListener { anim ->
+                val fraction = anim.animatedValue as Float
+                val newLat = startPos.latitude +
+                    fraction * (endPos.latitude - startPos.latitude)
+                val newLng = startPos.longitude +
+                    fraction * (endPos.longitude - startPos.longitude)
+                marker.position = LatLng(newLat, newLng)
+                }
+                addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    callback(Result.success(Unit))
+                }
+                })
+            }.start()
+            } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+            } catch (e: Exception) {
+            callback(Result.failure(GoogleMapsError(e.localizedMessage ?: "Animation error")))
+            }
+        }
+        } catch (e: GoogleMapsError) {
+        callback(Result.failure(e))
         }
     }
 

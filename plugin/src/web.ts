@@ -27,6 +27,7 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  AnimateMarkerArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
@@ -290,6 +291,36 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     this.currMarkerId++;
 
     return { id: id };
+  }
+  
+  async animateMarker(_args: AnimateMarkerArgs): Promise<void> {
+    const { id, markerId, lat, lng, duration = 1000 } = _args;
+    const mapData = this.maps[id];
+    if (!mapData) {
+      throw new Error(`Map with id '${id}' not found`);
+    }
+    const marker = mapData.markers[markerId];
+    if (!marker) {
+      throw new Error(`Marker '${markerId}' not found on map '${id}'`);
+    }
+    const start = marker.position as google.maps.LatLngLiteral;
+    const end = { lat, lng };
+    const startTime = performance.now();
+
+    return new Promise<void>(resolve => {
+      const step = (now: number) => {
+        const t = Math.min((now - startTime) / duration, 1);
+        const currLat = start.lat + (end.lat - start.lat) * t;
+        const currLng = start.lng + (end.lng - start.lng) * t;
+        marker.position = { lat: currLat, lng: currLng };
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          resolve();
+        }
+      };
+      requestAnimationFrame(step);
+    });
   }
 
   async removeMarkers(_args: RemoveMarkersArgs): Promise<void> {

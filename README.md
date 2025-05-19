@@ -301,6 +301,7 @@ export default MyMap;
 * [`enableClustering(...)`](#enableclustering)
 * [`disableClustering()`](#disableclustering)
 * [`addMarker(...)`](#addmarker)
+* [`animateMarker(...)`](#animatemarker)
 * [`addMarkers(...)`](#addmarkers)
 * [`removeMarker(...)`](#removemarker)
 * [`removeMarkers(...)`](#removemarkers)
@@ -416,6 +417,20 @@ addMarker(marker: Marker) => Promise<string>
 
 --------------------
 
+### animateMarker(...)
+
+```typescript
+animateMarker(markerId: string, lat: number, lng: number, duration?: number | undefined) => Promise<void>
+```
+
+| Param          | Type                |
+| -------------- | ------------------- |
+| **`markerId`** | <code>string</code> |
+| **`lat`**      | <code>number</code> |
+| **`lng`**      | <code>number</code> |
+| **`duration`** | <code>number</code> |
+
+--------------------
 
 ### addMarkers(...)
 
