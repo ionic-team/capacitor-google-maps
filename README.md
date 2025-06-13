@@ -160,10 +160,10 @@ await newMap.destroy();
 
 ```vue
 <script lang="ts" setup>
-import { ref, shallowRef } from 'vue'
+import { ref, shallowRef, useTemplateRef } from 'vue'
 import { GoogleMap } from '@capacitor/google-maps'
 
-const mapRef = ref<HTMLElement>()
+const mapRef = useTemplateRef<HTMLDivElement>('mapRef')
 const newMap = shallowRef<GoogleMap>()
 
 async function createMap() {
