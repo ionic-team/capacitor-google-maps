@@ -1002,7 +1002,7 @@ https://tools.ietf.org/html/rfc7946#section-3.1.6
 #### Circle
 
 For web, all the javascript <a href="#circle">Circle</a> options are available as
-Polygon extends google.maps.CircleOptions.
+Circle extends google.maps.CircleOptions.
 For iOS and Android only the config options declared on <a href="#circle">Circle</a> are available.
 
 | Prop               | Type                 | Description                                                                                                                                                                            |
