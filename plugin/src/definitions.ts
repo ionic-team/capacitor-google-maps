@@ -71,6 +71,7 @@ export interface Point {
  * For iOS and Android only the config options declared on Polygon are available.
  */
 export interface Polygon extends google.maps.PolygonOptions {
+  paths?: google.maps.MVCArray<any> | any[];
   strokeColor?: string;
   strokeOpacity?: number;
   strokeWeight?: number;
