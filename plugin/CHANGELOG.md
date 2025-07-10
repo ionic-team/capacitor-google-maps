@@ -3,13 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [7.0.2](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.1...@capacitor/google-maps@7.0.2) (2025-04-29)
+# [7.0.3](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.2...v7.0.3) (2025-07-10)
+
+### Fixes
+* Update docs and references for Polygon ([#89](https://github.com/ionic-team/capacitor-google-maps/pull/89))
+
+
+# [7.0.2](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.1...v7.0.2) (2025-04-29)
 
 ### Fixes
 * **android:** Replace events.removeFirst with events.removeAt(0) ([#50](https://github.com/ionic-team/capacitor-google-maps/pull/50))
 
 
-# [7.0.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.0...@capacitor/google-maps@7.0.1) (2025-02-21)
+# [7.0.1](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.0...v7.0.1) (2025-02-21)
 
 ### Refactor
 * migrate deprecated `Marker` to use `AdvancedMarkerElement` ([#72](https://github.com/ionic-team/capacitor-google-maps/pull/72))
