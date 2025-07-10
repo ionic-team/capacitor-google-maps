@@ -42,7 +42,7 @@
     "verify:web": "pnpm run build",
     "lint": "pnpm eslint . --ext ts && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --check && pnpm node-swiftlint lint",
     "fmt": "pnpm eslint . --ext ts --fix && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --write && pnpm node-swiftlint --fix --format",
-    "docgen": "docgen --api GoogleMapInterface --output-readme README.md --output-json dist/docs.json",
+    "docgen": "node ../scripts/docgen_updates.js",
     "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.js && pnpm run downleveldts",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
