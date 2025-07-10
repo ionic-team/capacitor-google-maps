@@ -16,7 +16,7 @@
     "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev --no-push --yes"
   },
   "devDependencies": {
-    "@capacitor/ios": "next",
+    "@capacitor/ios": ">=7.0.0",
     "@types/node": "^20.11.25",
     "husky": "^9.0.1",
     "lerna": "^8.1.2",
