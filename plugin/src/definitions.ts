@@ -71,6 +71,7 @@ export interface Point {
  * For iOS and Android only the config options declared on Polygon are available.
  */
 export interface Polygon extends google.maps.PolygonOptions {
+  paths?: google.maps.MVCArray<any> | any[];
   strokeColor?: string;
   strokeOpacity?: number;
   strokeWeight?: number;
@@ -89,7 +90,7 @@ export interface Polygon extends google.maps.PolygonOptions {
 
 /**
  * For web, all the javascript Circle options are available as
- * Polygon extends google.maps.CircleOptions.
+ * Circle extends google.maps.CircleOptions.
  * For iOS and Android only the config options declared on Circle are available.
  */
 export interface Circle extends google.maps.CircleOptions {
