@@ -7,11 +7,10 @@ import type {
   GoogleMapConfig,
   LatLng,
   LatLngBounds,
-  MapPadding,
-  MapType,
   Marker,
   Polygon,
   Polyline,
+  GoogleMapCreateConfig,
 } from './definitions';
 
 /**
@@ -29,7 +28,7 @@ export interface CreateMapArgs {
   /**
    * The initial configuration settings for the map.
    */
-  config: GoogleMapConfig;
+  config: GoogleMapCreateConfig;
   /**
    * The DOM element that the Google Map View will be mounted on which determines size and positioning.
    */
@@ -52,6 +51,11 @@ export interface CreateMapArgs {
    * Only available for web.
    */
   language?: string;
+}
+
+export interface UpdateMapArgs {
+  id: string;
+  config: GoogleMapConfig;
 }
 
 export interface DestroyMapArgs {
@@ -107,35 +111,11 @@ export interface CameraArgs {
   config: CameraConfig;
 }
 
-export interface MapTypeArgs {
-  id: string;
-  mapType: MapType;
-}
-
-export interface IndoorMapArgs {
-  id: string;
-  enabled: boolean;
-}
-
-export interface TrafficLayerArgs {
-  id: string;
-  enabled: boolean;
-}
-
 export interface AccElementsArgs {
   id: string;
   enabled: boolean;
 }
 
-export interface PaddingArgs {
-  id: string;
-  padding: MapPadding;
-}
-
-export interface CurrentLocArgs {
-  id: string;
-  enabled: boolean;
-}
 export interface AddMarkersArgs {
   id: string;
   markers: Marker[];
@@ -171,6 +151,7 @@ export interface FitBoundsArgs {
 
 export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
+  update(options: UpdateMapArgs): Promise<void>;
   enableTouch(args: { id: string }): Promise<void>;
   disableTouch(args: { id: string }): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
@@ -187,13 +168,6 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   disableClustering(args: { id: string }): Promise<void>;
   destroy(args: DestroyMapArgs): Promise<void>;
   setCamera(args: CameraArgs): Promise<void>;
-  getMapType(args: { id: string }): Promise<{ type: string }>;
-  setMapType(args: MapTypeArgs): Promise<void>;
-  enableIndoorMaps(args: IndoorMapArgs): Promise<void>;
-  enableTrafficLayer(args: TrafficLayerArgs): Promise<void>;
-  enableAccessibilityElements(args: AccElementsArgs): Promise<void>;
-  enableCurrentLocation(args: CurrentLocArgs): Promise<void>;
-  setPadding(args: PaddingArgs): Promise<void>;
   onScroll(args: MapBoundsArgs): Promise<void>;
   onResize(args: MapBoundsArgs): Promise<void>;
   onDisplay(args: MapBoundsArgs): Promise<void>;
