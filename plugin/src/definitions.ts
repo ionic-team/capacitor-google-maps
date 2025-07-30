@@ -392,6 +392,14 @@ export interface Marker {
   zIndex?: number;
 }
 
+export interface AnimateMarkerOptions {
+  id: string;
+  markerId: string;
+  lat: number;
+  lng: number;
+  duration?: number;
+}
+
 /**
  * The callback function to be called when map events are emitted.
  */
