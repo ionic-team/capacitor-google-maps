@@ -243,7 +243,7 @@ public class Map {
     func addTileOverlay(tileOverlay: TileOverlay) throws -> Int {
         var tileOverlayHash = 0
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.sync {
             let urlConstructor: GMSTileURLConstructor = { x, y, zoom in
                 URL(string: tileOverlay.url
                         .replacingOccurrences(of: "{x}", with: "\(x)")
@@ -269,7 +269,6 @@ public class Map {
             DispatchQueue.main.async {
                 tileOverlay.map = nil
                 self.tileOverlays.removeValue(forKey: id)
-
             }
         } else {
             throw GoogleMapErrors.tileOverlayNotFound
