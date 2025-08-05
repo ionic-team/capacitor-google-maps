@@ -292,12 +292,17 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
   async removeTileOverlay(_args: RemoveTileOverlayArgs): Promise<void> {
     const map = this.maps[_args.id].map;
+    if (!map) {
+      return;
+    }
+
     for (let i = 0; i < map.overlayMapTypes.getLength(); i++) {
       if (map.overlayMapTypes.getAt(i) === this.maps[_args.id].tileOverlays[_args.tileOverlayId]) {
         map.overlayMapTypes.removeAt(i);
+        delete this.maps[_args.id].tileOverlays[_args.tileOverlayId];
+        break;
       }
     }
-    delete this.maps[_args.id].tileOverlays[_args.tileOverlayId];
   }
 
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
