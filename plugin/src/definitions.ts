@@ -222,6 +222,40 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    * @since 5.4.0
    */
   iOSMapId?: string;
+  /**
+   * The maximum zoom level which will be displayed on the map. If omitted, or
+   * set to <code>null</code>, the maximum zoom from the current map type is
+   * used instead. Valid zoom values are numbers from zero up to the supported
+   * <a
+   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
+   * zoom level</a>.
+   */
+  maxZoom?: number | null;
+  /**
+   * The minimum zoom level which will be displayed on the map. If omitted, or
+   * set to <code>null</code>, the minimum zoom from the current map type is
+   * used instead. Valid zoom values are numbers from zero up to the supported
+   * <a
+   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
+   * zoom level</a>.
+   */
+  minZoom?: number | null;
+  /**
+   * The initial Map mapTypeId. Defaults to <code>ROADMAP</code>.
+   */
+  mapTypeId?: string | null;
+  /**
+   * The heading for aerial imagery in degrees measured clockwise from
+   * cardinal direction North. Headings are snapped to the nearest available
+   * angle for which imagery is available.
+   */
+  heading?: number | null;
+  /**
+   * Defines a boundary that restricts the area of the map accessible to
+   * users. When set, a user can only pan and zoom while the camera view stays
+   * inside the limits of the boundary.
+   */
+  restriction?: google.maps.MapRestriction | null;
 }
 
 /**
