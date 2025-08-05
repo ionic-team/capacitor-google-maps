@@ -128,14 +128,15 @@ class CapacitorGoogleMap(
                 }
 
                 if (config.heading != null) {
-                    googleMap?.animateCamera(
-                        CameraUpdateFactory.newCameraPosition(
-                            CameraPosition.Builder(googleMap!!.cameraPosition)
-                                .bearing(config.heading!!.toFloat())
-                                .build()
+                    googleMap?.cameraPosition?.let { cameraPosition ->
+                        googleMap?.animateCamera(
+                            CameraUpdateFactory.newCameraPosition(
+                                CameraPosition.Builder(cameraPosition)
+                                    .bearing(config.heading!!.toFloat())
+                                    .build()
+                            )
                         )
-                    )
-
+                    }
                 }
             }
         }
