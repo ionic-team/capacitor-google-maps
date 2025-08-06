@@ -222,6 +222,40 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    * @since 5.4.0
    */
   iOSMapId?: string;
+  /**
+   * The maximum zoom level which will be displayed on the map. If omitted, or
+   * set to <code>null</code>, the maximum zoom from the current map type is
+   * used instead. Valid zoom values are numbers from zero up to the supported
+   * <a
+   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
+   * zoom level</a>.
+   */
+  maxZoom?: number | null;
+  /**
+   * The minimum zoom level which will be displayed on the map. If omitted, or
+   * set to <code>null</code>, the minimum zoom from the current map type is
+   * used instead. Valid zoom values are numbers from zero up to the supported
+   * <a
+   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
+   * zoom level</a>.
+   */
+  minZoom?: number | null;
+  /**
+   * The initial Map mapTypeId. Defaults to <code>ROADMAP</code>.
+   */
+  mapTypeId?: string | null;
+  /**
+   * The heading for aerial imagery in degrees measured clockwise from
+   * cardinal direction North. Headings are snapped to the nearest available
+   * angle for which imagery is available.
+   */
+  heading?: number | null;
+  /**
+   * Defines a boundary that restricts the area of the map accessible to
+   * users. When set, a user can only pan and zoom while the camera view stays
+   * inside the limits of the boundary.
+   */
+  restriction?: google.maps.MapRestriction | null;
 }
 
 /**
@@ -294,6 +328,42 @@ export interface MapPadding {
   left: number;
   right: number;
   bottom: number;
+}
+
+/**
+ * A tile overlay is an image placed on top of your map at a specific zoom level. Available on iOS, Android and Web
+ */
+export interface TileOverlay {
+  /**
+   * A string representing the tile url. Should contain `{x}`, `{y}` and `{z}` so they can be replaced with actual values for x, y and zoom. Available on iOS, Android and Web
+   *
+   * @type {string}
+   */
+  url: string;
+
+  /**
+   * The opacity of the tile overlay, between 0 (completely transparent) and 1 inclusive. Available on iOS, Android and Web
+   *
+   * @type {number | undefined}
+   * @default undefined
+   */
+  opacity?: number;
+
+  /**
+   * Controls whether this tile overlay should be visible. Available only on Android
+   *
+   * @type {boolean | undefined}
+   * @default undefined
+   */
+  visible?: boolean;
+
+  /**
+   * The zIndex of the tile overlay. Available on iOS and Android
+   *
+   * @type {number | undefined}
+   * @default undefined
+   */
+  zIndex?: number;
 }
 
 /**

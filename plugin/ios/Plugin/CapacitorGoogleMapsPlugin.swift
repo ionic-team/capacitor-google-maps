@@ -183,6 +183,56 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
+    @objc func addTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayObj = call.getObject("tileOverlay") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlay object is missing")
+            }
+
+            let tileOverlay = try TileOverlay(fromJSObject: tileOverlayObj)
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let tileOverlayId = try map.addTileOverlay(tileOverlay: tileOverlay)
+
+            call.resolve(["id": String(tileOverlayId)])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayIdString = call.getString("tileOverlayId") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let tileOverlayId = Int(tileOverlayIdString) else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeTileOverlay(id: tileOverlayId)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func addMarker(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {

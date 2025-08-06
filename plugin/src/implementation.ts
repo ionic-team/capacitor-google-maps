@@ -12,6 +12,7 @@ import type {
   Marker,
   Polygon,
   Polyline,
+  TileOverlay,
 } from './definitions';
 
 /**
@@ -117,6 +118,16 @@ export interface IndoorMapArgs {
   enabled: boolean;
 }
 
+export interface RemoveTileOverlayArgs {
+  id: string;
+  tileOverlayId: string;
+}
+
+export interface AddTileOverlayArgs {
+  id: string;
+  tileOverlay: TileOverlay;
+}
+
 export interface TrafficLayerArgs {
   id: string;
   enabled: boolean;
@@ -173,6 +184,8 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   create(options: CreateMapArgs): Promise<void>;
   enableTouch(args: { id: string }): Promise<void>;
   disableTouch(args: { id: string }): Promise<void>;
+  addTileOverlay(args: AddTileOverlayArgs): Promise<{ id: string }>;
+  removeTileOverlay(args: RemoveTileOverlayArgs): Promise<void>;
   addMarker(args: AddMarkerArgs): Promise<{ id: string }>;
   addMarkers(args: AddMarkersArgs): Promise<{ ids: string[] }>;
   removeMarker(args: RemoveMarkerArgs): Promise<void>;
