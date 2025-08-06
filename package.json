@@ -27,7 +27,9 @@
     "node": ">=20",
     "pnpm": ">=8"
   },
-  "dependencies": {},
+  "dependencies": {
+    "eslint": "^8.57.0"
+  },
   "workspaces": [
     "plugin"
   ]
