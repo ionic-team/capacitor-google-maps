@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/google-maps",
-  "version": "6.0.0-rc.0",
+  "version": "7.0.3",
   "description": "Google maps on Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -42,7 +42,7 @@
     "verify:web": "pnpm run build",
     "lint": "pnpm eslint . --ext ts && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --check && pnpm node-swiftlint lint",
     "fmt": "pnpm eslint . --ext ts --fix && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --write && pnpm node-swiftlint --fix --format",
-    "docgen": "docgen --api GoogleMapInterface --output-readme README.md --output-json dist/docs.json",
+    "docgen": "node ../scripts/docgen_updates.js",
     "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.js && pnpm run downleveldts",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
@@ -54,19 +54,19 @@
     "unittest:android": "cd ./unit-tests/android && ./gradlew testDebugUnitTest"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
-    "@capacitor/docgen": "0.2.2",
-    "@capacitor/ios": "next",
+    "@capacitor/android": ">=7.0.0",
+    "@capacitor/core": ">=7.0.0",
+    "@capacitor/docgen": "0.3.0",
+    "@capacitor/ios": ">=7.0.0",
     "@ionic/prettier-config": "^1.0.1",
     "@types/resize-observer-browser": "^0.1.7",
     "@types/supercluster": "^7.1.0",
-    "downlevel-dts": "^0.7.0",
-    "eslint-plugin-import": "^2.25.4",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
+    "downlevel-dts": "^0.7.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.25.4",
     "prettier": "^2.8.8",
     "prettier-plugin-java": "~2.1.0",
     "rimraf": "^3.0.2",
@@ -75,7 +75,7 @@
     "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@capacitor/core": "next"
+    "@capacitor/core": ">=7.0.0"
   },
   "capacitor": {
     "ios": {
@@ -89,8 +89,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "~1.13.7",
-    "@googlemaps/markerclusterer": "~2.0.7",
-    "@types/google.maps": "~3.50.5"
+    "@googlemaps/js-api-loader": "~1.16.8",
+    "@googlemaps/markerclusterer": "~2.5.3",
+    "@types/google.maps": "~3.58.1"
   }
 }

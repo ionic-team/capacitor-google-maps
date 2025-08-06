@@ -3,6 +3,79 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.3](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.2...v7.0.3) (2025-07-10)
+
+### Fixes
+* Update docs and references for Polygon ([#89](https://github.com/ionic-team/capacitor-google-maps/pull/89))
+
+
+# [7.0.2](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.1...v7.0.2) (2025-04-29)
+
+### Fixes
+* **android:** Replace events.removeFirst with events.removeAt(0) ([#50](https://github.com/ionic-team/capacitor-google-maps/pull/50))
+
+
+# [7.0.1](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.0...v7.0.1) (2025-02-21)
+
+### Refactor
+* migrate deprecated `Marker` to use `AdvancedMarkerElement` ([#72](https://github.com/ionic-team/capacitor-google-maps/pull/72))
+
+
+# [7.0.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.0-rc.1...@capacitor/google-maps@7.0.0) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# [7.0.0-rc.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.0-alpha.1...@capacitor/google-maps@7.0.0-rc.1) (2025-01-20)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# [7.0.0-alpha.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@6.0.1...@capacitor/google-maps@7.0.0-alpha.1) (2025-01-20)
+
+
+### Features
+
+* update to show installation requirements ([#47](https://github.com/ionic-team/capacitor-google-maps/issues/47)) ([3281142](https://github.com/ionic-team/capacitor-google-maps/commit/3281142eff8f4ea49810e64a458314dc5b96fe87))
+
+
+
+
+
+## [6.0.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@6.0.0...@capacitor/google-maps@6.0.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* include `getMapsBounds()` in `GoogleMapInterface` and README.md file ([2e5d213](https://github.com/ionic-team/capacitor-google-maps/commit/2e5d213dd205210d08f759e81401597e197a8c0e))
+
+
+
+
+
+# 6.0.0 (2024-08-20)
+
+
+
+# 6.0.0-rc.0 (2024-08-20)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
+
+
+
+# 6.0.0-rc.0 (2024-08-20)
+
+**Note:** Version bump only for package @capacitor/google-maps
+
+
 # [6.0.0-rc.0](https://github.com/ionic-team/capacitor-plugins/compare/@capacitor/google-maps@6.0.0-beta.1...@capacitor/google-maps@6.0.0-rc.0) (2024-02-07)
 
 **Note:** Version bump only for package @capacitor/google-maps

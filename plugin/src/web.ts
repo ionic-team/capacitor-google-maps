@@ -2,9 +2,10 @@ import { WebPlugin } from '@capacitor/core';
 import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
 import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 
-import type { Marker } from './definitions';
+import type { Marker, TileOverlay } from './definitions';
 import { MapType, LatLngBounds } from './definitions';
 import type {
+  AddTileOverlayArgs,
   AddMarkerArgs,
   CameraArgs,
   AddMarkersArgs,
@@ -27,16 +28,22 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
+  RemoveTileOverlayArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
   private gMapsRef: typeof google.maps | undefined = undefined;
+  private AdvancedMarkerElement: typeof google.maps.marker.AdvancedMarkerElement | undefined = undefined;
+  private PinElement: typeof google.maps.marker.PinElement | undefined = undefined;
   private maps: {
     [id: string]: {
       element: HTMLElement;
       map: google.maps.Map;
       markers: {
-        [id: string]: google.maps.Marker;
+        [id: string]: google.maps.marker.AdvancedMarkerElement;
+      };
+      tileOverlays: {
+        [id: string]: google.maps.ImageMapType;
       };
       polygons: {
         [id: string]: google.maps.Polygon;
@@ -52,9 +59,11 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     };
   } = {};
   private currMarkerId = 0;
+  private currTileOverlayId = 0;
   private currPolygonId = 0;
   private currCircleId = 0;
   private currPolylineId = 0;
+  private currMapId = 0;
 
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
@@ -64,24 +73,27 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     const mapId = this.getIdFromMap(map);
     const items: any[] = [];
 
-    if (cluster.markers != undefined) {
+    if (cluster.markers != undefined && this.AdvancedMarkerElement) {
       for (const marker of cluster.markers) {
-        const markerId = this.getIdFromMarker(mapId, marker);
+        if (marker instanceof this.AdvancedMarkerElement) {
+          const markerId = this.getIdFromMarker(mapId, marker);
+          const position = marker.position as google.maps.LatLngLiteral;
 
-        items.push({
-          markerId: markerId,
-          latitude: marker.getPosition()?.lat(),
-          longitude: marker.getPosition()?.lng(),
-          title: marker.getTitle(),
-          snippet: '',
-        });
+          items.push({
+            markerId: markerId,
+            latitude: position.lat,
+            longitude: position.lng,
+            title: marker.title ?? '',
+            snippet: '',
+          });
+        }
       }
     }
 
     this.notifyListeners('onClusterClick', {
       mapId: mapId,
-      latitude: cluster.position.lat(),
-      longitude: cluster.position.lng(),
+      latitude: cluster.position.lat,
+      longitude: cluster.position.lng,
       size: cluster.count,
       items: items,
     });
@@ -97,7 +109,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     return '';
   }
 
-  private getIdFromMarker(mapId: string, marker: google.maps.Marker): string {
+  private getIdFromMarker(mapId: string, marker: google.maps.marker.AdvancedMarkerElement): string {
     for (const id in this.maps[mapId].markers) {
       if (this.maps[mapId].markers[id] == marker) {
         return id;
@@ -119,6 +131,14 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       });
       const google = await loader.load();
       this.gMapsRef = google.maps;
+
+      // Import marker library once
+      const { AdvancedMarkerElement, PinElement } = (await google.maps.importLibrary(
+        'marker'
+      )) as google.maps.MarkerLibrary;
+      this.AdvancedMarkerElement = AdvancedMarkerElement;
+      this.PinElement = PinElement;
+
       console.log('Loaded google maps API');
     }
   }
@@ -246,18 +266,56 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     map.fitBounds(bounds, _args.padding);
   }
 
+  async addTileOverlay(_args: AddTileOverlayArgs): Promise<{ id: string }> {
+    const tileOverlay = _args.tileOverlay as TileOverlay;
+
+    const map = this.maps[_args.id].map;
+
+    const id = '' + this.currTileOverlayId;
+
+    const customMapOverlay = new google.maps.ImageMapType({
+      getTileUrl: function (coord, zoom) {
+        return tileOverlay.url.replace('{x}', `${coord.x}`).replace('{y}', `${coord.y}`).replace('{z}', `${zoom}`);
+      },
+      tileSize: new google.maps.Size(256, 256),
+      opacity: tileOverlay.opacity,
+    });
+
+    this.maps[_args.id].tileOverlays[id] = customMapOverlay;
+
+    map.overlayMapTypes.push(customMapOverlay);
+
+    this.currTileOverlayId++;
+
+    return { id: id };
+  }
+
+  async removeTileOverlay(_args: RemoveTileOverlayArgs): Promise<void> {
+    const map = this.maps[_args.id].map;
+    if (!map) {
+      return;
+    }
+
+    for (let i = 0; i < map.overlayMapTypes.getLength(); i++) {
+      if (map.overlayMapTypes.getAt(i) === this.maps[_args.id].tileOverlays[_args.tileOverlayId]) {
+        map.overlayMapTypes.removeAt(i);
+        delete this.maps[_args.id].tileOverlays[_args.tileOverlayId];
+        break;
+      }
+    }
+  }
+
   async addMarkers(_args: AddMarkersArgs): Promise<{ ids: string[] }> {
     const markerIds: string[] = [];
     const map = this.maps[_args.id];
 
     for (const markerArgs of _args.markers) {
-      const markerOpts = this.buildMarkerOpts(markerArgs, map.map);
-      const marker = new google.maps.Marker(markerOpts);
+      const advancedMarker = this.buildMarkerOpts(markerArgs, map.map);
 
       const id = '' + this.currMarkerId;
 
-      map.markers[id] = marker;
-      this.setMarkerListeners(_args.id, id, marker);
+      map.markers[id] = advancedMarker;
+      await this.setMarkerListeners(_args.id, id, advancedMarker);
 
       markerIds.push(id);
       this.currMarkerId++;
@@ -267,14 +325,12 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
-    const markerOpts = this.buildMarkerOpts(_args.marker, this.maps[_args.id].map);
-
-    const marker = new google.maps.Marker(markerOpts);
+    const advancedMarker = this.buildMarkerOpts(_args.marker, this.maps[_args.id].map);
 
     const id = '' + this.currMarkerId;
 
-    this.maps[_args.id].markers[id] = marker;
-    this.setMarkerListeners(_args.id, id, marker);
+    this.maps[_args.id].markers[id] = advancedMarker;
+    await this.setMarkerListeners(_args.id, id, advancedMarker);
 
     this.currMarkerId++;
 
@@ -285,14 +341,18 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     const map = this.maps[_args.id];
 
     for (const id of _args.markerIds) {
-      map.markers[id].setMap(null);
-      delete map.markers[id];
+      if (map.markers[id]) {
+        map.markers[id].map = null;
+        delete map.markers[id];
+      }
     }
   }
 
   async removeMarker(_args: RemoveMarkerArgs): Promise<void> {
-    this.maps[_args.id].markers[_args.markerId].setMap(null);
-    delete this.maps[_args.id].markers[_args.markerId];
+    if (this.maps[_args.id].markers[_args.markerId]) {
+      this.maps[_args.id].markers[_args.markerId].map = null;
+      delete this.maps[_args.id].markers[_args.markerId];
+    }
   }
 
   async addPolygons(args: AddPolygonsArgs): Promise<{ ids: string[] }> {
@@ -383,7 +443,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
-    const markers: google.maps.Marker[] = [];
+    const markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
     for (const id in this.maps[_args.id].markers) {
       markers.push(this.maps[_args.id].markers[id]);
@@ -400,8 +460,17 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async disableClustering(_args: { id: string }): Promise<void> {
-    this.maps[_args.id].markerClusterer?.setMap(null);
-    this.maps[_args.id].markerClusterer = undefined;
+    const mapInstance = this.maps[_args.id];
+    if (mapInstance.markerClusterer) {
+      const markers = Object.values(mapInstance.markers);
+
+      mapInstance.markerClusterer.setMap(null);
+      mapInstance.markerClusterer = undefined;
+
+      for (const marker of markers) {
+        marker.map = mapInstance.map;
+      }
+    }
   }
 
   async onScroll(): Promise<void> {
@@ -420,10 +489,17 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     console.log(`Create map: ${_args.id}`);
     await this.importGoogleLib(_args.apiKey, _args.region, _args.language);
 
+    // Ensure we have a Map ID for Advanced Markers
+    const config = { ..._args.config };
+    if (!config.mapId) {
+      config.mapId = `capacitor_map_${this.currMapId++}`;
+    }
+
     this.maps[_args.id] = {
-      map: new window.google.maps.Map(_args.element, { ..._args.config }),
+      map: new window.google.maps.Map(_args.element, config),
       element: _args.element,
       markers: {},
+      tileOverlays: {},
       polygons: {},
       circles: {},
       polylines: {},
@@ -503,50 +579,60 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     });
   }
 
-  async setMarkerListeners(mapId: string, markerId: string, marker: google.maps.Marker): Promise<void> {
+  async setMarkerListeners(
+    mapId: string,
+    markerId: string,
+    marker: google.maps.marker.AdvancedMarkerElement
+  ): Promise<void> {
     marker.addListener('click', () => {
+      const position = marker.position as google.maps.LatLngLiteral;
       this.notifyListeners('onMarkerClick', {
         mapId: mapId,
         markerId: markerId,
-        latitude: marker.getPosition()?.lat(),
-        longitude: marker.getPosition()?.lng(),
-        title: marker.getTitle(),
+        latitude: position.lat,
+        longitude: position.lng,
+        title: marker.title ?? '',
         snippet: '',
       });
     });
 
-    marker.addListener('dragstart', () => {
-      this.notifyListeners('onMarkerDragStart', {
-        mapId: mapId,
-        markerId: markerId,
-        latitude: marker.getPosition()?.lat(),
-        longitude: marker.getPosition()?.lng(),
-        title: marker.getTitle(),
-        snippet: '',
+    if (marker.gmpDraggable) {
+      marker.addListener('dragstart', () => {
+        const position = marker.position as google.maps.LatLngLiteral;
+        this.notifyListeners('onMarkerDragStart', {
+          mapId: mapId,
+          markerId: markerId,
+          latitude: position.lat,
+          longitude: position.lng,
+          title: marker.title ?? '',
+          snippet: '',
+        });
       });
-    });
 
-    marker.addListener('drag', () => {
-      this.notifyListeners('onMarkerDrag', {
-        mapId: mapId,
-        markerId: markerId,
-        latitude: marker.getPosition()?.lat(),
-        longitude: marker.getPosition()?.lng(),
-        title: marker.getTitle(),
-        snippet: '',
+      marker.addListener('drag', () => {
+        const position = marker.position as google.maps.LatLngLiteral;
+        this.notifyListeners('onMarkerDrag', {
+          mapId: mapId,
+          markerId: markerId,
+          latitude: position.lat,
+          longitude: position.lng,
+          title: marker.title ?? '',
+          snippet: '',
+        });
       });
-    });
 
-    marker.addListener('dragend', () => {
-      this.notifyListeners('onMarkerDragEnd', {
-        mapId: mapId,
-        markerId: markerId,
-        latitude: marker.getPosition()?.lat(),
-        longitude: marker.getPosition()?.lng(),
-        title: marker.getTitle(),
-        snippet: '',
+      marker.addListener('dragend', () => {
+        const position = marker.position as google.maps.LatLngLiteral;
+        this.notifyListeners('onMarkerDragEnd', {
+          mapId: mapId,
+          markerId: markerId,
+          latitude: position.lat,
+          longitude: position.lng,
+          title: marker.title ?? '',
+          snippet: '',
+        });
       });
-    });
+    }
   }
 
   async setMapListeners(mapId: string): Promise<void> {
@@ -598,31 +684,42 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     });
   }
 
-  private buildMarkerOpts(marker: Marker, map: google.maps.Map): google.maps.MarkerOptions {
-    let iconImage: google.maps.Icon | undefined = undefined;
-    if (marker.iconUrl) {
-      iconImage = {
-        url: marker.iconUrl,
-        scaledSize: marker.iconSize ? new google.maps.Size(marker.iconSize.width, marker.iconSize.height) : null,
-        anchor: marker.iconAnchor
-          ? new google.maps.Point(marker.iconAnchor.x, marker.iconAnchor.y)
-          : new google.maps.Point(0, 0),
-        origin: marker.iconOrigin
-          ? new google.maps.Point(marker.iconOrigin.x, marker.iconOrigin.y)
-          : new google.maps.Point(0, 0),
-      };
+  private buildMarkerOpts(marker: Marker, map: google.maps.Map): google.maps.marker.AdvancedMarkerElement {
+    if (!this.AdvancedMarkerElement || !this.PinElement) {
+      throw new Error('Marker library not loaded');
     }
 
-    const opts: google.maps.MarkerOptions = {
+    let content: HTMLElement | undefined = undefined;
+
+    if (marker.iconUrl) {
+      const img = document.createElement('img');
+      img.src = marker.iconUrl;
+      if (marker.iconSize) {
+        img.style.width = `${marker.iconSize.width}px`;
+        img.style.height = `${marker.iconSize.height}px`;
+      }
+      content = img;
+    } else {
+      const pinOptions: google.maps.marker.PinElementOptions = {
+        scale: marker.opacity ?? 1,
+        glyph: marker.title,
+        background: marker.tintColor
+          ? `rgb(${marker.tintColor.r}, ${marker.tintColor.g}, ${marker.tintColor.b})`
+          : undefined,
+      };
+
+      const pin = new this.PinElement(pinOptions);
+      content = pin.element;
+    }
+
+    const advancedMarker = new this.AdvancedMarkerElement({
       position: marker.coordinate,
       map: map,
-      opacity: marker.opacity,
+      content: content,
       title: marker.title,
-      icon: iconImage,
-      draggable: marker.draggable,
-      zIndex: marker.zIndex ?? 0,
-    };
+      gmpDraggable: marker.draggable,
+    });
 
-    return opts;
+    return advancedMarker;
   }
 }

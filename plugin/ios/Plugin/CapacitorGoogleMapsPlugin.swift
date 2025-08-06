@@ -67,11 +67,12 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    private var locationManager = CLLocationManager()
 
     func checkLocationPermission() -> String {
         let locationState: String
 
-        switch CLLocationManager.authorizationStatus() {
+        switch self.locationManager.authorizationStatus {
         case .notDetermined:
             locationState = "prompt"
         case .restricted, .denied:
@@ -175,6 +176,56 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             map.disableTouch()
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func addTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayObj = call.getObject("tileOverlay") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlay object is missing")
+            }
+
+            let tileOverlay = try TileOverlay(fromJSObject: tileOverlayObj)
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let tileOverlayId = try map.addTileOverlay(tileOverlay: tileOverlay)
+
+            call.resolve(["id": String(tileOverlayId)])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeTileOverlay(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let tileOverlayIdString = call.getString("tileOverlayId") else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let tileOverlayId = Int(tileOverlayIdString) else {
+                throw GoogleMapErrors.invalidArguments("tileOverlayId is invalid or missing")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.removeTileOverlay(id: tileOverlayId)
 
             call.resolve()
         } catch {
@@ -683,7 +734,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
             }
 
-            if enabled && checkLocationPermission() != "granted" {
+            let locationStatus = checkLocationPermission()
+
+            if enabled &&  !(locationStatus == "granted" || locationStatus == "prompt") {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
 
