@@ -816,13 +816,33 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     }
 
     @PluginMethod
-    fun enableCurrentLocation(call: PluginCall) {
-        if (getPermissionState(LOCATION) != PermissionState.GRANTED) {
-            requestAllPermissions(call, "enableCurrentLocationCallback")
-        } else {
-            internalEnableCurrentLocation(call)
+    @SuppressLint("MissingPermission")
+    fun internalEnableCurrentLocation(call: PluginCall) {
+        val id = call.getString("id")
+        val enabled = call.getBoolean("enabled") ?: false
+        val showButton = call.getBoolean("showButton") ?: false
+
+        if (id == null) {
+            call.reject("ID is required")
+            return
+        }
+
+        val map = maps[id]
+        if (map == null) {
+            call.reject("Map not found")
+            return
+        }
+
+        map.enableCurrentLocation(enabled) { error ->
+            if (error != null) {
+                call.reject("Error enabling location", error.localizedMessage)
+            } else {
+                map.setMyLocationButtonEnabled(showButton)
+                call.resolve()
+            }
         }
     }
+
 
     @PermissionCallback
     fun enableCurrentLocationCallback(call: PluginCall) {
