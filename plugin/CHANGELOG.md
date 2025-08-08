@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.3...@capacitor/google-maps@7.1.0) (2025-08-08)
+
+
+### Features
+
+* support for tile overlays and extra map config params ([#66](https://github.com/ionic-team/capacitor-google-maps/issues/66)) ([f57a0e4](https://github.com/ionic-team/capacitor-google-maps/commit/f57a0e4b477e87385899870c37653bd5be983805))
+
+
+
+
+
 # [7.0.3](https://github.com/ionic-team/capacitor-google-maps/compare/v7.0.2...v7.0.3) (2025-07-10)
 
 ### Fixes
