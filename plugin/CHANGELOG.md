@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.1.0...@capacitor/google-maps@7.1.1) (2025-08-13)
+
+
+### Bug Fixes
+
+* **android:** make config options optional ([#97](https://github.com/ionic-team/capacitor-google-maps/issues/97)) ([101c315](https://github.com/ionic-team/capacitor-google-maps/commit/101c315946bcb8da1f4351308b1eee5a87b0ef6c))
+
+
+
+
+
 # [7.1.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.3...@capacitor/google-maps@7.1.0) (2025-08-08)
 
 
