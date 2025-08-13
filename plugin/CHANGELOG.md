@@ -16,6 +16,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [7.1.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.0.3...@capacitor/google-maps@7.1.0) (2025-08-08)
 
+### DEPRECATED
+
+This version is deprecated because of a bug on Android ([#95](https://github.com/ionic-team/capacitor-google-maps/issues/95)). Please use 7.1.1 instead.
 
 ### Features
 
