@@ -82,23 +82,23 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         x = fromJSONObject.getInt("x")
         y = fromJSONObject.getInt("y")
 
-        val _zoom = fromJSONObject.getInt("zoom")
-        var _minZoom = fromJSONObject.getInt("minZoom")
-        var _maxZoom = fromJSONObject.getInt("maxZoom")
-        if (_minZoom != null && maxZoom != null && _minZoom > _maxZoom) {
-            _minZoom = _maxZoom.also { _maxZoom = _minZoom }
-        }
-        minZoom = _minZoom
-        maxZoom = _maxZoom
-        if (_maxZoom != null && _zoom > _maxZoom) {
-            zoom = _maxZoom
-        } else if (_minZoom != null && _zoom < _minZoom) {
-            zoom = _minZoom
-        } else {
-            zoom = _zoom
+        val tempZoom = fromJSONObject.getInt("zoom")
+        var tempMinZoom = fromJSONObject.optInt("minZoom").takeIf { fromJSONObject.has("minZoom") }
+        var tempMaxZoom = fromJSONObject.optInt("maxZoom").takeIf { fromJSONObject.has("maxZoom") }
+
+        if (tempMinZoom != null && tempMaxZoom != null && tempMinZoom > tempMaxZoom) {
+            tempMinZoom = tempMaxZoom.also { tempMaxZoom = tempMinZoom }
         }
 
-        mapTypeId = fromJSONObject.getString("mapTypeId")
+        minZoom = tempMinZoom
+        maxZoom = tempMaxZoom
+
+        zoom = tempZoom.coerceIn(
+            tempMinZoom ?: Int.MIN_VALUE,
+            tempMaxZoom ?: Int.MAX_VALUE
+        )
+
+        mapTypeId = fromJSONObject.optString("mapTypeId").takeIf { fromJSONObject.has("mapTypeId") }
 
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
@@ -110,11 +110,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
 
         mapId = fromJSONObject.getString("androidMapId")
 
-        if (fromJSONObject.has("restriction")) {
-            restriction = GoogleMapConfigRestriction(fromJSONObject.getJSONObject("restriction"))
-        }
+        restriction = fromJSONObject.optJSONObject("restriction")?.let { GoogleMapConfigRestriction(it) }
 
-        heading = fromJSONObject.getDouble("heading")
+        heading = fromJSONObject.optDouble("heading").takeIf { fromJSONObject.has("heading") }
 
         googleMapOptions = GoogleMapOptions().camera(cameraPosition).liteMode(liteMode)
         if (mapId != null) {
