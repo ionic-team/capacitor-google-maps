@@ -211,6 +211,59 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     }
 
     @PluginMethod
+    fun addTileOverlay(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val tileOverlayObj = call.getObject("tileOverlay", null)
+            tileOverlayObj ?: throw InvalidArgumentsError("tileOverlay object is missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val tileOverlay = CapacitorGoogleMapTileOverlay(tileOverlayObj)
+            map.addTileOverlay(tileOverlay) { result ->
+                val tileOverlayId = result.getOrThrow()
+
+                val res = JSObject()
+                res.put("id", tileOverlayId)
+                call.resolve(res)
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun removeTileOverlay(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val tileOverlayId = call.getString("tileOverlayId")
+            tileOverlayId ?: throw InvalidArgumentsError("tileOverlayId is invalid or missing")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.removeTileOverlay(tileOverlayId) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
     fun addMarker(call: PluginCall) {
         try {
             val id = call.getString("id")

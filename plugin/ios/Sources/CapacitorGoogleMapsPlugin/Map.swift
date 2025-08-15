@@ -75,6 +75,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var tileOverlays = [Int: GMSURLTileLayer]()
     var polygons = [Int: GMSPolygon]()
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
@@ -128,6 +129,33 @@ public class Map {
                 } catch {
                     CAPLog.print("Invalid Google Maps styles")
                 }
+            }
+
+            let minZoom = self.config.minZoom.map { Float($0) } ?? self.mapViewController.GMapView.minZoom
+            let maxZoom = self.config.maxZoom.map { Float($0) } ?? self.mapViewController.GMapView.maxZoom
+            self.mapViewController.GMapView.setMinZoom(minZoom, maxZoom: maxZoom)
+
+            if let mapTypeId = self.config.mapTypeId {
+                switch mapTypeId {
+                case "hybrid":
+                    self.mapViewController.GMapView.mapType = .hybrid
+                case "roadmap":
+                    self.mapViewController.GMapView.mapType = .normal
+                case "satellite":
+                    self.mapViewController.GMapView.mapType = .satellite
+                case "terrain":
+                    self.mapViewController.GMapView.mapType = .terrain
+                default:
+                    break
+                }
+            }
+
+            if let restriction = self.config.restriction {
+                self.mapViewController.GMapView.cameraTargetBounds = restriction.latLngBounds
+            }
+
+            if let heading = self.config.heading {
+                self.mapViewController.GMapView.animate(toBearing: heading)
             }
 
             self.delegate.notifyListeners("onMapReady", data: [
@@ -209,6 +237,41 @@ public class Map {
             if let target = self.targetViewController, let itemIndex = WKWebView.disabledTargets.firstIndex(of: target) {
                 WKWebView.disabledTargets.remove(at: itemIndex)
             }
+        }
+    }
+
+    func addTileOverlay(tileOverlay: TileOverlay) throws -> Int {
+        var tileOverlayHash = 0
+
+        DispatchQueue.main.sync {
+            let urlConstructor: GMSTileURLConstructor = { x, y, zoom in
+                URL(string: tileOverlay.url
+                        .replacingOccurrences(of: "{x}", with: "\(x)")
+                        .replacingOccurrences(of: "{y}", with: "\(y)")
+                        .replacingOccurrences(of: "{z}", with: "\(zoom)")
+                )
+            }
+            let layer = GMSURLTileLayer(urlConstructor: urlConstructor)
+            layer.opacity = tileOverlay.opacity ?? 1
+            layer.zIndex = tileOverlay.zIndex
+            layer.map = self.mapViewController.GMapView
+
+            self.tileOverlays[layer.hash.hashValue] = layer
+
+            tileOverlayHash = layer.hash.hashValue
+        }
+
+        return tileOverlayHash
+    }
+
+    func removeTileOverlay(id: Int) throws {
+        if let tileOverlay = self.tileOverlays[id] {
+            DispatchQueue.main.async {
+                tileOverlay.map = nil
+                self.tileOverlays.removeValue(forKey: id)
+            }
+        } else {
+            throw GoogleMapErrors.tileOverlayNotFound
         }
     }
 
