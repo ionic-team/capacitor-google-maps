@@ -7,10 +7,10 @@ Pod::Spec.new do |s|
   s.version = package['version']
   s.summary = package['description']
   s.license = package['license']
-  s.homepage = 'https://capacitorjs.com'
+  s.homepage = package['repository']['url']
   s.author = package['author']
-  s.source = { :git => 'https://github.com/ionic-team/capacitor-plugins.git', :tag => package['name'] + '@' + package['version'] }
-  s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}', 'google-maps/ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
+  s.source = { :git => package['repository']['url'], :tag => s.version.to_s }
+  s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
   s.ios.deployment_target  = '14.0'
   s.dependency 'Capacitor'
   s.dependency 'GoogleMaps', '~> 8.4'
