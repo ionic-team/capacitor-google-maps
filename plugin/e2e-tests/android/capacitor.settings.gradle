@@ -3,16 +3,16 @@ include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
 include ':capacitor-app'
-project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
+project(':capacitor-app').projectDir = new File('../../../../capacitor-plugins/app/android')
 
 include ':capacitor-google-maps'
 project(':capacitor-google-maps').projectDir = new File('../../android')
 
 include ':capacitor-haptics'
-project(':capacitor-haptics').projectDir = new File('../node_modules/@capacitor/haptics/android')
+project(':capacitor-haptics').projectDir = new File('../../../../capacitor-plugins/haptics/android')
 
 include ':capacitor-keyboard'
-project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor/keyboard/android')
+project(':capacitor-keyboard').projectDir = new File('../../../../capacitor-plugins/keyboard/android')
 
 include ':capacitor-status-bar'
-project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
+project(':capacitor-status-bar').projectDir = new File('../../../../capacitor-plugins/status-bar/android')

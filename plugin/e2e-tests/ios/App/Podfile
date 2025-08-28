@@ -1,4 +1,4 @@
-platform :ios, '14.0'
+platform :ios, '15.0'
 use_frameworks!
 
 # workaround to avoid Xcode caching of Pods that requires
@@ -9,11 +9,11 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
+  pod 'CapacitorApp', :path => '../../../../../capacitor-plugins/app'
   pod 'CapacitorGoogleMaps', :path => '../../..'
-  pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
-  pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
-  pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
+  pod 'CapacitorHaptics', :path => '../../../../../capacitor-plugins/haptics'
+  pod 'CapacitorKeyboard', :path => '../../../../../capacitor-plugins/keyboard'
+  pod 'CapacitorStatusBar', :path => '../../../../../capacitor-plugins/status-bar'
 end
 
 target 'App' do
