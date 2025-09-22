@@ -14,6 +14,7 @@ class GMViewController: UIViewController {
     var cameraPosition: [String: Double]!
     var minimumClusterSize: Int?
     var mapId: String?
+    var onViewDidLoad: (() -> Void)?
 
     private var clusterManager: GMUClusterManager?
 
@@ -34,6 +35,7 @@ class GMViewController: UIViewController {
         }
 
         self.view = GMapView
+        self.onViewDidLoad?()
     }
 
     func initClusterManager(_ minClusterSize: Int?) {
@@ -94,10 +96,12 @@ public class Map {
         self.delegate = delegate
         self.mapViewController = GMViewController()
         self.mapViewController.mapId = config.mapId
-
+        self.mapViewController.onViewDidLoad = { [weak self] in
+            self?.finishMapConfiguration()
+        }
         self.render()
     }
-
+    
     func render() {
         DispatchQueue.main.async {
             self.mapViewController.mapViewBounds = [
@@ -106,23 +110,28 @@ public class Map {
                 "x": self.config.x,
                 "y": self.config.y
             ]
-
+            
             self.mapViewController.cameraPosition = [
                 "latitude": self.config.center.lat,
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
-
+            
             self.targetViewController = self.getTargetContainer(refWidth: self.config.width, refHeight: self.config.height)
-
+            
             if let target = self.targetViewController {
                 target.tag = Map.MAP_TAG
                 target.removeAllSubview()
                 self.mapViewController.view.frame = target.bounds
                 target.addSubview(self.mapViewController.view)
-                self.mapViewController.GMapView.delegate = self.delegate
             }
+        }
+    }
 
+    func finishMapConfiguration() {
+        DispatchQueue.main.async {
+            self.mapViewController.GMapView.delegate = self.delegate
+            
             if let styles = self.config.styles {
                 do {
                     self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
