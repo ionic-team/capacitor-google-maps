@@ -217,10 +217,11 @@ public class Map {
 
                     let height = Double((item as? UIScrollView)?.contentSize.height ?? 0)
                     let width = Double((item as? UIScrollView)?.contentSize.width ?? 0)
-                    let actualHeight = round(height / 2)
+                    let actualHeightFloor = floor(height / 2)
+                    let actualHeightCeil = ceil(height / 2)
 
-                    let isWidthEqual = width == self.config.width
-                    let isHeightEqual = actualHeight == self.config.height
+                    let isWidthEqual = width == refWidth
+                    let isHeightEqual = actualHeightFloor == refHeight || actualHeightCeil == refHeight
 
                     if isWidthEqual && isHeightEqual && item.tag < self.targetViewController?.tag ?? Map.MAP_TAG {
                         return item
