@@ -180,7 +180,7 @@ const CircleMapPage: React.FC = () => {
           bottom: 0,
           left: 0,
           width: window.outerWidth,
-          height: 500,
+          height: window.outerWidth * 2 / 3,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>

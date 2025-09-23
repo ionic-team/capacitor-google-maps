@@ -227,10 +227,10 @@ const ConfigMapPage: React.FC = () => {
     return (
         <BaseTestingPage pageTitle="Map Configuration">
             <div>
-                <IonButton expand="block" id="createMapButton" onClick={createMaps}>
+                <IonButton id="createMapButton" onClick={createMaps}>
                     Create Maps
                 </IonButton>
-                <IonButton expand="block" id="destroyMapButton" onClick={destroyMaps}>
+                <IonButton id="destroyMapButton" onClick={destroyMaps}>
                     Destroy Maps
                 </IonButton>
                 <IonButton id="moveCameraButton" onClick={moveCameras}>Move Camera</IonButton>

@@ -22,7 +22,7 @@ const PolylineMapPage: React.FC = () => {
     setCommandOutput('');
     setMap(null);
     try {
-      const mapRef = document.getElementById('map')!;
+      const mapRef = document.getElementById('map_polylines')!;
 
       const newMap = await GoogleMap.create({
         element: mapRef,
@@ -162,7 +162,7 @@ const PolylineMapPage: React.FC = () => {
           bottom: 0,
           left: 0,
           width: window.outerWidth,
-          height: 500,
+          height: window.outerWidth * 2 / 3,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>

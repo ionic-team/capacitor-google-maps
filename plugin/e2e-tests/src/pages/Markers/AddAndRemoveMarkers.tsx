@@ -152,10 +152,10 @@ const AddAndRemoveMarkers: React.FC = () => {
             </div>
             <capacitor-google-map id="markers_add_remove_map1" style={{
                 position: "absolute",
-                top: window.innerHeight - 300,
+                top: window.innerHeight - 150,
                 left: 0,
                 width: window.innerWidth,
-                height: 300,
+                height: window.outerWidth / 2,
             }}></capacitor-google-map>
         </BaseTestingPage>
     )

@@ -122,16 +122,16 @@ const BoundsMapPage: React.FC = () => {
   return (
     <BaseTestingPage pageTitle="Bounds">
       <div>
-        <IonButton expand="block" id="createMapButton" onClick={createMap}>
+        <IonButton id="createMapButton" onClick={createMap}>
           Create Map
         </IonButton>
-        <IonButton expand="block" id="destroyMapButton" onClick={destroyMap}>
+        <IonButton id="destroyMapButton" onClick={destroyMap}>
           Destroy Map
         </IonButton>
-        <IonButton expand="block" id="getBoundsButton" onClick={getBounds}>
+        <IonButton id="getBoundsButton" onClick={getBounds}>
           Get Bounds
         </IonButton>
-        <IonButton expand="block" id="fitBoundsButton" onClick={fitBounds}>
+        <IonButton id="fitBoundsButton" onClick={fitBounds}>
           Fit Bounds
         </IonButton>
         <IonRow>
@@ -185,7 +185,7 @@ const BoundsMapPage: React.FC = () => {
           top: window.innerHeight - window.outerWidth / 2,
           left: 0,
           width: window.outerWidth,
-          height: window.outerWidth,
+          height: window.outerWidth / 2,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>

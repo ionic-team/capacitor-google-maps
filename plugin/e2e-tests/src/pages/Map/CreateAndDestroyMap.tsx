@@ -86,20 +86,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
     }
   }
 
-  async function setOnMapBoundsChangedListeners() {
-    setCommandOutput('');
-    try {
-      if (maps) {
-        for (let map of maps) {
-         map.setOnBoundsChangedListener(onMapBoundsChanged);
-        }
-        setCommandOutput('Map Bounds Changed Listeners Set');
-      }
-    } catch (err: any) {
-      setCommandOutput(err.message);
-    }
-  }
-
   async function removeOnMapClickListeners() {
     setCommandOutput('');
     try {
@@ -158,16 +144,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
     }
   }
 
-  async function getBounds() {
-    setCommandOutput('');
-    try {
-      const bounds = await maps[0].getMapBounds();
-      setCommandOutput(JSON.stringify(bounds));
-    } catch (err: any) {
-      setCommandOutput(err.message);
-    }
-  }
-
   return (
     <BaseTestingPage pageTitle="Create and Destroy Map">
       <div>
@@ -180,16 +156,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
           onClick={setOnMapClickListeners}
         >
           Set On Map Click Listeners
-        </IonButton>
-        <IonButton
-          expand="block"
-          id="setOnMapBoundsButton"
-          onClick={setOnMapBoundsChangedListeners}
-        >
-          Set On Map Bounds Changed Listeners
-        </IonButton>
-        <IonButton expand="block" id="getMapBounds" onClick={getBounds}>
-          Get Current Bounds
         </IonButton>
         <IonButton
           expand="block"
