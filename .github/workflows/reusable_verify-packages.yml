@@ -9,12 +9,12 @@ on:
 jobs:
 
   verify-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 30
     strategy:
       matrix:
         xcode:
-        - /Applications/Xcode_15.0.app
+        - /Applications/Xcode_16.4.app
     steps:
       - uses: actions/checkout@v3
         with:
