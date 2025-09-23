@@ -28,13 +28,13 @@ const CreateAndDestroyMapPage: React.FC = () => {
     setCommandOutput('');
     setMaps([]);
     try {
-      const mapRef1 = document.getElementById('map1')!;
-      const mapRef2 = document.getElementById('map2')!;
+      const mapRef1 = document.getElementById('map1_create_destroy')!;
+      const mapRef2 = document.getElementById('map2_create_destroy')!;
 
       const newMap1 = await GoogleMap.create(
         {
           element: mapRef1,
-          id: 'test-map',
+          id: 'test-map-create-destroy1',
           apiKey: apiKey!,
           config: {
             center: {
@@ -51,7 +51,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
       const newMap2 = await GoogleMap.create(
         {
           element: mapRef2,
-          id: 'test-map2',
+          id: 'test-map-create-destroy2',
           apiKey: apiKey!,
           config: {
             center: {
@@ -212,7 +212,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map1"
+        id="map1_create_destroy"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,
@@ -222,7 +222,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         }}
       ></capacitor-google-map>
       <capacitor-google-map
-        id="map2"
+        id="map2_create_destroy"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,

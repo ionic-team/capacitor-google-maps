@@ -19,7 +19,7 @@ const ConfigMapPage: React.FC = () => {
             
             const newMap1 = await GoogleMap.create({
                 element: mapRef1,
-                id: "test-map",
+                id: "test-map-config1",
                 apiKey: apiKey!,
                 config: {
                     center: {
@@ -32,7 +32,7 @@ const ConfigMapPage: React.FC = () => {
 
             const newMap2 = await GoogleMap.create({
                 element: mapRef2, 
-                id: "test-map2", 
+                id: "test-map-config2", 
                 apiKey: apiKey!, 
                 config: {
                     center: {

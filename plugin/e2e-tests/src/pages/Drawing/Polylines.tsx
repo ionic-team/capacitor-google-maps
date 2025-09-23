@@ -26,7 +26,7 @@ const PolylineMapPage: React.FC = () => {
 
       const newMap = await GoogleMap.create({
         element: mapRef,
-        id: 'test-map',
+        id: 'test-map-polylines',
         apiKey: apiKey!,
         config: {
           center: {
@@ -156,7 +156,7 @@ const PolylineMapPage: React.FC = () => {
         ></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map"
+        id="map_polylines"
         style={{
           position: 'absolute',
           bottom: 0,

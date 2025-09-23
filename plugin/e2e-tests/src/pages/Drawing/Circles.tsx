@@ -22,11 +22,11 @@ const CircleMapPage: React.FC = () => {
     setCommandOutput('');
     setMap(null);
     try {
-      const mapRef = document.getElementById('map')!;
+      const mapRef = document.getElementById('map_circles')!;
 
       const newMap = await GoogleMap.create({
         element: mapRef,
-        id: 'test-map',
+        id: 'test-map-circles',
         apiKey: apiKey!,
         config: {
           center: { lat: 37.09, lng: -95.712 },
@@ -174,7 +174,7 @@ const CircleMapPage: React.FC = () => {
         ></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map"
+        id="map_circles"
         style={{
           position: 'absolute',
           bottom: 0,

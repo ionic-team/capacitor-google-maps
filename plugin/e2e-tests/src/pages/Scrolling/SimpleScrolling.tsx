@@ -9,13 +9,13 @@ const SimpleScrollingPage: React.FC = () => {
   const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
   async function createMaps() {
-    const mapRef = document.getElementById('map')!;
+    const mapRef = document.getElementById('map_scrolling')!;
     setCommandOutput('');
     setMap(null);
     try {
       const newMap1 = await GoogleMap.create({
         element: mapRef, 
-        id: 'test-map', 
+        id: 'test-map-scrolling', 
         apiKey: apiKey!, 
         config: {
           center: {
@@ -106,7 +106,7 @@ const SimpleScrollingPage: React.FC = () => {
           
           
           <capacitor-google-map
-            id="map"
+            id="map_scrolling"
             style={{
               display: 'inline-block',
               width: 275,

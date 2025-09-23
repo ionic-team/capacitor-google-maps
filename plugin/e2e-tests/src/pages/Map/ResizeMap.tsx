@@ -18,11 +18,11 @@ const ResizeMapPage: React.FC = () => {
     setCommandOutput('');
     setMap(null);
     try {
-      const mapRef = document.getElementById('map')!;
+      const mapRef = document.getElementById('map_resize')!;
 
       const newMap = await GoogleMap.create({
         element: mapRef,
-        id: 'test-map',
+        id: 'test-map-resize',
         apiKey: apiKey!,
         config: {
           center: {
@@ -84,7 +84,7 @@ const ResizeMapPage: React.FC = () => {
         ></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map"
+        id="map_resize"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,
