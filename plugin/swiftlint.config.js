@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 module.exports = {
   // eslint-disable-next-line no-template-curly-in-string
-  included: ['${PWD}/ios/Plugin'],
+  included: ['${PWD}/ios/Sources', '${PWD}/ios/Tests'],
   identifier_name: {
     min_length: {
       warning: 3,
