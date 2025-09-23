@@ -22,11 +22,11 @@ const BoundsMapPage: React.FC = () => {
     setCommandOutput('');
     setMap(null);
     try {
-      const mapRef = document.getElementById('map')!;
+      const mapRef = document.getElementById('map_bounds')!;
 
       const newMap = await GoogleMap.create({
         element: mapRef,
-        id: 'test-map',
+        id: 'test-map-bounds',
         apiKey: apiKey!,
         config: {
           center: {
@@ -122,16 +122,16 @@ const BoundsMapPage: React.FC = () => {
   return (
     <BaseTestingPage pageTitle="Bounds">
       <div>
-        <IonButton expand="block" id="createMapButton" onClick={createMap}>
+        <IonButton id="createMapButton" onClick={createMap}>
           Create Map
         </IonButton>
-        <IonButton expand="block" id="destroyMapButton" onClick={destroyMap}>
+        <IonButton id="destroyMapButton" onClick={destroyMap}>
           Destroy Map
         </IonButton>
-        <IonButton expand="block" id="getBoundsButton" onClick={getBounds}>
+        <IonButton id="getBoundsButton" onClick={getBounds}>
           Get Bounds
         </IonButton>
-        <IonButton expand="block" id="fitBoundsButton" onClick={fitBounds}>
+        <IonButton id="fitBoundsButton" onClick={fitBounds}>
           Fit Bounds
         </IonButton>
         <IonRow>
@@ -179,13 +179,13 @@ const BoundsMapPage: React.FC = () => {
         ></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map"
+        id="map_bounds"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,
           left: 0,
           width: window.outerWidth,
-          height: window.outerWidth,
+          height: window.outerWidth / 2,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>

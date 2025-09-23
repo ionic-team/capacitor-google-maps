@@ -21,7 +21,7 @@ const MarkerCustomizations: React.FC = () => {
       if (element !== null) {
         const newMap = await GoogleMap.create({
           element: element,
-          id: 'test-map',
+          id: 'test-map-marker-custom',
           apiKey: apiKey!,
           config: {
             center: {
@@ -332,40 +332,37 @@ const MarkerCustomizations: React.FC = () => {
   return (
     <BaseTestingPage pageTitle="Marker Customization">
       <div>
-        <IonButton id="createMapButton" onClick={createMap} expand="block">
+        <IonButton id="createMapButton" onClick={createMap}>
           Create Map
         </IonButton>
-        <IonButton id="addMarkerImageButton" onClick={addMarkerImage} expand="block">
+        <IonButton id="addMarkerImageButton" onClick={addMarkerImage}>
           Add Marker with Image
         </IonButton>
-        <IonButton id="addMarkerSVGButton" onClick={addMarkerSVG} expand="block">
+        <IonButton id="addMarkerSVGButton" onClick={addMarkerSVG}>
           Add Marker with SVG
         </IonButton>
-        <IonButton id="addMarkerColorButton" onClick={addMarkerColor} expand="block">
+        <IonButton id="addMarkerColorButton" onClick={addMarkerColor}>
           Add Marker with Color
         </IonButton>
         <IonButton
           id="addMultipleImageMarkersButton"
           onClick={addMultipleImageMarkers}
-          expand="block"
         >
           Add Multiple Image Markers
         </IonButton>
         <IonButton
           id="addMultipleColorMarkersButton"
           onClick={addMultipleColorMarkers}
-          expand="block"
         >
           Add Multiple Color Markers
         </IonButton>
         <IonButton
           id="removeAllMarkersButton"
-          expand="block"
           onClick={removeAllMarkers}
         >
           Remove All Markers
         </IonButton>
-        <IonButton id="destroyMapButton" expand="block" onClick={destroyMap}>
+        <IonButton id="destroyMapButton" onClick={destroyMap}>
           Destroy Map
         </IonButton>
       </div>
@@ -376,10 +373,10 @@ const MarkerCustomizations: React.FC = () => {
         id="map_marker_custom"
         style={{
           position: 'absolute',
-          top: window.innerHeight - 250,
+          top: window.innerHeight - 150,
           left: 0,
           width: window.innerWidth,
-          height: 250,
+          height: 200,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>
