@@ -32,10 +32,10 @@ const AddAndRemoveMarkers: React.FC = () => {
 
     async function createMap() {
         try {
-            const mapRef1 = document.getElementById("markers_map1")!
+            const mapRef1 = document.getElementById("markers_add_remove_map1")!
             const newMap = await GoogleMap.create({
                 element: mapRef1, 
-                id: "test-map", 
+                id: "test-map-markers-add-remove", 
                 apiKey: apiKey!, 
                 config: {
                     center: {
@@ -150,12 +150,12 @@ const AddAndRemoveMarkers: React.FC = () => {
             <div>
                 <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
             </div>
-            <capacitor-google-map id="markers_map1" style={{
+            <capacitor-google-map id="markers_add_remove_map1" style={{
                 position: "absolute",
-                top: window.innerHeight - 300,
+                top: window.innerHeight - 150,
                 left: 0,
                 width: window.innerWidth,
-                height: 300,
+                height: window.outerWidth / 2,
             }}></capacitor-google-map>
         </BaseTestingPage>
     )

@@ -28,13 +28,13 @@ const CreateAndDestroyMapPage: React.FC = () => {
     setCommandOutput('');
     setMaps([]);
     try {
-      const mapRef1 = document.getElementById('map1')!;
-      const mapRef2 = document.getElementById('map2')!;
+      const mapRef1 = document.getElementById('map1_create_destroy')!;
+      const mapRef2 = document.getElementById('map2_create_destroy')!;
 
       const newMap1 = await GoogleMap.create(
         {
           element: mapRef1,
-          id: 'test-map',
+          id: 'test-map-create-destroy1',
           apiKey: apiKey!,
           config: {
             center: {
@@ -51,7 +51,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
       const newMap2 = await GoogleMap.create(
         {
           element: mapRef2,
-          id: 'test-map2',
+          id: 'test-map-create-destroy2',
           apiKey: apiKey!,
           config: {
             center: {
@@ -80,20 +80,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
           map.setOnMapClickListener(onMapClick);
         }
         setCommandOutput('Map Click Listeners Set');
-      }
-    } catch (err: any) {
-      setCommandOutput(err.message);
-    }
-  }
-
-  async function setOnMapBoundsChangedListeners() {
-    setCommandOutput('');
-    try {
-      if (maps) {
-        for (let map of maps) {
-         map.setOnBoundsChangedListener(onMapBoundsChanged);
-        }
-        setCommandOutput('Map Bounds Changed Listeners Set');
       }
     } catch (err: any) {
       setCommandOutput(err.message);
@@ -158,16 +144,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
     }
   }
 
-  async function getBounds() {
-    setCommandOutput('');
-    try {
-      const bounds = await maps[0].getMapBounds();
-      setCommandOutput(JSON.stringify(bounds));
-    } catch (err: any) {
-      setCommandOutput(err.message);
-    }
-  }
-
   return (
     <BaseTestingPage pageTitle="Create and Destroy Map">
       <div>
@@ -180,16 +156,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
           onClick={setOnMapClickListeners}
         >
           Set On Map Click Listeners
-        </IonButton>
-        <IonButton
-          expand="block"
-          id="setOnMapBoundsButton"
-          onClick={setOnMapBoundsChangedListeners}
-        >
-          Set On Map Bounds Changed Listeners
-        </IonButton>
-        <IonButton expand="block" id="getMapBounds" onClick={getBounds}>
-          Get Current Bounds
         </IonButton>
         <IonButton
           expand="block"
@@ -212,7 +178,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         <IonTextarea id="commandOutput" value={commandOutput}></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map1"
+        id="map1_create_destroy"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,
@@ -222,7 +188,7 @@ const CreateAndDestroyMapPage: React.FC = () => {
         }}
       ></capacitor-google-map>
       <capacitor-google-map
-        id="map2"
+        id="map2_create_destroy"
         style={{
           position: 'absolute',
           top: window.innerHeight - window.outerWidth / 2,

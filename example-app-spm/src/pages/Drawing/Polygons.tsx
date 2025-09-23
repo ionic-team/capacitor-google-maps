@@ -22,11 +22,11 @@ const PolygonMapPage: React.FC = () => {
     setCommandOutput('');
     setMap(null);
     try {
-      const mapRef = document.getElementById('map')!;
+      const mapRef = document.getElementById('map_polygons')!;
 
       const newMap = await GoogleMap.create({
         element: mapRef,
-        id: 'test-map',
+        id: 'test-map-polygons',
         apiKey: apiKey!,
         config: {
           center: {
@@ -199,13 +199,13 @@ const PolygonMapPage: React.FC = () => {
         ></IonTextarea>
       </div>
       <capacitor-google-map
-        id="map"
+        id="map_polygons"
         style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           width: window.outerWidth,
-          height: 500,
+          height: window.outerWidth * 2 / 3,
         }}
       ></capacitor-google-map>
     </BaseTestingPage>

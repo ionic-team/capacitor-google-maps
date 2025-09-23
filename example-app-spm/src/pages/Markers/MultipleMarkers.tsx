@@ -57,7 +57,7 @@ const MultipleMarkers: React.FC = () => {
       if (element !== null) {
         const newMap = await GoogleMap.create({
           element: element,
-          id: 'test-map',
+          id: 'test-map-multiple-markers',
           apiKey: apiKey!,
           config: {
             center: {
