@@ -719,7 +719,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-
+    
     @objc func enableCurrentLocation(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -734,19 +734,23 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
             }
 
+            let showButton = call.getBool("showButton") ?? false
+
             let locationStatus = checkLocationPermission()
 
-            if enabled &&  !(locationStatus == "granted" || locationStatus == "prompt") {
+            if enabled && !(locationStatus == "granted" || locationStatus == "prompt") {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
 
             try map.enableCurrentLocation(enabled: enabled)
+            map.setMyLocationButtonEnabled(enabled: showButton)
 
             call.resolve()
         } catch {
             handleError(call, error: error)
         }
     }
+
 
     @objc func enableClustering(_ call: CAPPluginCall) {
         do {
