@@ -1,0 +1,6 @@
+{
+	"appId": "com.capacitorjs.maps_spm",
+	"appName": "example-app-spm",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

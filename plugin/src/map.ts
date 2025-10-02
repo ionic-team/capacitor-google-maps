@@ -19,6 +19,7 @@ import type {
   CircleClickCallbackData,
   Polyline,
   PolylineCallbackData,
+  TileOverlay,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -35,6 +36,8 @@ export interface GoogleMapInterface {
     minClusterSize?: number
   ): Promise<void>;
   disableClustering(): Promise<void>;
+  addTileOverlay(tileOverlay: TileOverlay): Promise<{ id: string }>;
+  removeTileOverlay(id: string): Promise<void>;
   addMarker(marker: Marker): Promise<string>;
   addMarkers(markers: Marker[]): Promise<string[]>;
   removeMarker(id: string): Promise<void>;
@@ -330,6 +333,34 @@ export class GoogleMap {
   async disableClustering(): Promise<void> {
     return CapacitorGoogleMaps.disableClustering({
       id: this.id,
+    });
+  }
+
+  /**
+   * Adds a tile overlay to the map
+   *
+   * @param tileOverlay
+   * @returns created tile overlay id
+   */
+  async addTileOverlay(tileOverlay: TileOverlay): Promise<string> {
+    const res = await CapacitorGoogleMaps.addTileOverlay({
+      id: this.id,
+      tileOverlay,
+    });
+
+    return res.id;
+  }
+
+  /**
+   * Removes a tile overlay from the map
+   *
+   * @param id of the tile overlay to remove from the map
+   * @returns void
+   */
+  async removeTileOverlay(id: string): Promise<void> {
+    return CapacitorGoogleMaps.removeTileOverlay({
+      id: this.id,
+      tileOverlayId: id,
     });
   }
 

@@ -1,0 +1,7 @@
+{
+  "name": "example-app-spm",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

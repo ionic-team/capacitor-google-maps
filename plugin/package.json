@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/google-maps",
-  "version": "7.0.1",
+  "version": "7.1.1",
   "description": "Google maps on Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -17,8 +17,10 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-    "ios/Plugin/",
-    "CapacitorGoogleMaps.podspec"
+    "CapacitorGoogleMaps.podspec",
+    "ios/Sources",
+    "ios/Tests",
+    "Package.swift"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
@@ -37,12 +39,12 @@
   ],
   "scripts": {
     "verify": "pnpm run verify:ios && pnpm run verify:android && pnpm run verify:web",
-    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -sdk iphonesimulator && cd ..",
+    "verify:ios": "xcodebuild build -scheme CapacitorGoogleMaps -destination generic/platform=iOS",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "pnpm run build",
     "lint": "pnpm eslint . --ext ts && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --check && pnpm node-swiftlint lint",
     "fmt": "pnpm eslint . --ext ts --fix && pnpm prettier \"./**/*.{css,html,ts,js,java}\" --write && pnpm node-swiftlint --fix --format",
-    "docgen": "docgen --api GoogleMapInterface --output-readme README.md --output-json dist/docs.json",
+    "docgen": "node ../scripts/docgen_updates.js",
     "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.js && pnpm run downleveldts",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
@@ -54,10 +56,10 @@
     "unittest:android": "cd ./unit-tests/android && ./gradlew testDebugUnitTest"
   },
   "devDependencies": {
-    "@capacitor/android": "next",
-    "@capacitor/core": "next",
+    "@capacitor/android": ">=7.0.0",
+    "@capacitor/core": ">=7.0.0",
     "@capacitor/docgen": "0.3.0",
-    "@capacitor/ios": "next",
+    "@capacitor/ios": ">=7.0.0",
     "@ionic/prettier-config": "^1.0.1",
     "@types/resize-observer-browser": "^0.1.7",
     "@types/supercluster": "^7.1.0",
