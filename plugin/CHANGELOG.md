@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.1.1...@capacitor/google-maps@7.2.0) (2025-10-03)
+
+
+### Bug Fixes
+
+* **ios:** Crash "Unexpectedly found nil while implicitly unwrapping an Optional value" ([#136](https://github.com/ionic-team/capacitor-google-maps/issues/136)) ([e4ea913](https://github.com/ionic-team/capacitor-google-maps/commit/e4ea913e45d8d368926d637c62dbf745bfdc3ae4))
+* **ios:** getTargetContainer calculation ([#24](https://github.com/ionic-team/capacitor-google-maps/issues/24)) ([ebf62a1](https://github.com/ionic-team/capacitor-google-maps/commit/ebf62a1aada3d9dd6d4d5de475d9b455de1e4aa9))
+
+
+### Features
+
+* **ios:** SPM iOS support ([#98](https://github.com/ionic-team/capacitor-google-maps/issues/98)) ([c0f423b](https://github.com/ionic-team/capacitor-google-maps/commit/c0f423ba855c8494c6d69c82bb68046a04a0a616))
+
+
+
+
+
 ## [7.1.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.1.0...@capacitor/google-maps@7.1.1) (2025-08-13)
 
 

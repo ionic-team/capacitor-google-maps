@@ -1,10 +1,10 @@
 {
   "name": "example-app-spm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
-    "@capacitor/app": "^7.0.0",
     "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
     "@capacitor/core": "^7.0.0",
     "@capacitor/google-maps": "workspace:*",
     "@capacitor/haptics": "^7.0.0",
