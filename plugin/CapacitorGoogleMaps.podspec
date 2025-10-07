@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
   s.author = package['author']
   s.source = { :git => package['repository']['url'], :tag => s.version.to_s }
   s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
-  s.ios.deployment_target  = '14.0'
+  s.ios.deployment_target  = '15.0'
   s.dependency 'Capacitor'
-  s.dependency 'GoogleMaps', '~> 8.4'
-  s.dependency 'Google-Maps-iOS-Utils', '~> 5.0'
+  s.dependency 'GoogleMaps', '~> 9.4'
+  s.dependency 'Google-Maps-iOS-Utils', '6.1.0'
   s.swift_version = '5.1'
   s.static_framework = true
 end
