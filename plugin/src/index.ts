@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LatLngBounds, MapType, Marker, Polygon, Circle, Polyline, StyleSpan } from './definitions';
 import { GoogleMap } from './map';
 
