@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CapacitorGoogleMaps",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "CapacitorGoogleMaps",
@@ -11,8 +11,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0"),
-        .package(url: "https://github.com/googlemaps/ios-maps-sdk.git", .upToNextMajor(from:"8.4.0")),
-        .package(url: "https://github.com/googlemaps/google-maps-ios-utils.git", .upToNextMajor(from:"5.0.0"))
+        .package(url: "https://github.com/googlemaps/ios-maps-sdk.git", .upToNextMajor(from:"9.4.0")),
+        .package(url: "https://github.com/googlemaps/google-maps-ios-utils.git", .exact("6.1.0"))
     ],
     targets: [
         .target(
