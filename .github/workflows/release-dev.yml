@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'test/trusted-publishing'
       # - 'main'
   workflow_dispatch:
 
