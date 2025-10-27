@@ -16,7 +16,7 @@ runs:
         node-version: 20
 
     - name: Install PNPM
-      uses: pnpm/action-setup@v2
+      uses: pnpm/action-setup@v4
       id: pnpm-install
       with:
         version: 9
