@@ -3,8 +3,8 @@ name: "Release"
 on: workflow_dispatch
 
 permissions:
+  id-token: write  # Required for OIDC for trusted publishing
   contents: write
-  id-token: write
 
 jobs:
   setup:
@@ -32,4 +32,3 @@ jobs:
       create-rc-release: false
     secrets:
       CAP_GH_RELEASE_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
-      NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

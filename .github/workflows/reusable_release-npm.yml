@@ -11,10 +11,12 @@ on:
         required: false
         type: boolean
         default: false
+      create-release-from-prerelease:
+        required: false
+        type: boolean
+        default: false
     secrets:
       CAP_GH_RELEASE_TOKEN:
-        required: true
-      NPM_TOKEN:
         required: true
 
 permissions:
@@ -54,7 +56,6 @@ jobs:
         if: inputs.create-dev-release
         shell: bash
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
           pnpm ci:publish:dev
@@ -63,7 +64,6 @@ jobs:
         if: "!inputs.create-dev-release && inputs.create-rc-release"
         shell: bash
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
           pnpm run ci:publish:rc
@@ -72,7 +72,6 @@ jobs:
         if: ${{ !inputs.create-dev-release && !inputs.create-rc-release && env.releasetype == 'prerelease' }}
         shell: bash
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
           pnpm run ci:publish:latest-from-pre
@@ -81,7 +80,6 @@ jobs:
         if: ${{ !inputs.create-dev-release && !inputs.create-rc-release && env.releasetype == 'release' }}
         shell: bash
         env: 
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
           pnpm run ci:publish:latest
