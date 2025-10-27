@@ -5,6 +5,7 @@
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "typings": "dist/typings/index.d.ts",
+  "homepage": "https://github.com/ionic-team/capacitor-google-maps",
   "typesVersions": {
     "<4.1": {
       "dist/typings/index.d.ts": [
