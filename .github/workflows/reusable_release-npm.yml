@@ -11,10 +11,6 @@ on:
         required: false
         type: boolean
         default: false
-      create-release-from-prerelease:
-        required: false
-        type: boolean
-        default: false
     secrets:
       CAP_GH_RELEASE_TOKEN:
         required: true
