@@ -58,4 +58,4 @@ jobs:
         env: 
           GH_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
         run: |
-          pnpm ci:publish:devs
+          pnpm ci:publish:dev
