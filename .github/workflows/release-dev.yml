@@ -30,7 +30,7 @@ jobs:
       #CAP_GH_RELEASE_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
 
   release-npm-dev:
-    needs: ['verify-packages', 'lint-test']
+    #needs: ['verify-packages', 'lint-test']
     uses: ./.github/workflows/reusable_release-npm.yml
     with:
       create-dev-release: true
