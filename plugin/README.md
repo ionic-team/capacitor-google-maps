@@ -381,6 +381,8 @@ Vue({
 * [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
 * [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
 * [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
+* [`show()`](#show)
+* [`hide()`](#hide)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -960,6 +962,24 @@ setOnMyLocationClickListener(callback?: MapListenerCallback<MapClickCallbackData
 | Param          | Type                                                                                                                                |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapclickcallbackdata">MapClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### show()
+
+```typescript
+show() => Promise<void>
+```
+
+--------------------
+
+
+### hide()
+
+```typescript
+hide() => Promise<void>
+```
 
 --------------------
 

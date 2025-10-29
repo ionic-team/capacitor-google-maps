@@ -769,6 +769,20 @@ class CapacitorGoogleMap(
         googleMap?.animateCamera(cameraUpdate)
     }
 
+    fun show() {
+        CoroutineScope(Dispatchers.Main).launch {
+            mapView.onResume()
+            mapView.visibility = View.VISIBLE
+        }
+    }
+
+    fun hide() {
+        CoroutineScope(Dispatchers.Main).launch {
+            mapView.onPause()
+            mapView.visibility = View.GONE
+        }
+    }
+
     private fun getScaledPixels(bridge: Bridge, pixels: Int): Int {
         // Get the screen's density scale
         val scale = bridge.activity.resources.displayMetrics.density
