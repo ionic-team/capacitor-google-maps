@@ -20,14 +20,14 @@ jobs:
     secrets:
       CAP_GH_RELEASE_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
 
-  build-packages:
+  verify-packages:
     needs: 'setup'
-    uses: ./.github/workflows/reusable_build-packages.yml
+    uses: ./.github/workflows/reusable_verify-packages.yml
     secrets:
       CAP_GH_RELEASE_TOKEN: ${{ secrets.CAP_GH_RELEASE_TOKEN }}
 
   release-npm-dev:
-    needs: ['build-packages', 'lint-test']
+    needs: ['verify-packages', 'lint-test']
     uses: ./.github/workflows/reusable_release-npm.yml
     with:
       create-dev-release: true
