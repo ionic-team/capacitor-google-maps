@@ -1,7 +1,7 @@
 {
   "command": {
     "version": {
-      "allowBranch": "main",
+      "allowBranch": "test/dev-build",
       "conventionalCommits": true,
       "createRelease": "github",
       "message": "chore(release): publish [skip ci]",
