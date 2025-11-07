@@ -13,4 +13,10 @@ ext {
     cordovaAndroidVersion = '10.1.1'
     coreSplashScreenVersion = '1.0.1'
     junitVersion = '4.13.2'
+    androidxCoreKTXVersion = '1.12.0'
+    googleMapsPlayServicesVersion = '19.0.0'
+    googleMapsUtilsVersion = '3.8.2'
+    googleMapsKtxVersion = '5.1.1'
+    googleMapsUtilsKtxVersion = '5.1.1'
+    kotlinxCoroutinesVersion = '1.7.3'
 }
