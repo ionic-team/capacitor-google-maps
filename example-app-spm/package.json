@@ -3,14 +3,14 @@
   "version": "0.0.2",
   "private": true,
   "dependencies": {
-    "@capacitor/android": "^7.0.0",
-    "@capacitor/app": "^7.0.0",
-    "@capacitor/core": "^7.0.0",
+    "@capacitor/android": "next",
+    "@capacitor/app": "next",
+    "@capacitor/core": "next",
     "@capacitor/google-maps": "workspace:*",
-    "@capacitor/haptics": "^7.0.0",
-    "@capacitor/ios": "^7.0.0",
-    "@capacitor/keyboard": "^7.0.0",
-    "@capacitor/status-bar": "^7.0.0",
+    "@capacitor/haptics": "next",
+    "@capacitor/ios": "next",
+    "@capacitor/keyboard": "next",
+    "@capacitor/status-bar": "next",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
     "@testing-library/jest-dom": "^5.11.9",
@@ -69,7 +69,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "^7.0.0"
+    "@capacitor/cli": "next"
   },
   "description": "An Ionic project"
 }

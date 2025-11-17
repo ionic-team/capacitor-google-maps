@@ -56,10 +56,10 @@
     "unittest:android": "cd ./unit-tests/android && ./gradlew testDebugUnitTest"
   },
   "devDependencies": {
-    "@capacitor/android": ">=7.0.0",
-    "@capacitor/core": ">=7.0.0",
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
     "@capacitor/docgen": "0.3.0",
-    "@capacitor/ios": ">=7.0.0",
+    "@capacitor/ios": "next",
     "@ionic/prettier-config": "^1.0.1",
     "@types/resize-observer-browser": "^0.1.7",
     "@types/supercluster": "^7.1.0",
@@ -77,7 +77,7 @@
     "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=7.0.0"
+    "@capacitor/core": "next"
   },
   "capacitor": {
     "ios": {
