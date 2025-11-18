@@ -13,6 +13,8 @@ import type {
   Polygon,
   Polyline,
   TileOverlay,
+  FeatureType,
+  FeatureStyles,
 } from './definitions';
 
 /**
@@ -93,6 +95,7 @@ export interface RemoveCirclesArgs {
   id: string;
   circleIds: string[];
 }
+
 export interface AddPolylinesArgs {
   id: string;
   polylines: Polyline[];
@@ -101,6 +104,24 @@ export interface AddPolylinesArgs {
 export interface RemovePolylinesArgs {
   id: string;
   polylineIds: string[];
+}
+
+export interface AddFeatureArgs {
+  id: string;
+  type: FeatureType;
+  data: any;
+  idPropertyName?: string;
+  styles?: FeatureStyles;
+}
+
+export interface GetFeatureBoundsArgs {
+  id: string;
+  featureId: string;
+}
+
+export interface RemoveFeatureArgs {
+  id: string;
+  featureId: string;
 }
 
 export interface CameraArgs {
@@ -195,6 +216,9 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   addCircles(args: AddCirclesArgs): Promise<{ ids: string[] }>;
   removeCircles(args: RemoveCirclesArgs): Promise<void>;
   addPolylines(args: AddPolylinesArgs): Promise<{ ids: string[] }>;
+  addFeatures(args: AddFeatureArgs): Promise<{ ids: string[] }>;
+  getFeatureBounds(args: GetFeatureBoundsArgs): Promise<{ bounds: LatLngBounds }>;
+  removeFeature(args: RemoveFeatureArgs): Promise<void>;
   removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
