@@ -354,6 +354,9 @@ Vue({
 * [`removeCircles(...)`](#removecircles)
 * [`addPolylines(...)`](#addpolylines)
 * [`removePolylines(...)`](#removepolylines)
+* [`addFeatures(...)`](#addfeatures)
+* [`getFeatureBounds(...)`](#getfeaturebounds)
+* [`removeFeature(...)`](#removefeature)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -610,6 +613,52 @@ removePolylines(ids: string[]) => Promise<void>
 | Param     | Type                  |
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
+
+--------------------
+
+
+### addFeatures(...)
+
+```typescript
+addFeatures(type: FeatureType, data: any, idPropertyName?: string | undefined, styles?: FeatureStyles | undefined) => Promise<string[]>
+```
+
+| Param                | Type                                                    |
+| -------------------- | ------------------------------------------------------- |
+| **`type`**           | <code><a href="#featuretype">FeatureType</a></code>     |
+| **`data`**           | <code>any</code>                                        |
+| **`idPropertyName`** | <code>string</code>                                     |
+| **`styles`**         | <code><a href="#featurestyles">FeatureStyles</a></code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### getFeatureBounds(...)
+
+```typescript
+getFeatureBounds(featureId: string) => Promise<LatLngBounds>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
+
+--------------------
+
+
+### removeFeature(...)
+
+```typescript
+removeFeature(featureId: string) => Promise<void>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
 
 --------------------
 
@@ -1139,6 +1188,11 @@ Describes the style for some region of a polyline.
 | **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
 
 
+#### FeatureStyles
+
+Feature styles, identified by the feature id
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -1275,6 +1329,14 @@ Supports markers of either either "legacy" or "advanced" types.
 
 
 ### Enums
+
+
+#### FeatureType
+
+| Members       | Value                  | Description |
+| ------------- | ---------------------- | ----------- |
+| **`Default`** | <code>'Default'</code> | Default     |
+| **`GeoJSON`** | <code>'GeoJSON'</code> | GeoJSON     |
 
 
 #### MapType
