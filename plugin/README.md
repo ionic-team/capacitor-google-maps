@@ -373,6 +373,9 @@ Vue({
 * [`removeCircles(...)`](#removecircles)
 * [`addPolylines(...)`](#addpolylines)
 * [`removePolylines(...)`](#removepolylines)
+* [`addFeatures(...)`](#addfeatures)
+* [`getFeatureBounds(...)`](#getfeaturebounds)
+* [`removeFeature(...)`](#removefeature)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
 * [`getMapType()`](#getmaptype)
@@ -391,6 +394,7 @@ Vue({
 * [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
 * [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
 * [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnFeatureClickListener(...)`](#setonfeatureclicklistener)
 * [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
 * [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
 * [`setOnCircleClickListener(...)`](#setoncircleclicklistener)
@@ -633,6 +637,52 @@ removePolylines(ids: string[]) => Promise<void>
 --------------------
 
 
+### addFeatures(...)
+
+```typescript
+addFeatures(type: FeatureType, data: any, idPropertyName?: string | undefined, styles?: FeatureStyles | undefined) => Promise<string[]>
+```
+
+| Param                | Type                                                    |
+| -------------------- | ------------------------------------------------------- |
+| **`type`**           | <code><a href="#featuretype">FeatureType</a></code>     |
+| **`data`**           | <code>any</code>                                        |
+| **`idPropertyName`** | <code>string</code>                                     |
+| **`styles`**         | <code><a href="#featurestyles">FeatureStyles</a></code> |
+
+**Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### getFeatureBounds(...)
+
+```typescript
+getFeatureBounds(featureId: string) => Promise<LatLngBounds>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
+
+**Returns:** <code>Promise&lt;LatLngBounds&gt;</code>
+
+--------------------
+
+
+### removeFeature(...)
+
+```typescript
+removeFeature(featureId: string) => Promise<void>
+```
+
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`featureId`** | <code>string</code> |
+
+--------------------
+
+
 ### destroy()
 
 ```typescript
@@ -862,6 +912,19 @@ setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData> | und
 | Param          | Type                                                                                                                                |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapclickcallbackdata">MapClickCallbackData</a>&gt;</code> |
+
+--------------------
+
+
+### setOnFeatureClickListener(...)
+
+```typescript
+setOnFeatureClickListener(callback?: MapListenerCallback<FeatureClickCallbackData> | undefined) => Promise<void>
+```
+
+| Param          | Type                                                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#featureclickcallbackdata">FeatureClickCallbackData</a>&gt;</code> |
 
 --------------------
 
@@ -1158,6 +1221,11 @@ Describes the style for some region of a polyline.
 | **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
 
 
+#### FeatureStyles
+
+Feature styles, identified by the feature id
+
+
 #### CameraConfig
 
 Configuration properties for a Google Map Camera
@@ -1243,6 +1311,15 @@ Controls for setting padding on the 'visible' region of the view.
 | **`longitude`** | <code>number</code> |
 
 
+#### FeatureClickCallbackData
+
+| Prop             | Type                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| **`mapId`**      | <code>string</code>                                          |
+| **`featureId`**  | <code>string</code>                                          |
+| **`properties`** | <code>Record<string, any></code> |
+
+
 #### PolygonClickCallbackData
 
 | Prop            | Type                |
@@ -1294,6 +1371,14 @@ Supports markers of either "legacy" or "advanced" types.
 
 
 ### Enums
+
+
+#### FeatureType
+
+| Members       | Value                  | Description |
+| ------------- | ---------------------- | ----------- |
+| **`Default`** | <code>'Default'</code> | Default     |
+| **`GeoJSON`** | <code>'GeoJSON'</code> | GeoJSON     |
 
 
 #### MapType

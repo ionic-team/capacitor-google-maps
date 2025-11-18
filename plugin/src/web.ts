@@ -2,8 +2,8 @@ import { WebPlugin } from '@capacitor/core';
 import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
 import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
 
-import type { Marker, TileOverlay } from './definitions';
-import { MapType, LatLngBounds } from './definitions';
+import type { LatLngBoundsInterface, LatLng, Marker, TileOverlay } from './definitions';
+import { FeatureType, MapType, LatLngBounds } from './definitions';
 import type {
   AddTileOverlayArgs,
   AddMarkerArgs,
@@ -29,6 +29,9 @@ import type {
   AddPolylinesArgs,
   RemovePolylinesArgs,
   RemoveTileOverlayArgs,
+  AddFeatureArgs,
+  GetFeatureBoundsArgs,
+  RemoveFeatureArgs,
 } from './implementation';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
@@ -440,6 +443,89 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     }
   }
 
+  async addFeatures(args: AddFeatureArgs): Promise<{ ids: string[] }> {
+    const featureIds: string[] = [];
+    const map = this.maps[args.id];
+
+    const features =
+      args.type === FeatureType.GeoJSON
+        ? map.map.data.addGeoJson(args.data, args.idPropertyName ? { idPropertyName: args.idPropertyName } : null)
+        : [map.map.data.add(args.data)];
+
+    for (const feature of features) {
+      let featureId = feature.getId();
+      if (featureId === undefined) {
+        featureId = window.crypto.randomUUID();
+        const properties: Record<string, any> = {};
+        feature.forEachProperty((value, name) => {
+          properties[name] = value;
+        });
+        map.map.data.remove(feature);
+        map.map.data.add(
+          new google.maps.Data.Feature({
+            id: featureId,
+            geometry: feature.getGeometry(),
+            properties,
+          }),
+        );
+      }
+      featureIds.push(featureId.toString());
+    }
+
+    if (args.styles) {
+      map.map.data.setStyle((feature) => {
+        const featureId = feature.getId();
+        return featureId !== undefined ? (args.styles?.[featureId] as any) : null;
+      });
+    }
+
+    return {
+      ids: featureIds,
+    };
+  }
+
+  async getFeatureBounds(args: GetFeatureBoundsArgs): Promise<{ bounds: LatLngBounds }> {
+    if (!args.featureId) {
+      throw new Error('Feature id not set.');
+    }
+
+    const map = this.maps[args.id];
+    const feature = map.map.data.getFeatureById(args.featureId);
+
+    if (!feature) {
+      throw new Error(`Feature '${args.featureId}' could not be found.`);
+    }
+
+    const bounds = new google.maps.LatLngBounds();
+
+    feature?.getGeometry()?.forEachLatLng((latLng) => {
+      bounds.extend(latLng);
+    });
+
+    return {
+      bounds: new LatLngBounds({
+        southwest: bounds.getSouthWest().toJSON() as LatLng,
+        center: bounds.getCenter().toJSON() as LatLng,
+        northeast: bounds.getNorthEast().toJSON() as LatLng,
+      } as LatLngBoundsInterface),
+    };
+  }
+
+  async removeFeature(args: RemoveFeatureArgs): Promise<void> {
+    if (!args.featureId) {
+      throw new Error('Feature id not set.');
+    }
+
+    const map = this.maps[args.id];
+
+    const feature = map.map.data.getFeatureById(args.featureId);
+    if (!feature) {
+      throw new Error(`Feature '${args.featureId}' could not be found.`);
+    }
+
+    map.map.data.remove(feature);
+  }
+
   async enableClustering(_args: EnableClusteringArgs): Promise<void> {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
@@ -674,6 +760,18 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
         mapId: mapId,
         latitude: e.latLng?.lat(),
         longitude: e.latLng?.lng(),
+      });
+    });
+
+    map.data.addListener('click', (event: google.maps.Data.MouseEvent) => {
+      const properties: Record<string, any> = {};
+      event.feature.forEachProperty((value, name) => {
+        properties[name] = value;
+      });
+      this.notifyListeners('onFeatureClick', {
+        mapId,
+        featureId: event.feature.getId()?.toString(),
+        properties,
       });
     });
 
