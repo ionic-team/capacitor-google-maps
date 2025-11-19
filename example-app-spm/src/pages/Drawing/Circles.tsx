@@ -173,6 +173,7 @@ const CircleMapPage: React.FC = () => {
           autoGrow={true}
         ></IonTextarea>
       </div>
+      {/* @ts-ignore - custom element */}
       <capacitor-google-map
         id="map_circles"
         style={{

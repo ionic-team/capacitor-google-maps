@@ -101,7 +101,7 @@ public class Map {
         }
         self.render()
     }
-    
+
     func render() {
         DispatchQueue.main.async {
             self.mapViewController.mapViewBounds = [
@@ -110,15 +110,15 @@ public class Map {
                 "x": self.config.x,
                 "y": self.config.y
             ]
-            
+
             self.mapViewController.cameraPosition = [
                 "latitude": self.config.center.lat,
                 "longitude": self.config.center.lng,
                 "zoom": self.config.zoom
             ]
-            
+
             self.targetViewController = self.getTargetContainer(refWidth: self.config.width, refHeight: self.config.height)
-            
+
             if let target = self.targetViewController {
                 target.tag = Map.MAP_TAG
                 target.removeAllSubview()
@@ -131,7 +131,7 @@ public class Map {
     func finishMapConfiguration() {
         DispatchQueue.main.async {
             self.mapViewController.GMapView.delegate = self.delegate
-            
+
             if let styles = self.config.styles {
                 do {
                     self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)

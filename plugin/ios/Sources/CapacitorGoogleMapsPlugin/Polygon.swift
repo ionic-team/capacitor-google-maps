@@ -42,7 +42,7 @@ public struct Polygon {
             throw GoogleMapErrors.invalidArguments("Polygon object is missing the required 'paths' property")
         }
 
-        if let obj = shapeJSArray.first, obj as? JSArray != nil {
+        if let obj = shapeJSArray.first, obj is JSArray {
             try shapeJSArray.forEach({ obj in
                 if let shapeArr = obj as? JSArray {
                     try processedShapes.append(Polygon.processShape(shapeArr))
