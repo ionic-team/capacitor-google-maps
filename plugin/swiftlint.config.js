@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 module.exports = {
-  // eslint-disable-next-line no-template-curly-in-string
   included: ['${PWD}/ios/Sources', '${PWD}/ios/Tests'],
   identifier_name: {
     min_length: {

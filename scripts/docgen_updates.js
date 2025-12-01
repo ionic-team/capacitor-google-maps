@@ -28,7 +28,7 @@ try {
 function geojsonDependencyPath() {
   // 1. check npm install path
   const geojsonPathNpm = path.resolve('../node_modules/@types/geojson');
-  if (fs.existsSync(geojsonPath)) {
+  if (fs.existsSync(geojsonPathNpm)) {
     return geojsonPathNpm;
   }
   // 2. check pnpm-style path

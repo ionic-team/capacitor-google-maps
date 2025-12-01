@@ -68,7 +68,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   private onClusterClickHandler: onClusterClickHandler = (
     _: google.maps.MapMouseEvent,
     cluster: Cluster,
-    map: google.maps.Map
+    map: google.maps.Map,
   ): void => {
     const mapId = this.getIdFromMap(map);
     const items: any[] = [];
@@ -132,7 +132,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
       // Import marker library once
       const { AdvancedMarkerElement, PinElement } = (await google.maps.importLibrary(
-        'marker'
+        'marker',
       )) as google.maps.MarkerLibrary;
       this.AdvancedMarkerElement = AdvancedMarkerElement;
       this.PinElement = PinElement;
@@ -220,7 +220,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
           },
           () => {
             throw new Error('Geolocation not supported on web browser.');
-          }
+          },
         );
       } else {
         throw new Error('Geolocation not supported on web browser.');
@@ -543,7 +543,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   private getLatLngBounds(_args: LatLngBounds): google.maps.LatLngBounds {
     return new google.maps.LatLngBounds(
       new google.maps.LatLng(_args.southwest.lat, _args.southwest.lng),
-      new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng)
+      new google.maps.LatLng(_args.northeast.lat, _args.northeast.lng),
     );
   }
 
@@ -580,7 +580,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   async setMarkerListeners(
     mapId: string,
     markerId: string,
-    marker: google.maps.marker.AdvancedMarkerElement
+    marker: google.maps.marker.AdvancedMarkerElement,
   ): Promise<void> {
     marker.addListener('click', () => {
       const position = marker.position as google.maps.LatLngLiteral;

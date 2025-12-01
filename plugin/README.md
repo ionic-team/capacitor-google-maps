@@ -1269,7 +1269,7 @@ The callback function to be called when map events are emitted.
 
 #### Marker
 
-Supports markers of either either "legacy" or "advanced" types.
+Supports markers of either "legacy" or "advanced" types.
 
 <code>google.maps.<a href="#marker">Marker</a> | google.maps.marker.AdvancedMarkerElement</code>
 

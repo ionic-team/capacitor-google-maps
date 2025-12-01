@@ -125,13 +125,6 @@ public struct GoogleMapConfigRestriction: Codable {
         let south: CLLocationDegrees
         let east: CLLocationDegrees
         let west: CLLocationDegrees
-
-        init(north: CLLocationDegrees, south: CLLocationDegrees, east: CLLocationDegrees, west: CLLocationDegrees) {
-            self.north = north
-            self.south = south
-            self.east = east
-            self.west = west
-        }
     }
 
     public func encode(to encoder: any Encoder) throws {

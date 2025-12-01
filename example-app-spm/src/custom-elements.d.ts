@@ -1,4 +1,4 @@
-/// <reference types="react-scripts" />
+import '@capacitor/google-maps';
 
 declare global {
   namespace JSX {
@@ -9,3 +9,4 @@ declare global {
 }
 
 export {};
+
