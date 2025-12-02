@@ -1,5 +1,3 @@
-import "@capacitor/google-maps";
-
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
