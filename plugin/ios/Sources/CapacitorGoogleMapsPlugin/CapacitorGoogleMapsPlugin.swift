@@ -83,6 +83,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         CAPPluginMethod(name: "removeCircles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removePolygons", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removePolylines", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addFeatures", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getFeatureBounds", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeFeature", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "enableClustering", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "disableClustering", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise),
@@ -592,6 +595,98 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
             }
 
             try map.removePolylines(ids: ids)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func addFeatures(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let type = call.getString("type") else {
+                throw GoogleMapErrors.invalidArguments("feature type is missing")
+            }
+
+            guard let data = call.getObject("data") else {
+                throw GoogleMapErrors.invalidArguments("feature data is missing")
+            }
+
+            let idPropertyName = call.getString("idPropertyName")
+
+            let styles = call.getObject("styles")
+
+            let ids = try map.addFeatures(type: type, data: data, idPropertyName: idPropertyName, styles: styles)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func getFeatureBounds(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let featureId = call.getString("featureId") else {
+                throw GoogleMapErrors.invalidArguments("feature id is missing")
+            }
+
+            let bounds = try map.getFeatureBounds(featureId: featureId)
+            let center = GMSGeometryInterpolate(bounds.southWest, bounds.northEast, 0.5)
+
+            call.resolve([
+                "bounds": [
+                    "southwest": [
+                        "lat": bounds.southWest.latitude,
+                        "lng": bounds.southWest.longitude
+                    ],
+                    "center": [
+                        "lat": center.latitude,
+                        "lng": center.longitude
+                    ],
+                    "northeast": [
+                        "lat": bounds.northEast.latitude,
+                        "lng": bounds.northEast.longitude
+                    ]
+                ]
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeFeature(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let featureId = call.getString("featureId") else {
+                throw GoogleMapErrors.invalidArguments("feature id is missing")
+            }
+
+            try map.removeFeature(featureId: featureId)
 
             call.resolve()
         } catch {
