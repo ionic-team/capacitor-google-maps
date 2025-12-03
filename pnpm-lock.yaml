@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      '@capacitor/ios':
-        specifier: next
-        version: 8.0.0-beta.0(@capacitor/core@8.0.0-beta.0)
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.1

@@ -16,7 +16,6 @@
     "ci:publish:dev": "lerna publish prerelease --conventional-commits --conventional-prerelease --preid dev-$(date +\"%Y%m%dT%H%M%S\") --force-publish --no-changelog --no-git-tag-version --dist-tag dev --no-push --yes"
   },
   "devDependencies": {
-    "@capacitor/ios": "next",
     "@types/node": "^24.10.1",
     "glob": "^13.0.0",
     "husky": "^9.1.7",
@@ -27,7 +26,6 @@
     "node": ">=20",
     "pnpm": ">=8"
   },
-  "dependencies": {},
   "workspaces": [
     "plugin"
   ]
