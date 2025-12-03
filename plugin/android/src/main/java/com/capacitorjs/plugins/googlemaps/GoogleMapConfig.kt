@@ -3,7 +3,6 @@ package com.capacitorjs.plugins.googlemaps
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import org.json.JSONObject
 
 class GoogleMapConfig(fromJSONObject: JSONObject) {
@@ -11,17 +10,9 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var height: Int = 0
     var x: Int = 0
     var y: Int = 0
-    var center: LatLng = LatLng(0.0, 0.0)
     var googleMapOptions: GoogleMapOptions? = null
-    var zoom: Int = 0
-    var liteMode: Boolean = false
     var devicePixelRatio: Float = 1.00f
-    var styles: String? = null
-    var mapId: String? = null
-    var minZoom: Int? = null
-    var maxZoom: Int? = null
     var mapTypeId: String? = null
-    var restriction: GoogleMapConfigRestriction? = null
     var heading: Double? = null
 
     init {
@@ -73,10 +64,6 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
             )
         }
 
-        liteMode =
-                fromJSONObject.has("androidLiteMode") &&
-                        fromJSONObject.getBoolean("androidLiteMode")
-
         width = fromJSONObject.getInt("width")
         height = fromJSONObject.getInt("height")
         x = fromJSONObject.getInt("x")
@@ -90,27 +77,20 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
             tempMinZoom = tempMaxZoom.also { tempMaxZoom = tempMinZoom }
         }
 
-        minZoom = tempMinZoom
-        maxZoom = tempMaxZoom
-
-        zoom = tempZoom.coerceIn(
-            tempMinZoom ?: Int.MIN_VALUE,
-            tempMaxZoom ?: Int.MAX_VALUE
-        )
-
         mapTypeId = fromJSONObject.optString("mapTypeId").takeIf { fromJSONObject.has("mapTypeId") }
 
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
-        center = LatLng(lat, lng)
-
+        val center = LatLng(lat, lng)
+        val zoom = tempZoom.coerceIn(
+            tempMinZoom ?: Int.MIN_VALUE,
+            tempMaxZoom ?: Int.MAX_VALUE
+        )
+        val mapId = fromJSONObject.getString("androidMapId")
+        val liteMode =
+            fromJSONObject.has("androidLiteMode") &&
+                    fromJSONObject.getBoolean("androidLiteMode")
         val cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
-
-        styles = fromJSONObject.getString("styles")
-
-        mapId = fromJSONObject.getString("androidMapId")
-
-        restriction = fromJSONObject.optJSONObject("restriction")?.let { GoogleMapConfigRestriction(it) }
 
         heading = fromJSONObject.optDouble("heading").takeIf { fromJSONObject.has("heading") }
 
@@ -118,48 +98,5 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         if (mapId != null) {
             googleMapOptions?.mapId(mapId!!)
         }
-    }
-}
-
-class GoogleMapConfigRestriction(fromJSONObject: JSONObject) {
-    var latLngBounds: LatLngBounds
-
-    init {
-        if (!fromJSONObject.has("latLngBounds")) {
-            throw InvalidArgumentsError(
-                "GoogleMapConfigRestriction object is missing the required 'latLngBounds' property"
-            )
-        }
-        val latLngBoundsObj = fromJSONObject.getJSONObject("latLngBounds")
-
-        if (!latLngBoundsObj.has("north")) {
-            throw InvalidArgumentsError(
-                "GoogleMapConfigRestriction object is missing the required 'latLngBounds.north' property"
-            )
-        }
-        if (!latLngBoundsObj.has("south")) {
-            throw InvalidArgumentsError(
-                "GoogleMapConfigRestriction object is missing the required 'latLngBounds.south' property"
-            )
-        }
-        if (!latLngBoundsObj.has("east")) {
-            throw InvalidArgumentsError(
-                "GoogleMapConfigRestriction object is missing the required 'latLngBounds.east' property"
-            )
-        }
-        if (!latLngBoundsObj.has("west")) {
-            throw InvalidArgumentsError(
-                "GoogleMapConfigRestriction object is missing the required 'latLngBounds.west' property"
-            )
-        }
-        val north = latLngBoundsObj.getDouble("north")
-        val south = latLngBoundsObj.getDouble("south")
-        val east = latLngBoundsObj.getDouble("east")
-        val west = latLngBoundsObj.getDouble("west")
-
-        latLngBounds = LatLngBounds(
-            LatLng(south, west),
-            LatLng(north, east)
-        )
     }
 }
