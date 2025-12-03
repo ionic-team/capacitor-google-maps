@@ -122,13 +122,13 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   private async importGoogleLib(apiKey: string, region?: string, language?: string) {
     if (this.gMapsRef === undefined) {
       const lib = await import('@googlemaps/js-api-loader');
-      const loader = new lib.Loader({
-        apiKey: apiKey ?? '',
-        version: 'weekly',
+      lib.setOptions({
+        key: apiKey ?? '',
         language,
         region,
       });
-      this.gMapsRef = await loader.importLibrary('maps');
+
+      this.gMapsRef = await lib.importLibrary('maps');
 
       // Import marker library once
       const { AdvancedMarkerElement, PinElement } = (await google.maps.importLibrary(

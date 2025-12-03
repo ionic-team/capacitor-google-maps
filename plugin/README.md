@@ -245,6 +245,25 @@ const MyMap: React.FC = () => {
 export default MyMap;
 ```
 
+You may need to create a `*.d.ts` file for the custom element in React:
+
+```ts
+// custom-elements.d.ts
+
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "capacitor-google-map": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      >;
+    }
+  }
+}
+
+export {};
+```
+
 ### Vue
 
 ```vue
