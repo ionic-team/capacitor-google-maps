@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.2.0...@capacitor/google-maps@8.0.0) (2025-12-08)
+
+
+### Features
+
+* Google Maps npm library updates ([#151](https://github.com/ionic-team/capacitor-google-maps/issues/151)) ([6a9d6cb](https://github.com/ionic-team/capacitor-google-maps/commit/6a9d6cb7d899ab8baf9a70b79c38ee4a13fe312e))
+* Optimize @googlemaps/js-api-loader to use importLibrary method ([43f7625](https://github.com/ionic-team/capacitor-google-maps/commit/43f7625a7d986b9e93558c2b7f9cc65367062a15))
+
+
+
+
+
 # [7.2.0](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.1.1...@capacitor/google-maps@7.2.0) (2025-10-03)
 
 
