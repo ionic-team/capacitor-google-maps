@@ -16,7 +16,10 @@ jobs:
           # TODO: check if we need to disable shallow clone
           fetch-depth: 0
 
-      - name: Setup environment
+      - name: Setup Tools
+        uses: ./.github/actions/setup-tools
+
+      - name: Setup Environment
         uses: ./.github/actions/setup-action
         with:
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
