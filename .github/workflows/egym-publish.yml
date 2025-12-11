@@ -22,17 +22,29 @@ jobs:
         with:
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
-  
+    
+      - name: Rename package for private registry
+        run: |
+          npm pkg set name="@egym-private/capacitor-google-maps"
+        working-directory: ./plugin 
+
+      - name: Using npm instead of pnpm
+        run: |
+          sed -i 's/pnpm run /npm run /g' package.json
+          sed -i 's/pnpm downlevel-dts/npx downlevel-dts/g' package.json
+        working-directory: ./plugin
+
       - name: Publish Pre-release Version
         if: ${{ github.ref_name != 'main' && github.ref_name != 'master' }}
         run: |
-          npm pkg set name="@egym-private/capacitor-google-maps"
-          
-          # Replace pnpm with npm
-          sed -i 's/pnpm run /npm run /g' package.json
-          sed -i 's/pnpm downlevel-dts/npx downlevel-dts/g' package.json
-
           npm version "0.0.${{ github.run_number }}"
           npm version prerelease --preid="dev.${{ github.run_attempt}}"
+          npm publish --tag dev --registry https://egym.jfrog.io/egym/api/npm/npm-local/
+        working-directory: ./plugin
+
+      - name: Publish Release Version
+        if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
+        run: |
+          npm version "0.0.${{ github.run_number }}"
           npm publish --tag dev --registry https://egym.jfrog.io/egym/api/npm/npm-local/
         working-directory: ./plugin

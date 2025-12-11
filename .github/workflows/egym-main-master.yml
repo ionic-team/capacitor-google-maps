@@ -1,0 +1,13 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  publish:
+    uses: ./.github/workflows/egym-publish.yml
+    secrets: inherit
+
