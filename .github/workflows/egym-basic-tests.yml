@@ -1,0 +1,27 @@
+name: "Egym Basic Tests"
+
+on:
+  pull_request:
+    types:
+      - 'synchronize'
+      - 'opened'
+
+jobs:
+  setup:
+    steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 24
+
+    - uses: actions/checkout@v5
+      name: Checkout Repository
+      
+  lint-test:
+    needs: 'setup'
+    steps:
+    - name: 'Lint Packages'
+      shell: bash
+      run: |
+        sed -i 's/pnpm run /npm run /g' package.json
+        npm run lint
+      working-directory: ./plugin 

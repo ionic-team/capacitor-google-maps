@@ -1,5 +1,5 @@
 ---
-name: Setup Capacitor Google Maps Library
+name: Egym Setup Capacitor Google Maps Library
 description: |
   This action sets up the Capacitor Google Maps library environment by setting up Node.js, and configuring JFrog credentials.
 
