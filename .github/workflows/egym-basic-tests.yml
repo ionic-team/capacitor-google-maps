@@ -25,6 +25,9 @@ jobs:
       with:
         node-version: 24
 
+    - uses: actions/checkout@v5
+      name: Checkout Repository
+
     - name: Install dependencies
       run: npm install
       working-directory: ./plugin
