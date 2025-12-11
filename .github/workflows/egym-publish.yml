@@ -14,14 +14,16 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
       - uses: actions/checkout@v5
         name: Checkout Repository
 
-      - name: Setup Environment
-        uses: ./.github/actions/egym-setup-action
-        with:
-          artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      - name: Setup JFrog credentials
+        shell: bash
+        run: curl --user ${{ secrets.ARTIFACTORY_USERNAME }}:${{ secrets.ARTIFACTORY_PASSWORD }} https://egym.jfrog.io/egym/api/npm/npm-local/auth/egym-private > ~/.npmrc
 
       - name: Rename Package for Private Registry
         run: |
