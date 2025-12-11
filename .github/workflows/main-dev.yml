@@ -1,0 +1,31 @@
+name: Development Workflow
+
+on:
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  publish:
+    timeout-minutes: 5
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v5
+        name: Checkout Repository
+        with:
+          # TODO: check if we need to disable shallow clone
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-action
+        with:
+          artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+
+      - name: Publish Pre-release Version
+        if: ${{ github.ref_name != 'main' && github.ref_name != 'master' }}
+        run: |
+          npm version "0.0.${{ github.run_number }}"
+          npm version prerelease --preid="dev.${{ github.run_attempt}}"
+          npm publish --tag dev --registry https://egym.jfrog.io/egym/api/npm/npm-local/
+        working-directory: ./plugin
