@@ -17,8 +17,6 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version-file: package.json
-        cache: "npm"
-        cache-dependency-path: package-lock.json
 
     - name: Setup JFrog credentials
       shell: bash
