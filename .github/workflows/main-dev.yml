@@ -28,6 +28,7 @@ jobs:
       - name: Publish Pre-release Version
         if: ${{ github.ref_name != 'main' && github.ref_name != 'master' }}
         run: |
+          npm pkg set name="@egym-private/capacitor-google-maps"
           npm version "0.0.${{ github.run_number }}"
           npm version prerelease --preid="dev.${{ github.run_attempt}}"
           npm publish --tag dev --registry https://egym.jfrog.io/egym/api/npm/npm-local/
