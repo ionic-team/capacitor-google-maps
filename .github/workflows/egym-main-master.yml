@@ -1,4 +1,4 @@
-name: Egym Main Workflow
+name: "[EGYM] Main Workflow"
 
 on:
   push:
@@ -10,4 +10,3 @@ jobs:
   publish:
     uses: ./.github/workflows/egym-publish.yml
     secrets: inherit
-

@@ -1,4 +1,4 @@
-name: Egym Publish Workflow
+name: "[EGYM] Publish Workflow"
 
 on:
   workflow_call:
@@ -22,11 +22,11 @@ jobs:
         with:
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
-    
-      - name: Rename package for private registry
+
+      - name: Rename Package for Private Registry
         run: |
           npm pkg set name="@egym-private/capacitor-google-maps"
-        working-directory: ./plugin 
+        working-directory: ./plugin
 
       - name: Using npm instead of pnpm
         run: |

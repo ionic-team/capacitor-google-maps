@@ -1,4 +1,4 @@
-name: Egym Development Workflow
+name: "[EGYM] Development Workflow"
 
 on:
   - pull_request
