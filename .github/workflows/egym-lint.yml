@@ -1,4 +1,4 @@
-name: "[EGYM] Basic Tests"
+name: "[EGYM] Lint"
 
 on:
   pull_request:
