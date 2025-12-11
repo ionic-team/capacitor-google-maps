@@ -16,7 +16,7 @@ runs:
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version-file: package.json
+        node-version: 24
 
     - name: Setup JFrog credentials
       shell: bash
