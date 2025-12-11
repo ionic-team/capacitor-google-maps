@@ -29,7 +29,8 @@ jobs:
           npm pkg set name="@egym-private/capacitor-google-maps"
           
           # Replace pnpm with npm
-          sed -i 's/pnpm/npm/g' package.json
+          sed -i 's/pnpm run /npm run /g' package.json
+          sed -i 's/pnpm downlevel-dts/npx downlevel-dts/g' package.json
 
           npm version "0.0.${{ github.run_number }}"
           npm version prerelease --preid="dev.${{ github.run_attempt}}"
