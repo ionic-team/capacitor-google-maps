@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v5
         name: Checkout Repository
 
-      - name: Setup JFrog credentials
+      - name: Setup JFrog Credentials
         shell: bash
         run: curl --user ${{ secrets.ARTIFACTORY_USERNAME }}:${{ secrets.ARTIFACTORY_PASSWORD }} https://egym.jfrog.io/egym/api/npm/npm-local/auth/egym-private > ~/.npmrc
 
