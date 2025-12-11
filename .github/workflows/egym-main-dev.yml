@@ -1,0 +1,10 @@
+name: Development Workflow
+
+on:
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  publish:
+    uses: ./.github/workflows/egym-publish.yml
+    secrets: inherit
