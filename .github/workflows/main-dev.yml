@@ -12,9 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         name: Checkout Repository
-        with:
-          # TODO: check if we need to disable shallow clone
-          fetch-depth: 0
 
       - name: Setup Environment
         uses: ./.github/actions/setup-action
