@@ -1,7 +1,7 @@
 ---
 name: Setup Capacitor Google Maps Library
 description: |
-  This action sets up the Capacitor Google Maps library environment by configuring JFrog credentials.
+  This action sets up the Capacitor Google Maps library environment by setting up Node.js, and configuring JFrog credentials.
 
 inputs:
   artifactory-username:
@@ -14,6 +14,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: package.json
+        cache: "npm"
+        cache-dependency-path: package-lock.json
+
     - name: Setup JFrog credentials
       shell: bash
       run: curl --user ${{ inputs.artifactory-username }}:${{ inputs.artifactory-password }} https://egym.jfrog.io/egym/api/npm/npm-local/auth/egym-private > ~/.npmrc

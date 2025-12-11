@@ -16,9 +16,6 @@ jobs:
           # TODO: check if we need to disable shallow clone
           fetch-depth: 0
 
-      - name: Setup Tools
-        uses: ./.github/actions/setup-tools
-
       - name: Setup Environment
         uses: ./.github/actions/setup-action
         with:
@@ -29,6 +26,11 @@ jobs:
         if: ${{ github.ref_name != 'main' && github.ref_name != 'master' }}
         run: |
           npm pkg set name="@egym-private/capacitor-google-maps"
+
+          npm pkg set scripts.downleveldts="npx downlevel-dts dist/typings dist/typings/ts_old --to=3.5"
+          npm pkg set scripts.build="npm run clean && npm run docgen && tsc && rollup -c rollup.config.js && npm run downleveldts"
+          npm pkg set scripts.prepublishOnly="npm run build"
+
           npm version "0.0.${{ github.run_number }}"
           npm version prerelease --preid="dev.${{ github.run_attempt}}"
           npm publish --tag dev --registry https://egym.jfrog.io/egym/api/npm/npm-local/
