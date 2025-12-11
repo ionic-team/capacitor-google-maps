@@ -1,43 +1,34 @@
-name: "Egym Basic Tests"
+name: "[EGYM] Basic Tests"
 
 on:
   pull_request:
     types:
-      - 'synchronize'
-      - 'opened'
+      - "synchronize"
+      - "opened"
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 24
-
-    - uses: actions/checkout@v5
-      name: Checkout Repository
-      
   lint-test:
     runs-on: ubuntu-latest
-    needs: 'setup'
     steps:
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 24
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
-    - uses: actions/checkout@v5
-      name: Checkout Repository
+      - uses: actions/checkout@v5
+        name: Checkout Repository
 
-    - name: Install root dependencies
-      run: npm install --ignore-scripts
+      - name: Install Root dependencies
+        run: npm install --ignore-scripts
 
-    - name: Install plugin dependencies
-      run: npm install
-      working-directory: ./plugin
+      - name: Install Plugin Dependencies
+        run: npm install
+        working-directory: ./plugin
 
-    - name: 'Lint Packages'
-      shell: bash
-      run: |
-        sed -i 's/pnpm run /npm run /g' package.json
-        npm run lint
-      working-directory: ./plugin 
+      - name: Using npm instead of pnpm
+        run: sed -i 's/pnpm run /npm run /g' package.json
+        working-directory: ./plugin
+
+      - name: "Lint Packages"
+        shell: bash
+        run: npm run lint
+        working-directory: ./plugin
