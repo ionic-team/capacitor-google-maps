@@ -18,7 +18,7 @@ jobs:
         name: Checkout Repository
 
       - name: Setup Environment
-        uses: ./.github/actions/setup-action
+        uses: ./.github/actions/egym-setup-action
         with:
           artifactory-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory-password: ${{ secrets.ARTIFACTORY_PASSWORD }}
