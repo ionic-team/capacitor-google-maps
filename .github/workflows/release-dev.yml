@@ -3,7 +3,8 @@ name: "Release Dev"
 on:
   push:
     branches:
-      - '7.x'
+      - 'master'
+      # - 'main'
   workflow_dispatch:
 
 jobs:
