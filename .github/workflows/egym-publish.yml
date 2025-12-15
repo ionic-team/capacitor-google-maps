@@ -3,9 +3,7 @@ name: "[EGYM] Publish Workflow"
 on:
   workflow_call:
     secrets:
-      ARTIFACTORY_USERNAME:
-        required: true
-      ARTIFACTORY_PASSWORD:
+      FORKED_ARTIFACTORY_PASSWORD:
         required: true
 
 jobs:
@@ -23,7 +21,7 @@ jobs:
 
       - name: Setup JFrog Credentials
         shell: bash
-        run: curl --user ${{ secrets.ARTIFACTORY_USERNAME }}:${{ secrets.ARTIFACTORY_PASSWORD }} https://egym.jfrog.io/egym/api/npm/npm-local/auth/egym-private > ~/.npmrc
+        run: curl --user ${{ vars.FORKED_ARTIFACTORY_USERNAME }}:${{ secrets.FORKED_ARTIFACTORY_PASSWORD }} https://egym.jfrog.io/egym/api/npm/npm-local/auth/egym-private > ~/.npmrc
 
       - name: Rename Package for Private Registry
         run: |
