@@ -5,3 +5,8 @@ Podfile.lock
 Package.resolved
 .env
 test.sh
+
+# WebStorm/JetBrains IDE files
+.idea/
+*.iml
+out/

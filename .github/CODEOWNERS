@@ -1,0 +1,4 @@
+*                                   @egym/wp-engagement-2
+/.github/                           @egym/wp-engagement-2 @egym/sre
+/plugin/android/                    @egym/wp-engagement-2 @egym/bma-core
+/plugin/ios/                        @egym/wp-engagement-2 @egym/bma-core
