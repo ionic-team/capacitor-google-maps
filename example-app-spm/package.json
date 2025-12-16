@@ -1,6 +1,6 @@
 {
   "name": "example-app-spm",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^7.0.0",
