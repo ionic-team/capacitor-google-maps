@@ -147,9 +147,82 @@ export interface StyleSpan {
 /**
  * For web, all the javascript Google Maps options are available as
  * GoogleMapConfig extends google.maps.MapOptions.
- * For iOS and Android only the config options declared on GoogleMapConfig are available.
+ * For iOS and Android the following options from google.maps.MapOptions with the same signature are additionally available:
+ * - gestureHandling ('none' | 'auto')
+ * - heading
+ * - mapTypeId
+ * - maxZoom
+ * - minZoom
+ * - restriction
+ * - styles
  */
 export interface GoogleMapConfig extends google.maps.MapOptions {
+  /**
+   * Show accessibility elements for overlay objects, such as Marker and Polyline.
+   *
+   * Only available on iOS.
+   */
+  isAccessibilityElementsEnabled?: boolean;
+  /**
+   * Enables or disables the compass.
+   */
+  isCompassEnabled?: boolean;
+  /**
+   * Sets whether a button should be displayed, which centers the camera to the users current position.
+   */
+  isMyLocationButtonEnabled?: boolean;
+  /**
+   * Sets whether the My Location dot and accuracy circle is enabled.
+   */
+  isMyLocationEnabled?: boolean;
+  /**
+   * Sets whether indoor maps should be enabled.
+   *
+   * Only available on Android and iOS.
+   */
+  isIndoorMapsEnabled?: boolean;
+  /**
+   * Sets the preference for whether rotate gestures should be enabled or disabled.
+   */
+  isRotateGesturesEnabled?: boolean;
+  /**
+   * Sets the preference for whether tilt gestures should be enabled or disabled.
+   */
+  isTiltGesturesEnabled?: boolean;
+  /**
+   * Sets the preference for whether the Map Toolbar should be enabled or disabled.
+   *
+   * Only available on Android.
+   */
+  isToolbarEnabled?: boolean;
+  /**
+   * Turns the traffic layer on or off.
+   */
+  isTrafficLayerEnabled?: boolean;
+  /**
+   * Sets the preference for whether zoom gestures should be enabled or disabled.
+   */
+  isZoomGesturesEnabled?: boolean;
+  /**
+   * Padding on the 'visible' region of the view.
+   */
+  padding?: MapPadding;
+}
+
+/**
+ * For web, all the javascript Google Maps options are available as
+ * GoogleMapCreateConfig extends google.maps.MapOptions.
+ * For iOS and Android the following options from google.maps.MapOptions with the same signature are additionally available:
+ * - gestureHandling ('none' | 'auto')
+ * - heading
+ * - mapTypeId
+ * - maxZoom
+ * - minZoom
+ * - restriction
+ * - styles
+ * - zoom
+ */
+export interface GoogleMapCreateConfig extends GoogleMapConfig {
   /**
    * Override width for native map.
    */
@@ -185,14 +258,6 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    */
   devicePixelRatio?: number;
   /**
-   * Styles to apply to each of the default map types. Note that for
-   * satellite, hybrid and terrain modes,
-   * these styles will only apply to labels and geometry.
-   *
-   * @since 4.3.0
-   */
-  styles?: google.maps.MapTypeStyle[] | null;
-  /**
    * A map id associated with a specific map style or feature.
    *
    * [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id)
@@ -222,40 +287,6 @@ export interface GoogleMapConfig extends google.maps.MapOptions {
    * @since 5.4.0
    */
   iOSMapId?: string;
-  /**
-   * The maximum zoom level which will be displayed on the map. If omitted, or
-   * set to <code>null</code>, the maximum zoom from the current map type is
-   * used instead. Valid zoom values are numbers from zero up to the supported
-   * <a
-   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
-   * zoom level</a>.
-   */
-  maxZoom?: number | null;
-  /**
-   * The minimum zoom level which will be displayed on the map. If omitted, or
-   * set to <code>null</code>, the minimum zoom from the current map type is
-   * used instead. Valid zoom values are numbers from zero up to the supported
-   * <a
-   * href="https://developers.google.com/maps/documentation/javascript/maxzoom">maximum
-   * zoom level</a>.
-   */
-  minZoom?: number | null;
-  /**
-   * The initial Map mapTypeId. Defaults to <code>ROADMAP</code>.
-   */
-  mapTypeId?: string | null;
-  /**
-   * The heading for aerial imagery in degrees measured clockwise from
-   * cardinal direction North. Headings are snapped to the nearest available
-   * angle for which imagery is available.
-   */
-  heading?: number | null;
-  /**
-   * Defines a boundary that restricts the area of the map accessible to
-   * users. When set, a user can only pan and zoom while the camera view stays
-   * inside the limits of the boundary.
-   */
-  restriction?: google.maps.MapRestriction | null;
 }
 
 /**
