@@ -11,10 +11,6 @@ jobs:
   verify-ios:
     runs-on: macos-15
     timeout-minutes: 30
-    strategy:
-      matrix:
-        xcode:
-        - /Applications/Xcode_26_0.app
     steps:
       - uses: actions/checkout@v3
         with:
@@ -24,7 +20,7 @@ jobs:
       - name: 'Setup Tools'
         uses: ./.github/actions/setup-tools
 
-      - run: sudo xcode-select --switch ${{ matrix.xcode }}
+      - run: sudo xcode-select --switch /Applications/Xcode_26.0.app
 
       - run: pnpm run verify:ios
         working-directory: ./plugin
