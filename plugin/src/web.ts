@@ -720,4 +720,12 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
     return advancedMarker;
   }
+
+  async show(): Promise<void> {
+    return;
+  }
+
+  async hide(): Promise<void> {
+    return;
+  }
 }
