@@ -21,6 +21,8 @@ jobs:
         uses: ./.github/actions/setup-tools
 
       - run: sudo xcode-select --switch /Applications/Xcode_26.0.app
+      - run: xcrun simctl list > /dev/null
+      - run: xcodebuild -downloadPlatform iOS
 
       - run: pnpm run verify:ios
         working-directory: ./plugin
