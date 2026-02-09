@@ -5,7 +5,7 @@ const prettierConfig = require('eslint-config-prettier');
 
 module.exports = [
   {
-    ignores: ['node_modules/**', 'dist/**', 'build/**', 'e2e-tests/**', 'unit-tests/**', 'android/**', 'ios/**', 'types/**', 'eslint.config.*'],
+    ignores: ['node_modules/**', 'dist/**', 'build/**', 'unit-tests/**', 'android/**', 'ios/**', 'types/**', 'eslint.config.*'],
   },
   eslintjs.configs.recommended,
   {

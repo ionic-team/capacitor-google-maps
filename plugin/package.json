@@ -45,7 +45,7 @@
     "lint": "pnpm run eslint && pnpm run prettier --check && pnpm run swiftlint lint",
     "fmt": "pnpm run eslint --fix && pnpm run prettier --write && pnpm run swiftlint lint --fix --format",
     "eslint": "eslint .",
-    "prettier": "prettier \"**/*.{css,html,ts,js,java}\" \"!e2e-tests/**\" --plugin=prettier-plugin-java",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
     "swiftlint": "node-swiftlint",
     "docgen": "node ../scripts/docgen_updates.js",
     "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.js && pnpm run downleveldts",
