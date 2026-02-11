@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.2](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.2.1...@capacitor/google-maps@7.2.2) (2026-02-11)
+
+
+### Bug Fixes
+
+* **android:** AGP 9.0 no longer supporting `proguard-android.txt` ([#164](https://github.com/ionic-team/capacitor-google-maps/issues/164)) ([15e8a5f](https://github.com/ionic-team/capacitor-google-maps/commit/15e8a5f9222d3a732f9d76ee9f036c2a3e3b3c2b))
+
+
+
+
+
 ## [7.2.1](https://github.com/ionic-team/capacitor-google-maps/compare/@capacitor/google-maps@7.2.0...@capacitor/google-maps@7.2.1) (2025-12-16)
 
 **Note:** Version bump only for package @capacitor/google-maps
