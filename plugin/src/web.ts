@@ -30,6 +30,7 @@ import type {
   RemovePolylinesArgs,
   RemoveTileOverlayArgs,
 } from './implementation';
+import { importLibrary, setOptions } from '@googlemaps/js-api-loader';
 
 export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
   private gMapsRef: google.maps.MapsLibrary | undefined = undefined;
@@ -121,14 +122,12 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
   private async importGoogleLib(apiKey: string, region?: string, language?: string) {
     if (this.gMapsRef === undefined) {
-      const lib = await import('@googlemaps/js-api-loader');
-      lib.setOptions({
+      setOptions({
         key: apiKey ?? '',
         language,
         region,
       });
-
-      this.gMapsRef = await lib.importLibrary('maps');
+      this.gMapsRef = await importLibrary('maps');
 
       // Import marker library once
       const { AdvancedMarkerElement, PinElement } = (await google.maps.importLibrary(
