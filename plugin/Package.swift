@@ -19,7 +19,6 @@ let package = Package(
             name: "CapacitorGoogleMapsPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "GoogleMaps", package: "ios-maps-sdk"),
                 .product(name: "GoogleMapsUtils", package: "google-maps-ios-utils")
             ],
