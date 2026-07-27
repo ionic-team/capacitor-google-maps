@@ -18,12 +18,6 @@ const CreateAndDestroyMapPage: React.FC = () => {
     );
   };
 
-  const onMapBoundsChanged = (data: any) => {    
-    setCommandOutput(
-        `MAP (${data.mapId}) BOUNDS CHANGED @ (${JSON.stringify(data.bounds)})`,
-      );
-  }
-
   async function createMaps() {
     setCommandOutput('');
     setMaps([]);
