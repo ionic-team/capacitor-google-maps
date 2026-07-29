@@ -407,10 +407,12 @@ class CapacitorGoogleMap(
     }
 
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
-        clusterManager?.renderer = CapacitorClusterManagerRenderer(
+        val map = googleMap ?: return
+        val manager = clusterManager ?: return
+        manager.renderer = CapacitorClusterManagerRenderer(
             delegate.bridge.context,
-            googleMap,
-            clusterManager,
+            map,
+            manager,
             minClusterSize
         )
     }
@@ -418,7 +420,7 @@ class CapacitorGoogleMap(
     @SuppressLint("PotentialBehaviorOverride")
     fun enableClustering(minClusterSize: Int?, callback: (error: GoogleMapsError?) -> Unit) {
         try {
-            googleMap ?: throw GoogleMapNotAvailable()
+            val map = googleMap ?: throw GoogleMapNotAvailable()
 
             CoroutineScope(Dispatchers.Main).launch {
                 if (clusterManager != null) {
@@ -428,7 +430,7 @@ class CapacitorGoogleMap(
                 }
 
                 val bridge = delegate.bridge
-                clusterManager = ClusterManager(bridge.context, googleMap)
+                clusterManager = ClusterManager(bridge.context, map)
 
                 setClusterManagerRenderer(minClusterSize)
                 setClusterListeners()
@@ -847,7 +849,7 @@ class CapacitorGoogleMap(
 
     private fun buildMarker(marker: CapacitorGoogleMapMarker): MarkerOptions {
         val markerOptions = MarkerOptions()
-        markerOptions.position(marker.coordinate)
+        markerOptions.position(marker.position)
         markerOptions.title(marker.title)
         markerOptions.snippet(marker.snippet)
         markerOptions.alpha(marker.opacity)
