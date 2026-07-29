@@ -88,6 +88,9 @@ export interface GoogleMapInterface {
   setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
   setOnMyLocationButtonClickListener(callback?: MapListenerCallback<MyLocationButtonClickCallbackData>): Promise<void>;
   setOnMyLocationClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void>;
+
+  show(): Promise<void>;
+  hide(): Promise<void>;
 }
 
 class MapCustomElement extends HTMLElement {
@@ -1104,5 +1107,17 @@ export class GoogleMap {
         callback(data);
       }
     };
+  }
+
+  async show(): Promise<void> {
+    return CapacitorGoogleMaps.show({
+      id: this.id,
+    });
+  }
+
+  async hide(): Promise<void> {
+    return CapacitorGoogleMaps.hide({
+      id: this.id,
+    });
   }
 }

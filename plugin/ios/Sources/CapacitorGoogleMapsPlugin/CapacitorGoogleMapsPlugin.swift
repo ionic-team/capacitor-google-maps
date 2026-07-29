@@ -100,7 +100,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         CAPPluginMethod(name: "getMapBounds", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fitBounds", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "mapBoundsContains", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "mapBoundsExtend", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "mapBoundsExtend", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "hide", returnType: CAPPluginReturnPromise)
     ]
     private var maps = [String: Map]()
     private var isInitialized = false
@@ -968,6 +970,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         } catch {
             handleError(call, error: error)
         }
+    }
+
+    @objc func show(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    @objc func hide(_ call: CAPPluginCall) {
+        call.resolve()
     }
 
     private func getGMSCoordinateBounds(_ bounds: JSObject) throws -> GMSCoordinateBounds {
