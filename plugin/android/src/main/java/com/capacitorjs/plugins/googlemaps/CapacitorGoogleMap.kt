@@ -20,6 +20,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import java.io.InputStream
 import java.net.URL
+import kotlin.time.Duration.Companion.milliseconds
 
 class CapacitorGoogleMap(
         val id: String,
@@ -116,10 +117,10 @@ class CapacitorGoogleMap(
 
                 if (config.mapTypeId != null) {
                     when (config.mapTypeId!!) {
-                        "hybrid" -> googleMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
-                        "roadmap" -> googleMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
-                        "satellite" -> googleMap?.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                        "terrain" -> googleMap?.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                        "hybrid" -> googleMap?.mapType = MAP_TYPE_HYBRID
+                        "roadmap" -> googleMap?.mapType = MAP_TYPE_NORMAL
+                        "satellite" -> googleMap?.mapType = MAP_TYPE_SATELLITE
+                        "terrain" -> googleMap?.mapType = MAP_TYPE_TERRAIN
                     }
                 }
 
@@ -152,7 +153,7 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
                 val mapRect = getScaledRect(bridge, updatedBounds)
-                val mapView = this@CapacitorGoogleMap.mapView;
+                val mapView = this@CapacitorGoogleMap.mapView
                 mapView.x = mapRect.left
                 mapView.y = mapRect.top
                 if (mapView.layoutParams.width != config.width || mapView.layoutParams.height != config.height) {
@@ -173,16 +174,6 @@ class CapacitorGoogleMap(
 
             event.setLocation(event.x - relativeLeft, event.y - relativeTop)
             mapView.dispatchTouchEvent(event)
-        }
-    }
-
-    fun bringToFront() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val mapViewParent =
-                    ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
-                            this@CapacitorGoogleMap.id
-                    )
-            mapViewParent.bringToFront()
         }
     }
 
@@ -215,7 +206,7 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 val tileProvider = object : UrlTileProvider(256, 256) {
-                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+                    override fun getTileUrl(x: Int, y: Int, zoom: Int): URL {
                         return URL(tileOverlay.url
                             .replace("{x}", "$x")
                             .replace("{y}", "$y")
@@ -223,7 +214,7 @@ class CapacitorGoogleMap(
                         )
                     }
                 }
-                var tileOverlayOptions = TileOverlayOptions().tileProvider(tileProvider)
+                val tileOverlayOptions = TileOverlayOptions().tileProvider(tileProvider)
                 if (tileOverlay.zIndex != null) {
                     tileOverlayOptions.zIndex(tileOverlay.zIndex!!)
                 }
@@ -369,7 +360,7 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 newCircles.forEach {
-                    var circleOptions: Deferred<CircleOptions> = CoroutineScope(Dispatchers.IO).async {
+                    val circleOptions: Deferred<CircleOptions> = CoroutineScope(Dispatchers.IO).async {
                         this@CapacitorGoogleMap.buildCircle(it)
                     }
 
@@ -667,7 +658,7 @@ class CapacitorGoogleMap(
                         "Normal"
                     }
                 }
-                callback(mapType, null);
+                callback(mapType, null)
             }
         }  catch (e: GoogleMapsError) {
             callback("", e)
@@ -815,14 +806,14 @@ class CapacitorGoogleMap(
         polygonOptions.clickable(polygon.clickable)
 
         var shapeCounter = 0
-        polygon.shapes.forEach {
+        polygon.shapes.forEach { pointList ->
             if (shapeCounter == 0) {
                 // outer shape
-                it.forEach {
+                pointList.forEach {
                     polygonOptions.add(it)
                 }
             } else {
-                polygonOptions.addHole(it)
+                polygonOptions.addHole(pointList)
             }
 
             shapeCounter += 1
@@ -874,13 +865,12 @@ class CapacitorGoogleMap(
                 markerOptions.icon(getResizedIcon(cachedBitmap!!, marker))
             } else {
                 try {
-                    var stream: InputStream? = null
-                    if (marker.iconUrl!!.startsWith("https:")) {
-                        stream = URL(marker.iconUrl).openConnection().getInputStream()
+                    val stream: InputStream? = if (marker.iconUrl!!.startsWith("https:")) {
+                        URL(marker.iconUrl).openConnection().getInputStream()
                     } else {
-                        stream = this.delegate.context.assets.open("public/${marker.iconUrl}")
+                        this.delegate.context.assets.open("public/${marker.iconUrl}")
                     }
-                    var bitmap = BitmapFactory.decodeStream(stream)
+                    val bitmap = BitmapFactory.decodeStream(stream)
                     this.markerIcons[marker.iconUrl!!] = bitmap
                     markerOptions.icon(getResizedIcon(bitmap, marker))
                 } catch (e: Exception) {
@@ -907,20 +897,20 @@ class CapacitorGoogleMap(
     }
 
     private fun getResizedIcon(
-            _bitmap: Bitmap,
-            marker: CapacitorGoogleMapMarker
+        bitmap: Bitmap,
+        marker: CapacitorGoogleMapMarker
     ): BitmapDescriptor {
-        var bitmap = _bitmap
+        var updatedBitmap = bitmap
         if (marker.iconSize != null) {
-            bitmap =
+            updatedBitmap =
                     Bitmap.createScaledBitmap(
-                            bitmap,
+                            updatedBitmap,
                             (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(),
                             (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(),
                             false
                     )
         }
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
+        return BitmapDescriptorFactory.fromBitmap(updatedBitmap)
     }
 
     fun onStart() {
@@ -1142,7 +1132,7 @@ class CapacitorGoogleMap(
     override fun onCameraMove() {
         debounceJob?.cancel()
         debounceJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(100)
+            delay(100.milliseconds)
             clusterManager?.cluster()
         }
     }

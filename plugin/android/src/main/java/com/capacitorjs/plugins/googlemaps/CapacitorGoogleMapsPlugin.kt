@@ -66,7 +66,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                                 if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
                                     if (event.action == MotionEvent.ACTION_DOWN) {
                                         if (cachedTouchEvents[id] == null) {
-                                            cachedTouchEvents[id] = mutableListOf<MotionEvent>()
+                                            cachedTouchEvents[id] = mutableListOf()
                                         }
 
                                         cachedTouchEvents[id]?.clear()
@@ -129,7 +129,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
         try {
             val id = call.getString("id")
 
-            if (null == id || id.isEmpty()) {
+            if (id.isNullOrEmpty()) {
                 throw InvalidMapIdError()
             }
 
@@ -167,7 +167,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
         try {
             val id = call.getString("id")
 
-            if (null == id || id.isEmpty()) {
+            if (id.isNullOrEmpty()) {
                 throw InvalidMapIdError()
             }
 
@@ -546,13 +546,13 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.enableClustering(minClusterSize,  { err ->
+            map.enableClustering(minClusterSize) { err ->
                 if (err != null) {
                     throw err
                 }
 
                 call.resolve()
-            })
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {
@@ -721,7 +721,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.getMapType() { type, err ->
+            map.getMapType { type, err ->
 
                 if (err != null) {
                     throw err
@@ -934,7 +934,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
             val events = cachedTouchEvents[id]
             if (events != null) {
-                while(events.size > 0) {
+                while(events.isNotEmpty()) {
                     val event = events.first()
                     if (focus) {
                         map.dispatchTouchEvent(event)
