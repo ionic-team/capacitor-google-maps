@@ -65,8 +65,6 @@ This plugin will use the following project variables (defined in your app's `var
 - `googleMapsKtxVersion`: version of `com.google.maps.android:maps-ktx` (default: `5.2.1`)
 - `googleMapsUtilsKtxVersion`: version of `com.google.maps.android:maps-utils-ktx` (default: `5.2.1`)
 - `kotlinxCoroutinesVersion`: version of `org.jetbrains.kotlinx:kotlinx-coroutines-android` and `org.jetbrains.kotlinx:kotlinx-coroutines-core` (default: `1.10.2`)
-- `androidxCoreVersion`: version of `androidx.core:core` (default: `1.19.0`)
-
 
 ## Usage
 
