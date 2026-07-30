@@ -7,8 +7,8 @@ ext {
     androidxCoreVersion = project.hasProperty('androidxCoreVersion') ? rootProject.ext.androidxCoreVersion : '1.19.0'
     googleMapsPlayServicesVersion = project.hasProperty('googleMapsPlayServicesVersion') ? rootProject.ext.googleMapsPlayServicesVersion : '20.0.0'
     googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '5.0.0'
-    googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '5.2.1'
-    googleMapsUtilsKtxVersion = project.hasProperty('googleMapsUtilsKtxVersion') ? rootProject.ext.googleMapsUtilsKtxVersion : '5.2.1'
+    googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '6.0.1'
+    googleMapsUtilsKtxVersion = project.hasProperty('googleMapsUtilsKtxVersion') ? rootProject.ext.googleMapsUtilsKtxVersion : '6.0.1'
     kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.10.2'
 }
 
