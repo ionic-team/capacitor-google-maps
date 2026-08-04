@@ -21,6 +21,17 @@ The Google Maps SDK supports the use of showing the users current location via `
 
 Read about [Configuring `Info.plist`](https://capacitorjs.com/docs/ios/configuration#configuring-infoplist) in the [iOS Guide](https://capacitorjs.com/docs/ios) for more information on setting iOS permissions in Xcode.
 
+### Google Maps SDK versions
+
+The native Google Maps SDK version used by the plugin depends on how your app consumes it:
+
+- **Swift Package Manager**: [Google Maps SDK](https://github.com/googlemaps/ios-maps-sdk) 10.x and [Google Maps iOS Utils](https://github.com/googlemaps/google-maps-ios-utils) 7.x.
+- **CocoaPods**: Google Maps SDK 9.4.0 and Google Maps iOS Utils 6.1.0. These are the latest versions available on CocoaPods, as Google no longer publishes the Maps SDK to the CocoaPods Trunk.
+
+Note that Google Maps SDK 10.x renders maps in dark mode by default when the device is in dark mode, so the map appearance can differ between the two setups.
+
+> **Warning**: CocoaPods support will be removed in Capacitor 10. We recommend migrating to Swift Package Manager.
+
 ### Typescript Configuration
 
 Your project will also need have `skipLibCheck` set to `true` in `tsconfig.json`.
