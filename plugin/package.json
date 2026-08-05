@@ -48,7 +48,7 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
     "swiftlint": "node-swiftlint",
     "docgen": "node ../scripts/docgen_updates.js",
-    "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.mjs && pnpm run downleveldts",
+    "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "pnpm run build",
