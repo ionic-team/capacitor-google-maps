@@ -8,14 +8,14 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 
 class CapacitorClusterManagerRenderer(
     context: Context,
-    map: GoogleMap?,
-    clusterManager: ClusterManager<CapacitorGoogleMapMarker>?,
+    map: GoogleMap,
+    clusterManager: ClusterManager<CapacitorGoogleMapMarker>,
     minClusterSize: Int?
 ) : DefaultClusterRenderer<CapacitorGoogleMapMarker>(context, map, clusterManager) {
 
     init {
         if(minClusterSize != null && minClusterSize > 0) {
-            super.setMinClusterSize(minClusterSize)
+            super.minClusterSize = minClusterSize
         }
     }
 

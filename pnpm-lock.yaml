@@ -40,13 +40,13 @@ importers:
         version: link:../plugin
       '@capacitor/haptics':
         specifier: next
-        version: 8.0.0-next.3(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/ios':
         specifier: next
         version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/keyboard':
         specifier: next
-        version: 8.0.0-next.4(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/status-bar':
         specifier: next
         version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
@@ -167,13 +167,13 @@ importers:
         version: link:../plugin
       '@capacitor/haptics':
         specifier: next
-        version: 8.0.0-next.3(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/ios':
         specifier: next
         version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/keyboard':
         specifier: next
-        version: 8.0.0-next.4(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
       '@capacitor/status-bar':
         specifier: next
         version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
@@ -1093,20 +1093,20 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@capacitor/haptics@8.0.0-next.3':
-    resolution: {integrity: sha512-chE6SUEegH9n7sGOyGH3XJAKfTi+ot3Z+TzecO/kXT0DJoZ4rtGXnpm9uElgqS50HYxFbZ2W/yCceA5jdWHOUg==}
+  '@capacitor/haptics@9.0.0-next.1':
+    resolution: {integrity: sha512-lBY9wPXmb9SFoocKzb31WOmqe8BXrfWwj15xUbdxZo8KBRfngBpDKUNxB6abzdrHQfBrMNPpZ+uWa/og87oV7A==}
     peerDependencies:
-      '@capacitor/core': next
+      '@capacitor/core': '>=9.0.0-alpha.0'
 
   '@capacitor/ios@9.0.0-alpha.5':
     resolution: {integrity: sha512-h2MvfGjBxp/CEqzb4YdlWiUjv+MuEg2PDwSYPlyBpWno1B/1jT43emR3VuyjiI2VRo12QSeUrxyKC4OyTgy2iw==}
     peerDependencies:
       '@capacitor/core': ^9.0.0-alpha.5
 
-  '@capacitor/keyboard@8.0.0-next.4':
-    resolution: {integrity: sha512-JpGxILIah+FJcIyD3IkRhUEyHFIUXWXCDTK3NPNLv5r4MFK8pMtB6NrMMfRlM/DsNdrAzd0SaB+CG0/H0PSpVw==}
+  '@capacitor/keyboard@9.0.0-next.1':
+    resolution: {integrity: sha512-6yLbKtYRbB2gzOPYAiN4ZsSZto6eFAMZprWkwWqD9ID7M1Hb+YpXWY/DnFAUaaK/AWNIJFU7PqvmS2glm66rgQ==}
     peerDependencies:
-      '@capacitor/core': next
+      '@capacitor/core': '>=9.0.0-alpha.0'
 
   '@capacitor/status-bar@9.0.0-alpha.1':
     resolution: {integrity: sha512-iFjz/wrviolCqdfmnABaEn+ufUApWXRQYr71pF6WIksTQeM9SsCZfQapc6+leDosDa33ygPDyKFYsjgx55brXg==}
@@ -4389,6 +4389,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.1.0:
@@ -4402,7 +4403,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
@@ -9114,7 +9115,7 @@ snapshots:
       minimist: 1.2.8
       typescript: 4.2.4
 
-  '@capacitor/haptics@8.0.0-next.3(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/haptics@9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)':
     dependencies:
       '@capacitor/core': 9.0.0-alpha.5
 
@@ -9122,7 +9123,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 9.0.0-alpha.5
 
-  '@capacitor/keyboard@8.0.0-next.4(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/keyboard@9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)':
     dependencies:
       '@capacitor/core': 9.0.0-alpha.5
 

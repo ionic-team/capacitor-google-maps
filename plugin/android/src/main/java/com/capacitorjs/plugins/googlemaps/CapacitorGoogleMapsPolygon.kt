@@ -71,9 +71,9 @@ class CapacitorGoogleMapsPolygon(fromJSONObject: JSONObject) {
         val colorInt = Color.parseColor(hex)
 
         val alpha = (opacity * 255.0).toInt()
-        val red = android.graphics.Color.red(colorInt)
-        val green = android.graphics.Color.green(colorInt)
-        val blue = android.graphics.Color.blue(colorInt)
+        val red = Color.red(colorInt)
+        val green = Color.green(colorInt)
+        val blue = Color.blue(colorInt)
 
         return Color.argb(alpha, red, green, blue)
     }
