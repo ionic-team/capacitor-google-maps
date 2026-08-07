@@ -28,28 +28,28 @@ importers:
     dependencies:
       '@capacitor/android':
         specifier: next
-        version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/app':
         specifier: next
-        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/core':
         specifier: next
-        version: 9.0.0-alpha.5
+        version: 9.0.0-alpha.6
       '@capacitor/google-maps':
         specifier: workspace:*
         version: link:../plugin
       '@capacitor/haptics':
         specifier: next
-        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/ios':
         specifier: next
-        version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/keyboard':
         specifier: next
-        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/status-bar':
         specifier: next
-        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)
       '@ionic/react':
         specifier: ^8.8.13
         version: 8.8.13(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -149,34 +149,34 @@ importers:
     devDependencies:
       '@capacitor/cli':
         specifier: next
-        version: 9.0.0-alpha.5
+        version: 9.0.0-alpha.6
 
   example-app-spm:
     dependencies:
       '@capacitor/android':
         specifier: next
-        version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/app':
         specifier: next
-        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/core':
         specifier: next
-        version: 9.0.0-alpha.5
+        version: 9.0.0-alpha.6
       '@capacitor/google-maps':
         specifier: workspace:*
         version: link:../plugin
       '@capacitor/haptics':
         specifier: next
-        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/ios':
         specifier: next
-        version: 9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/keyboard':
         specifier: next
-        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)
       '@capacitor/status-bar':
         specifier: next
-        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)
+        version: 9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)
       '@ionic/react':
         specifier: ^8.8.13
         version: 8.8.13(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -276,7 +276,7 @@ importers:
     devDependencies:
       '@capacitor/cli':
         specifier: next
-        version: 9.0.0-alpha.5
+        version: 9.0.0-alpha.6
 
   plugin:
     dependencies:
@@ -1075,18 +1075,26 @@ packages:
     peerDependencies:
       '@capacitor/core': ^9.0.0-alpha.5
 
+  '@capacitor/android@9.0.0-alpha.6':
+    resolution: {integrity: sha512-/hVYtjrvaoLinn8fkcnm2prCo7OSgbwP6x+tzQa+IQChTMsyBTAp/eWEvKCxh0EVQeUUWmRtLXd2CzhPamjdFA==}
+    peerDependencies:
+      '@capacitor/core': ^9.0.0-alpha.6
+
   '@capacitor/app@9.0.0-alpha.1':
     resolution: {integrity: sha512-2W/wOMctLxTA+lV7BIPcuSzK7xnHPxNd3+Y/qqqW0ENOJoI/8CNUUVX20F904iB0sP7SCe5BqM/qc5AB6n+uqw==}
     peerDependencies:
       '@capacitor/core': '>=9.0.0-alpha.0'
 
-  '@capacitor/cli@9.0.0-alpha.5':
-    resolution: {integrity: sha512-ugCtlP1GyoSN9ot8MXRaIEpqBoD0Z8DrryKRygPusUVVizJffuE0LJXXXctl4MHFVcpb2h4K9fAwKycoy29wTQ==}
+  '@capacitor/cli@9.0.0-alpha.6':
+    resolution: {integrity: sha512-PsPkbmK1SffBuv7kb6Htebyht2Y2tDJRPWvnxW/s8Y3BHv4LbCEhlIE3PeB+AnDgGNTAGp2e9BnTgWUHcmN7OQ==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
   '@capacitor/core@9.0.0-alpha.5':
     resolution: {integrity: sha512-ZB/4nWYzUW/U39QpGd4lK1N1KwWQSXCuAYpIu3heaf+L4SMx0YVEvQhqg3yE/hfBdcNiqveTm2HfmOBGfh2Gaw==}
+
+  '@capacitor/core@9.0.0-alpha.6':
+    resolution: {integrity: sha512-AqCxIP+84lNNh1E+Yv04FRF9Pg8MTm+ed8QEC8OGOI4epbMwCEDdS0W84+C9ZAs+6cFtQcIS5N2owhOy2KeOOQ==}
 
   '@capacitor/docgen@0.3.0':
     resolution: {integrity: sha512-WPggobo5Ql70F+2xOIUwNSApJXaL9F/9+Al6B+sNuSAmcg484OAksyUPKgiynF4BVlxeY5a0sDkgdVkmmA3ElQ==}
@@ -1102,6 +1110,11 @@ packages:
     resolution: {integrity: sha512-h2MvfGjBxp/CEqzb4YdlWiUjv+MuEg2PDwSYPlyBpWno1B/1jT43emR3VuyjiI2VRo12QSeUrxyKC4OyTgy2iw==}
     peerDependencies:
       '@capacitor/core': ^9.0.0-alpha.5
+
+  '@capacitor/ios@9.0.0-alpha.6':
+    resolution: {integrity: sha512-eFKuHmVdCnKMZ/+cMl24Up0yzLMFxS0vYXJLf62/556cHqTO9n7BBeXPCNIPpL5EV+wrVCw7Hq/xwXf7p2mGoQ==}
+    peerDependencies:
+      '@capacitor/core': ^9.0.0-alpha.6
 
   '@capacitor/keyboard@9.0.0-next.1':
     resolution: {integrity: sha512-6yLbKtYRbB2gzOPYAiN4ZsSZto6eFAMZprWkwWqD9ID7M1Hb+YpXWY/DnFAUaaK/AWNIJFU7PqvmS2glm66rgQ==}
@@ -9077,11 +9090,15 @@ snapshots:
     dependencies:
       '@capacitor/core': 9.0.0-alpha.5
 
-  '@capacitor/app@9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/android@9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)':
     dependencies:
-      '@capacitor/core': 9.0.0-alpha.5
+      '@capacitor/core': 9.0.0-alpha.6
 
-  '@capacitor/cli@9.0.0-alpha.5':
+  '@capacitor/app@9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)':
+    dependencies:
+      '@capacitor/core': 9.0.0-alpha.6
+
+  '@capacitor/cli@9.0.0-alpha.6':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
       '@ionic/utils-subprocess': 3.0.1
@@ -9107,6 +9124,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  '@capacitor/core@9.0.0-alpha.6':
+    dependencies:
+      tslib: 2.8.1
+
   '@capacitor/docgen@0.3.0':
     dependencies:
       '@types/node': 14.18.63
@@ -9115,21 +9136,25 @@ snapshots:
       minimist: 1.2.8
       typescript: 4.2.4
 
-  '@capacitor/haptics@9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/haptics@9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)':
     dependencies:
-      '@capacitor/core': 9.0.0-alpha.5
+      '@capacitor/core': 9.0.0-alpha.6
 
   '@capacitor/ios@9.0.0-alpha.5(@capacitor/core@9.0.0-alpha.5)':
     dependencies:
       '@capacitor/core': 9.0.0-alpha.5
 
-  '@capacitor/keyboard@9.0.0-next.1(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/ios@9.0.0-alpha.6(@capacitor/core@9.0.0-alpha.6)':
     dependencies:
-      '@capacitor/core': 9.0.0-alpha.5
+      '@capacitor/core': 9.0.0-alpha.6
 
-  '@capacitor/status-bar@9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.5)':
+  '@capacitor/keyboard@9.0.0-next.1(@capacitor/core@9.0.0-alpha.6)':
     dependencies:
-      '@capacitor/core': 9.0.0-alpha.5
+      '@capacitor/core': 9.0.0-alpha.6
+
+  '@capacitor/status-bar@9.0.0-alpha.1(@capacitor/core@9.0.0-alpha.6)':
+    dependencies:
+      '@capacitor/core': 9.0.0-alpha.6
 
   '@chevrotain/cst-dts-gen@11.0.3':
     dependencies:
@@ -11526,7 +11551,7 @@ snapshots:
       minipass-pipeline: 1.2.4
       p-map: 7.0.4
       ssri: 12.0.0
-      tar: 7.5.2
+      tar: 7.5.19
       unique-filename: 4.0.0
 
   cacache@20.0.3:
@@ -14793,7 +14818,7 @@ snapshots:
       nopt: 8.1.0
       proc-log: 5.0.0
       semver: 7.7.3
-      tar: 7.5.2
+      tar: 7.5.19
       tinyglobby: 0.2.12
       which: 5.0.0
     transitivePeerDependencies:
@@ -15175,7 +15200,7 @@ snapshots:
       promise-retry: 2.0.1
       sigstore: 4.1.0
       ssri: 13.0.0
-      tar: 7.5.2
+      tar: 7.5.19
     transitivePeerDependencies:
       - supports-color
 
