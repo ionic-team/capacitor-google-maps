@@ -4,7 +4,7 @@ project(':capacitor-android').projectDir = new File('../../node_modules/.pnpm/@c
 
 
 include ':capacitor-app'
-project(':capacitor-app').projectDir = new File('../../node_modules/.pnpm/@capacitor+app@9.0.0-alpha.2_@capacitor+core@9.0.0-alpha.6/node_modules/@capacitor/app/android')
+project(':capacitor-app').projectDir = new File('../../node_modules/.pnpm/@capacitor+app@9.0.0-alpha.1_@capacitor+core@9.0.0-alpha.6/node_modules/@capacitor/app/android')
 
 include ':capacitor-google-maps'
 project(':capacitor-google-maps').projectDir = new File('../../plugin/android')
@@ -16,4 +16,4 @@ include ':capacitor-keyboard'
 project(':capacitor-keyboard').projectDir = new File('../../node_modules/.pnpm/@capacitor+keyboard@9.0.0-next.1_@capacitor+core@9.0.0-alpha.6/node_modules/@capacitor/keyboard/android')
 
 include ':capacitor-status-bar'
-project(':capacitor-status-bar').projectDir = new File('../../node_modules/.pnpm/@capacitor+status-bar@9.0.0-alpha.2_@capacitor+core@9.0.0-alpha.6/node_modules/@capacitor/status-bar/android')
+project(':capacitor-status-bar').projectDir = new File('../../node_modules/.pnpm/@capacitor+status-bar@9.0.0-alpha.1_@capacitor+core@9.0.0-alpha.6/node_modules/@capacitor/status-bar/android')
