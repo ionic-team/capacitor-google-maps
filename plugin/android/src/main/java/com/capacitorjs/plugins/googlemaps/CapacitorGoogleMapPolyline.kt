@@ -1,14 +1,13 @@
 package com.capacitorjs.plugins.googlemaps
 
 import android.graphics.Color
-import androidx.core.graphics.toColor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import org.json.JSONObject
 
 class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
-    var path: MutableList<LatLng> = mutableListOf<LatLng>()
-    var styleSpans: MutableList<CapacitorGoogleMapsStyleSpan> = mutableListOf<CapacitorGoogleMapsStyleSpan>()
+    var path: MutableList<LatLng> = mutableListOf()
+    var styleSpans: MutableList<CapacitorGoogleMapsStyleSpan> = mutableListOf()
     var strokeWidth: Float = 1.0f
     var strokeColor: Int = Color.BLUE
     var clickable: Boolean
@@ -68,9 +67,9 @@ class CapacitorGoogleMapPolyline(fromJSONObject: JSONObject) {
         val colorInt = Color.parseColor(hex)
 
         val alpha = (opacity * 255.0).toInt()
-        val red = android.graphics.Color.red(colorInt)
-        val green = android.graphics.Color.green(colorInt)
-        val blue = android.graphics.Color.blue(colorInt)
+        val red = Color.red(colorInt)
+        val green = Color.green(colorInt)
+        val blue = Color.blue(colorInt)
 
         return Color.argb(alpha, red, green, blue)
     }

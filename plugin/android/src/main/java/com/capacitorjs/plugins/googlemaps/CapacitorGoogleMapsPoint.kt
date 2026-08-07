@@ -17,7 +17,7 @@ class CapacitorGoogleMapsPoint() {
     }
 
     constructor(x: Float, y: Float) : this() {
-        this.x = x;
+        this.x = x
         this.y = y
     }
 }

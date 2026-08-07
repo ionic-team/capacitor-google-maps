@@ -9,11 +9,12 @@ import org.json.JSONObject
 
 
 class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
-    var coordinate: LatLng = LatLng(0.0, 0.0)
+    private var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
-    private var title: String
-    private var snippet: String
-    private var zIndex: Float = 0.0f
+    override var title: String
+    override var snippet: String
+    override var zIndex: Float = 0.0f
+    override val position: LatLng get() = LatLng(coordinate.latitude, coordinate.longitude)
     var isFlat: Boolean = false
     var iconUrl: String? = null
     var iconSize: Size? = null
@@ -64,22 +65,6 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
 
         draggable = fromJSONObject.optBoolean("draggable", false)
         zIndex = fromJSONObject.optLong("zIndex").toFloat()
-    }
-
-    override fun getPosition(): LatLng {
-        return LatLng(coordinate.latitude, coordinate.longitude)
-    }
-
-    override fun getTitle(): String {
-        return title
-    }
-
-    override fun getSnippet(): String {
-        return snippet
-    }
-
-    override fun getZIndex(): Float {
-        return zIndex
     }
 
     private fun buildIconAnchorPoint(iconAnchor: CapacitorGoogleMapsPoint): CapacitorGoogleMapsPoint? {
