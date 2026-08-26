@@ -124,6 +124,17 @@ public class Map {
                 target.removeAllSubview()
                 self.mapViewController.view.frame = target.bounds
                 target.addSubview(self.mapViewController.view)
+            } else {
+                // No container matched this pass. getTargetContainer() looks for a WKWebView
+                // sub-scroll view whose contentSize is an exact match for the element, so it misses
+                // while the page is still laying out (e.g. mid page-transition).
+                //
+                // GMapView is only assigned in viewDidLoad, which only runs when the view is first
+                // touched -- and that touch lives in the branch above. Skipping it leaves GMapView
+                // nil for the lifetime of the map, so onViewDidLoad never fires, onMapReady is never
+                // emitted, and the next call from JS crashes on the implicitly-unwrapped optional.
+                // Load the view regardless; onResize/onDisplay attach it via rebindTargetContainer().
+                self.mapViewController.loadViewIfNeeded()
             }
         }
     }
