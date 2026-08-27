@@ -4,6 +4,7 @@ import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapColorScheme
 import org.json.JSONObject
 
 class GoogleMapConfig(fromJSONObject: JSONObject) {
@@ -118,6 +119,8 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         if (mapId != null) {
             googleMapOptions?.mapId(mapId!!)
         }
+
+        googleMapOptions?.mapColorScheme(MapColorScheme.FOLLOW_SYSTEM)
     }
 }
 
