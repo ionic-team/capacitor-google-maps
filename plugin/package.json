@@ -62,6 +62,7 @@
     "@capacitor/core": "next",
     "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "next",
+    "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
     "@types/resize-observer-browser": "^0.1.11",
     "@types/supercluster": "^7.1.3",
