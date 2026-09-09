@@ -687,7 +687,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       throw new Error('Marker library not loaded');
     }
 
-    let content: HTMLElement | undefined = undefined;
+    let content: HTMLElement | undefined;
 
     if (marker.iconUrl) {
       const img = document.createElement('img');

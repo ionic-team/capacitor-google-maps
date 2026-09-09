@@ -50,12 +50,6 @@
     "eject": "react-scripts eject",
     "sync": "npm run build && npx cap sync"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
