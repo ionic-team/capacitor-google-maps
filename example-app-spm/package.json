@@ -50,12 +50,6 @@
     "eject": "react-scripts eject",
     "sync": "npm run build && npx cap sync"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -69,7 +63,8 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "next"
+    "@capacitor/cli": "next",
+    "eslint": "^8.57.1"
   },
   "description": "An Ionic project"
 }
