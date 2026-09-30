@@ -63,7 +63,8 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "next"
+    "@capacitor/cli": "next",
+    "eslint": "^8.57.1"
   },
   "description": "An Ionic project"
 }
