@@ -3,6 +3,8 @@ package com.capacitorjs.plugins.googlemaps
 import android.annotation.SuppressLint
 import android.graphics.*
 import android.location.Location
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -16,8 +18,19 @@ import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.data.Feature
+import com.google.maps.android.data.geojson.GeoJsonFeature
+import com.google.maps.android.data.geojson.GeoJsonGeometryCollection
+import com.google.maps.android.data.geojson.GeoJsonLayer
+import com.google.maps.android.data.geojson.GeoJsonLineString
+import com.google.maps.android.data.geojson.GeoJsonMultiLineString
+import com.google.maps.android.data.geojson.GeoJsonMultiPoint
+import com.google.maps.android.data.geojson.GeoJsonMultiPolygon
+import com.google.maps.android.data.geojson.GeoJsonPoint
+import com.google.maps.android.data.geojson.GeoJsonPolygon
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.json.JSONObject
 import java.io.InputStream
 import java.net.URL
 
@@ -45,7 +58,10 @@ class CapacitorGoogleMap(
     private val tileOverlays = HashMap<String, CapacitorGoogleMapTileOverlay>()
     private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
     private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
-    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()        
+    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
+    private val featureLayers = HashMap<String, CapacitorGoogleMapsFeatureLayer>()
+    private var geoJsonLayer: GeoJsonLayer? = null
+    private val featureProperties = HashMap<String, JSONObject>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
 
@@ -415,6 +431,96 @@ class CapacitorGoogleMap(
         }
     }
 
+    fun addFeatures(type: String, data: JSONObject, idPropertyName: String?, styles: JSONObject?, callback: (ids: Result<List<String>>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
+            val featureIds: MutableList<String> = mutableListOf()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                if (type == "GeoJSON") {
+                    try {
+                        val normalizedData = JSONObject(data.toString())
+                        val inputs = if (normalizedData.optString("type") == "FeatureCollection") {
+                            val entries = normalizedData.getJSONArray("features")
+                            (0 until entries.length()).map { entries.getJSONObject(it) }
+                        } else {
+                            listOf(normalizedData)
+                        }
+                        val propertiesById = HashMap<String, JSONObject>()
+                        inputs.forEach { input ->
+                            val properties = input.optJSONObject("properties") ?: JSONObject()
+                            val propertyId = idPropertyName?.let { properties.opt(it) }
+                            val identifier = propertyId?.takeUnless { it == JSONObject.NULL }
+                                ?: input.opt("id")?.takeUnless { it == JSONObject.NULL }
+                                ?: java.util.UUID.randomUUID().toString()
+                            input.put("id", identifier.toString())
+                            propertiesById[identifier.toString()] = properties
+                        }
+                        val tempLayer = GeoJsonLayer(null, normalizedData)
+                        val layer = geoJsonLayer ?: GeoJsonLayer(googleMap, JSONObject()).also {
+                            geoJsonLayer = it
+                            it.addLayerToMap()
+                            Handler(Looper.getMainLooper()).post { restoreFeatureMapListeners() }
+                        }
+                        tempLayer.features.forEach {
+                            val featureLayer = CapacitorGoogleMapsFeatureLayer(layer, it, idPropertyName, styles)
+                            val featureId = featureLayer.id
+                            featureLayers.remove(featureId)?.renderedFeatures?.forEach { previous ->
+                                layer.removeFeature(previous)
+                            }
+                            featureIds.add(featureId)
+                            featureLayers[featureId] = featureLayer
+                            featureProperties[featureId] = propertiesById[featureId] ?: JSONObject()
+                        }
+                        callback(Result.success(featureIds))
+                    } catch (e: Exception) {
+                        callback(Result.failure(e))
+                    }
+                } else {
+                    callback(Result.failure(InvalidArgumentsError("addFeatures: not supported for this feature type")))
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
+        }
+    }
+
+    fun getFeatureBounds(featureId: String, callback: (bounds: Result<LatLngBounds?>) -> Unit) {
+        try {
+            CoroutineScope(Dispatchers.Main).launch {
+                val featurelayer = featureLayers[featureId]
+                val feature = featurelayer?.originalFeature
+                if (feature != null) {
+                    try {
+                        (feature as GeoJsonFeature).let {
+                            callback(Result.success(it.boundingBoxFromGeometry()))
+                        }
+                    } catch (e: Exception) {
+                        callback(Result.failure(InvalidArgumentsError("getFeatureBounds: not supported for this feature type")))
+                    }
+                } else {
+                    callback(Result.failure(InvalidArgumentsError("Could not find feature for feature id $featureId")))
+                }
+            }
+        } catch(e: Exception) {
+            callback(Result.failure(InvalidArgumentsError("Could not find feature layer")))
+        }
+    }
+
+    fun removeFeature(featureId: String, callback: (error: GoogleMapsError?) -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val featurelayer = featureLayers[featureId]
+            if (featurelayer != null) {
+                featurelayer.renderedFeatures.forEach { geoJsonLayer?.removeFeature(it) }
+                featureLayers.remove(featureId)
+                featureProperties.remove(featureId)
+                callback(null)
+            } else {
+                callback(InvalidArgumentsError("Could not find feature for feature id $featureId"))
+            }
+        }
+    }
+
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
         clusterManager?.renderer = CapacitorClusterManagerRenderer(
             delegate.bridge.context,
@@ -441,6 +547,9 @@ class CapacitorGoogleMap(
 
                 setClusterManagerRenderer(minClusterSize)
                 setClusterListeners()
+                if (geoJsonLayer != null) {
+                    Handler(Looper.getMainLooper()).post { restoreFeatureMapListeners() }
+                }
 
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
@@ -1032,6 +1141,52 @@ class CapacitorGoogleMap(
         return data
     }
 
+    private fun GeoJsonFeature.boundingBoxFromGeometry(): LatLngBounds? {
+        val coordinates: MutableList<LatLng> = ArrayList()
+
+        if (this.hasGeometry()) {
+            when (geometry.geometryType) {
+                "Point" -> coordinates.add((geometry as GeoJsonPoint).coordinates)
+                "MultiPoint" -> {
+                    val points = (geometry as GeoJsonMultiPoint).points
+                    for (point in points) {
+                        coordinates.add(point.coordinates)
+                    }
+                }
+
+                "LineString" -> coordinates.addAll((geometry as GeoJsonLineString).coordinates)
+                "MultiLineString" -> {
+                    val lines = (geometry as GeoJsonMultiLineString).lineStrings
+                    for (line in lines) {
+                        coordinates.addAll(line.coordinates)
+                    }
+                }
+
+                "Polygon" -> {
+                    val lists = (geometry as GeoJsonPolygon).coordinates
+                    for (list in lists) {
+                        coordinates.addAll(list)
+                    }
+                }
+
+                "MultiPolygon" -> {
+                    val polygons = (geometry as GeoJsonMultiPolygon).polygons
+                    for (polygon in polygons) {
+                        for (list in polygon.coordinates) {
+                            coordinates.addAll(list)
+                        }
+                    }
+                }
+            }
+        }
+
+        val builder = LatLngBounds.builder()
+        for (latLng in coordinates) {
+            builder.include(latLng)
+        }
+        return builder.build()
+    }
+
     override fun onMapClick(point: LatLng) {
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
@@ -1040,7 +1195,33 @@ class CapacitorGoogleMap(
         delegate.notify("onMapClick", data)
     }
 
+    private fun notifyFeatureClick(mapObject: Any): Boolean {
+        val feature = geoJsonLayer?.getFeature(mapObject) ?: return false
+        val featureId = feature.id ?: return false
+        val data = JSObject()
+        data.put("mapId", id)
+        data.put("featureId", featureId)
+        data.put("properties", featureProperties[featureId] ?: JSONObject())
+        delegate.notify("onFeatureClick", data)
+        return true
+    }
+
+    private fun restoreFeatureMapListeners() {
+        googleMap?.setOnMarkerClickListener { marker ->
+            if (notifyFeatureClick(marker)) false
+            else clusterManager?.onMarkerClick(marker) ?: onMarkerClick(marker)
+        }
+        googleMap?.setOnPolygonClickListener(this)
+        googleMap?.setOnPolylineClickListener(this)
+        googleMap?.setOnMarkerDragListener(this)
+        googleMap?.setOnInfoWindowClickListener { marker ->
+            if (clusterManager != null) clusterManager?.onInfoWindowClick(marker)
+            else onInfoWindowClick(marker)
+        }
+    }
+
     override fun onMarkerClick(marker: Marker): Boolean {
+        if (notifyFeatureClick(marker)) return false
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("markerId", marker.id)
@@ -1053,6 +1234,7 @@ class CapacitorGoogleMap(
     }
 
     override fun onPolylineClick(polyline: Polyline) {
+        if (notifyFeatureClick(polyline)) return
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("polylineId", polyline.id)
@@ -1148,6 +1330,7 @@ class CapacitorGoogleMap(
     }
 
     override fun onPolygonClick(polygon: Polygon) {
+        if (notifyFeatureClick(polygon)) return
         val data = JSObject()
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("polygonId", polygon.id)

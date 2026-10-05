@@ -11,6 +11,7 @@ import type {
   CameraMoveStartedCallbackData,
   ClusterClickCallbackData,
   MapClickCallbackData,
+  FeatureClickCallbackData,
   MarkerClickCallbackData,
   MyLocationButtonClickCallbackData,
   Polygon,
@@ -20,6 +21,8 @@ import type {
   Polyline,
   PolylineCallbackData,
   TileOverlay,
+  FeatureType,
+  FeatureStyles,
 } from './definitions';
 import { LatLngBounds, MapType } from './definitions';
 import type { CreateMapArgs } from './implementation';
@@ -48,6 +51,9 @@ export interface GoogleMapInterface {
   removeCircles(ids: string[]): Promise<void>;
   addPolylines(polylines: Polyline[]): Promise<string[]>;
   removePolylines(ids: string[]): Promise<void>;
+  addFeatures(type: FeatureType, data: any, idPropertyName?: string, styles?: FeatureStyles): Promise<string[]>;
+  getFeatureBounds(featureId: string): Promise<LatLngBounds>;
+  removeFeature(featureId: string): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
   /**
@@ -79,6 +85,7 @@ export interface GoogleMapInterface {
   setOnClusterInfoWindowClickListener(callback?: MapListenerCallback<ClusterClickCallbackData>): Promise<void>;
   setOnInfoWindowClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
   setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void>;
+  setOnFeatureClickListener(callback?: MapListenerCallback<FeatureClickCallbackData>): Promise<void>;
   setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
   setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackData>): Promise<void>;
   setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData>): Promise<void>;
@@ -124,6 +131,7 @@ export class GoogleMap {
   private onClusterInfoWindowClickListener?: PluginListenerHandle;
   private onInfoWindowClickListener?: PluginListenerHandle;
   private onMapClickListener?: PluginListenerHandle;
+  private onFeatureClickListener?: PluginListenerHandle;
   private onPolylineClickListener?: PluginListenerHandle;
   private onMarkerClickListener?: PluginListenerHandle;
   private onPolygonClickListener?: PluginListenerHandle;
@@ -465,6 +473,34 @@ export class GoogleMap {
     return CapacitorGoogleMaps.removePolylines({
       id: this.id,
       polylineIds: ids,
+    });
+  }
+
+  async addFeatures(type: FeatureType, data: any, idPropertyName?: string, styles?: FeatureStyles): Promise<string[]> {
+    const res = await CapacitorGoogleMaps.addFeatures({
+      id: this.id,
+      type,
+      data,
+      idPropertyName,
+      styles,
+    });
+
+    return res.ids;
+  }
+
+  async getFeatureBounds(id: string): Promise<LatLngBounds> {
+    const res = await CapacitorGoogleMaps.getFeatureBounds({
+      id: this.id,
+      featureId: id,
+    });
+
+    return new LatLngBounds(res.bounds);
+  }
+
+  async removeFeature(id: string): Promise<void> {
+    return CapacitorGoogleMaps.removeFeature({
+      id: this.id,
+      featureId: id,
     });
   }
 
@@ -824,6 +860,20 @@ export class GoogleMap {
   }
 
   /**
+   * Set the event listener for clicks on features added with addFeatures.
+   * The featureId matches the ID returned by addFeatures. Calling without a callback removes the listener.
+   *
+   * @param callback
+   * @returns
+   */
+  async setOnFeatureClickListener(callback?: MapListenerCallback<FeatureClickCallbackData>): Promise<void> {
+    await this.onFeatureClickListener?.remove();
+    this.onFeatureClickListener = callback
+      ? await CapacitorGoogleMaps.addListener('onFeatureClick', this.generateCallback(callback))
+      : undefined;
+  }
+
+  /**
    * Set the event listener on the map for 'onPolygonClick' events.
    *
    * @param callback
@@ -1049,6 +1099,11 @@ export class GoogleMap {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
       this.onMapClickListener = undefined;
+    }
+
+    if (this.onFeatureClickListener) {
+      await this.onFeatureClickListener.remove();
+      this.onFeatureClickListener = undefined;
     }
 
     if (this.onPolylineClickListener) {
