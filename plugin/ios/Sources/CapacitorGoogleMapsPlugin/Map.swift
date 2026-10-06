@@ -27,12 +27,13 @@ class GMViewController: UIViewController {
 
         let camera = GMSCameraPosition.camera(withLatitude: cameraPosition["latitude"] ?? 0, longitude: cameraPosition["longitude"] ?? 0, zoom: Float(cameraPosition["zoom"] ?? 12))
         let frame = CGRect(x: mapViewBounds["x"] ?? 0, y: mapViewBounds["y"] ?? 0, width: mapViewBounds["width"] ?? 0, height: mapViewBounds["height"] ?? 0)
+        let options = GMSMapViewOptions()
+        options.frame = frame
+        options.camera = camera
         if let id = mapId {
-            let gmsId = GMSMapID(identifier: id)
-            self.GMapView = GMSMapView(frame: frame, mapID: gmsId, camera: camera)
-        } else {
-            self.GMapView = GMSMapView(frame: frame, camera: camera)
+            options.mapID = GMSMapID(identifier: id)
         }
+        self.GMapView = GMSMapView(options: options)
 
         self.view = GMapView
         self.onViewDidLoad?()
