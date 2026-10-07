@@ -609,8 +609,8 @@ export class GoogleMap {
   initScrolling(): void {
     const ionContents = document.getElementsByTagName('ion-content');
 
-    for (let i = 0; i < ionContents.length; i++) {
-      (ionContents[i] as any).scrollEvents = true;
+    for (const ionContent of Array.from(ionContents)) {
+      (ionContent as any).scrollEvents = true;
     }
 
     window.addEventListener('ionScroll', this.handleScrollEvent);
@@ -851,7 +851,7 @@ export class GoogleMap {
    * @returns
    */
   async setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData>): Promise<void> {
-    if (this.onCircleClickListener) [this.onCircleClickListener.remove()];
+    if (this.onCircleClickListener) this.onCircleClickListener.remove();
 
     if (callback) {
       this.onCircleClickListener = await CapacitorGoogleMaps.addListener(
