@@ -83,6 +83,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         CAPPluginMethod(name: "removeCircles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removePolygons", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removePolylines", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "addFeatures", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getFeatureBounds", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeFeature", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "removeFeatures", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "enableClustering", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "disableClustering", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise),
@@ -599,6 +603,120 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         }
     }
 
+    @objc func addFeatures(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let type = call.getString("type") else {
+                throw GoogleMapErrors.invalidArguments("feature type is missing")
+            }
+
+            guard let data = call.getObject("data") else {
+                throw GoogleMapErrors.invalidArguments("feature data is missing")
+            }
+
+            let idPropertyName = call.getString("idPropertyName")
+
+            let styles = call.getObject("styles")
+
+            let ids = try map.addFeatures(type: type, data: data, idPropertyName: idPropertyName, styles: styles)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func getFeatureBounds(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let featureId = call.getString("featureId") else {
+                throw GoogleMapErrors.invalidArguments("feature id is missing")
+            }
+
+            let bounds = try map.getFeatureBounds(featureId: featureId)
+            let center = GMSGeometryInterpolate(bounds.southWest, bounds.northEast, 0.5)
+
+            call.resolve([
+                "bounds": [
+                    "southwest": [
+                        "lat": bounds.southWest.latitude,
+                        "lng": bounds.southWest.longitude
+                    ],
+                    "center": [
+                        "lat": center.latitude,
+                        "lng": center.longitude
+                    ],
+                    "northeast": [
+                        "lat": bounds.northEast.latitude,
+                        "lng": bounds.northEast.longitude
+                    ]
+                ]
+            ])
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeFeature(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let featureId = call.getString("featureId") else {
+                throw GoogleMapErrors.invalidArguments("feature id is missing")
+            }
+
+            try map.removeFeature(featureId: featureId)
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func removeFeatures(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            guard let featureIds = call.getArray("featureIds") as? [String] else {
+                throw GoogleMapErrors.invalidArguments("featureIds are invalid or missing")
+            }
+
+            map.removeFeatures(featureIds: featureIds) {
+                call.resolve()
+            }
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     @objc func setCamera(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -1090,8 +1208,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         ])
     }
 
-    // onPolygonClick, onPolylineClick, onCircleClick
+    // onFeatureClick (GeoJSON overlays), onPolygonClick, onPolylineClick, onCircleClick
     public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        if notifyFeatureClick(mapView, overlay: overlay) {
+            return
+        }
         if let polygon = overlay as? GMSPolygon {
             self.notifyListeners("onPolygonClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
@@ -1120,8 +1241,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
         }
     }
 
-    // onClusterClick, onMarkerClick
+    // onFeatureClick (GeoJSON points), onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if notifyFeatureClick(mapView, overlay: marker) {
+            return false
+        }
         if let cluster = marker.userData as? GMUCluster {
             var items: [[String: Any?]] = []
 
@@ -1153,6 +1277,25 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate, CAPBridge
             ])
         }
         return false
+    }
+
+    private func notifyFeatureClick(_ mapView: GMSMapView, overlay: GMSOverlay) -> Bool {
+        guard let feature = overlay.userData as? GMUFeature,
+              let identifier = feature.identifier else {
+            return false
+        }
+        let mapId = self.findMapIdByMapView(mapView)
+        var eventData: [String: Any] = [
+            "mapId": mapId,
+            "featureId": String(describing: identifier),
+            "properties": feature.properties ?? [:]
+        ]
+        if let coordinate = self.maps[mapId]?.consumeLastTapCoordinate() {
+            eventData["latitude"] = coordinate.latitude
+            eventData["longitude"] = coordinate.longitude
+        }
+        self.notifyListeners("onFeatureClick", data: eventData)
+        return true
     }
 
     // onMarkerDragStart

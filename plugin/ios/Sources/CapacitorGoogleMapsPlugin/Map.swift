@@ -8,6 +8,29 @@ public struct LatLng: Codable {
     let lng: Double
 }
 
+private final class MapTapCoordinateRecognizer: UITapGestureRecognizer, UIGestureRecognizerDelegate {
+    var onTouchBegan: ((CGPoint) -> Void)?
+
+    init() {
+        super.init(target: nil, action: nil)
+        delegate = self
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        if let touch = touches.first, let view {
+            onTouchBegan?(touch.location(in: view))
+        }
+        super.touchesBegan(touches, with: event)
+    }
+
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        true
+    }
+}
+
 class GMViewController: UIViewController {
     var mapViewBounds: [String: Double]!
     var GMapView: GMSMapView!
@@ -81,7 +104,10 @@ public class Map {
     var polygons = [Int: GMSPolygon]()
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
+    var features = [String: GMUGeometryRenderer]()
     var markerIcons = [String: UIImage]()
+    private var mapTapCoordinateRecognizer: MapTapCoordinateRecognizer?
+    private var lastTapCoordinate: CLLocationCoordinate2D?
 
     // swiftlint:disable identifier_name
     public static let MAP_TAG = 99999
@@ -130,7 +156,21 @@ public class Map {
 
     func finishMapConfiguration() {
         DispatchQueue.main.async {
-            self.mapViewController.GMapView.delegate = self.delegate
+            let mapView = self.mapViewController.GMapView!
+            mapView.delegate = self.delegate
+
+            let tapRecognizer = MapTapCoordinateRecognizer()
+            tapRecognizer.cancelsTouchesInView = false
+            tapRecognizer.delaysTouchesBegan = false
+            tapRecognizer.delaysTouchesEnded = false
+            tapRecognizer.onTouchBegan = { [weak self, weak mapView] point in
+                guard let self, let mapView else {
+                    return
+                }
+                self.lastTapCoordinate = mapView.projection.coordinate(for: point)
+            }
+            mapView.addGestureRecognizer(tapRecognizer)
+            self.mapTapCoordinateRecognizer = tapRecognizer
 
             if let styles = self.config.styles {
                 do {
@@ -476,6 +516,126 @@ public class Map {
         }
     }
 
+    func addFeatures(type: String, data: JSObject, idPropertyName: String?, styles: JSObject?) throws -> [String] {
+        guard type == "GeoJSON" else {
+            throw GoogleMapErrors.invalidArguments("addFeatures: not supported for this feature type")
+        }
+        let jsonData = try JSONSerialization.data(withJSONObject: data, options: [])
+        var featureIds: [String] = []
+
+        DispatchQueue.main.sync {
+            let geoJSONParser = GMUGeoJSONParser(data: jsonData)
+            geoJSONParser.parse()
+
+            for container in geoJSONParser.features {
+                if let tempFeature = container as? GMUFeature {
+                    let properties = tempFeature.properties ?? [:]
+                    var featureId: String? = nil
+                    if let propertyName = idPropertyName, let propertyId = properties[propertyName], !(propertyId is NSNull) {
+                        featureId = String(describing: propertyId)
+                    }
+                    
+                    if featureId == nil, let identifier = tempFeature.identifier, !(identifier is NSNull) {
+                        featureId = String(describing: identifier)
+                    }
+                    featureId = featureId ?? UUID().uuidString
+
+                    if (featureId != nil) {
+                        if let renderer = self.features[featureId!] {
+                            renderer.clear()
+                            self.features.removeValue(forKey: featureId!)
+                        }
+                    }
+
+                    let feature = GMUFeature(geometry: tempFeature.geometry, identifier: featureId, properties: properties, boundingBox: nil)
+
+                    if (featureId != nil) {
+                        featureIds.append(featureId!)
+                    }
+
+                    if (featureId != nil && styles != nil) {
+                        if let stylesData = (styles! as [String: Any])[featureId!] as? [String: Any] {
+                            if let strokeColor = stylesData["strokeColor"] as? String,
+                               let strokeOpacity = stylesData["strokeOpacity"] as? Double,
+                               let stroke = UIColor.init(hex: strokeColor)?.withAlphaComponent(strokeOpacity),
+                               let fillColor = stylesData["fillColor"] as? String,
+                               let fillOpacity = stylesData["fillOpacity"] as? Double,
+                               let fill = UIColor.init(hex: fillColor)?.withAlphaComponent(fillOpacity)
+                            {
+                                let style = GMUStyle(styleID: "styleId", stroke: stroke, fill: fill, width: stylesData["strokeWeight"] as? Double ?? 1, scale: 2, heading: 0, anchor: CGPoint(x: 0, y: 0), iconUrl: nil, title: nil, hasFill: true, hasStroke: true)
+                                feature.style = style
+                            }
+                        }
+                    }
+
+                    func flattenGeometry(_ geometry: GMUGeometry) -> [GMUFeature] {
+                        if let collection = geometry as? GMUGeometryCollection {
+                            return collection.geometries.flatMap { flattenGeometry($0) }
+                        }
+                        let part = GMUFeature(geometry: geometry, identifier: featureId, properties: properties, boundingBox: nil)
+                        part.style = feature.style
+                        return [part]
+                    }
+                    let renderer = GMUGeometryRenderer(map: self.mapViewController.GMapView, geometries: flattenGeometry(feature.geometry))
+                    renderer.render()
+                    for overlay in renderer.mapOverlays() {
+                        overlay.userData = feature
+                        overlay.isTappable = true
+                    }
+
+                    if (featureId != nil) {
+                        self.features[featureId!] = renderer
+                    }
+                }
+            }
+        }
+
+        return featureIds
+    }
+
+    func getFeatureBounds(featureId: String) throws -> GMSCoordinateBounds {
+        if let renderer = self.features[featureId] {
+            var bounds: GMSCoordinateBounds!
+
+            DispatchQueue.main.sync {
+                bounds = renderer.getBounds()
+            }
+
+            return bounds
+        } else {
+            throw GoogleMapErrors.unhandledError("feature not found")
+        }
+    }
+
+    func removeFeature(featureId: String) throws {
+        if let renderer = self.features[featureId] {
+            DispatchQueue.main.async {
+                renderer.clear()
+                self.features.removeValue(forKey: featureId)
+            }
+        } else {
+            throw GoogleMapErrors.unhandledError("feature not found")
+        }
+    }
+
+    func removeFeatures(featureIds: [String], completion: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            featureIds.forEach { featureId in
+                guard let renderer = self.features.removeValue(forKey: featureId) else {
+                    return
+                }
+
+                renderer.clear()
+            }
+            completion()
+        }
+    }
+
+    func consumeLastTapCoordinate() -> CLLocationCoordinate2D? {
+        defer { lastTapCoordinate = nil }
+        return lastTapCoordinate
+    }
+
     func setCamera(config: GoogleMapCameraConfig) throws {
         let currentCamera = self.mapViewController.GMapView.camera
 
@@ -803,5 +963,41 @@ extension UIImage {
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return resizedImage
+    }
+}
+
+extension GMUGeometryRenderer {
+    func getBounds() -> GMSCoordinateBounds {
+        var bounds = GMSCoordinateBounds.init()
+
+        for overlay in self.mapOverlays() {
+            if let circle = overlay as? GMSCircle {
+                bounds = bounds.includingBounds(circle.getBounds())
+            }
+            if let groundOverlay = overlay as? GMSGroundOverlay, let groundOverlayBounds = groundOverlay.bounds {
+                bounds = bounds.includingBounds(groundOverlayBounds)
+            }
+            if let marker = overlay as? GMSMarker {
+                bounds = bounds.includingCoordinate(marker.position)
+            }
+            if let polygon = overlay as? GMSPolygon, let polygonPath = polygon.path {
+                bounds = bounds.includingPath(polygonPath)
+            }
+            if let polyline = overlay as? GMSPolyline, let polylinePath = polyline.path {
+                bounds = bounds.includingPath(polylinePath)
+            }
+        }
+
+        return bounds
+    }
+}
+
+extension GMSCircle {
+    func getBounds() -> GMSCoordinateBounds {
+        var bounds = GMSCoordinateBounds.init(
+            coordinate: GMSGeometryOffset(self.position, self.radius * sqrt(2.0), 225),
+            coordinate: GMSGeometryOffset(self.position, self.radius * sqrt(2.0), 45)
+        )
+        return bounds
     }
 }
