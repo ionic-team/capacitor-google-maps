@@ -4,6 +4,13 @@ plugins {
 
 apply plugin: 'com.android.application'
 
+def androidxAppCompatVersion = rootProject.ext.androidxAppCompatVersion
+def androidxCoordinatorLayoutVersion = rootProject.ext.androidxCoordinatorLayoutVersion
+def coreSplashScreenVersion = rootProject.ext.coreSplashScreenVersion
+def junitVersion = rootProject.ext.junitVersion
+def androidxJunitVersion = rootProject.ext.androidxJunitVersion
+def androidxEspressoCoreVersion = rootProject.ext.androidxEspressoCoreVersion
+
 def getApiKey() {
     Properties properties = new Properties()
     if (project.rootProject.file('local.properties').canRead()) {
