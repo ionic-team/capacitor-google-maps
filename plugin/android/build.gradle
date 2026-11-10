@@ -6,7 +6,9 @@ ext {
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
     androidxCoreVersion = project.hasProperty('androidxCoreVersion') ? rootProject.ext.androidxCoreVersion : '1.19.1'
     googleMapsPlayServicesVersion = project.hasProperty('googleMapsPlayServicesVersion') ? rootProject.ext.googleMapsPlayServicesVersion : '20.1.0'
-    googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '7.0.0'
+    googleMapsUtilsVersion = project.hasProperty('googleMapsUtilsVersion') ? rootProject.ext.googleMapsUtilsVersion : '5.0.0'
+    googleMapsKtxVersion = project.hasProperty('googleMapsKtxVersion') ? rootProject.ext.googleMapsKtxVersion : '6.0.1'
+    googleMapsUtilsKtxVersion = project.hasProperty('googleMapsUtilsKtxVersion') ? rootProject.ext.googleMapsUtilsKtxVersion : '6.0.1'
     kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.11.0'
 }
 
@@ -89,6 +91,9 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation "androidx.core:core:$androidxCoreVersion"
+
+    implementation "com.google.maps.android:maps-ktx:$googleMapsKtxVersion"
+    implementation "com.google.maps.android:maps-utils-ktx:$googleMapsUtilsKtxVersion"
     implementation "com.google.maps.android:android-maps-utils:$googleMapsUtilsVersion"
     implementation "com.google.android.gms:play-services-maps:$googleMapsPlayServicesVersion"
 }
