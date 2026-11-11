@@ -10,7 +10,7 @@ let package = Package(
             targets: ["CapacitorGoogleMapsPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-alpha.7"),
+        .package(url: "https://github.com/ionic-team/capacitor.git", from: "9.0.0-beta.0"),
         .package(url: "https://github.com/googlemaps/ios-maps-sdk.git", .upToNextMajor(from:"10.15.0")),
         .package(url: "https://github.com/googlemaps/google-maps-ios-utils.git", .exact("7.1.0"))
     ],
