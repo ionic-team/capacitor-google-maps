@@ -60,12 +60,26 @@ The Google Maps SDK for Android requires you to add your API key to the AndroidM
 <meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_API_KEY_HERE"/>
 ```
 
-To use certain location features, the SDK requires the following permissions to also be added to your AndroidManifest.xml:
+To show the user's current location on the map (`enableCurrentLocation`), the app must declare at least one location permission in its AndroidManifest.xml. The plugin does not declare any location permission itself.
+
+`ACCESS_COARSE_LOCATION` is enough to show the current location on the map:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+```
+
+Add `ACCESS_FINE_LOCATION` as well only if your app needs precise location:
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
+
+If only `ACCESS_COARSE_LOCATION` is declared, the plugin only requests coarse location at runtime. On Android 12 and above, the user can also grant approximate location only, even if both permissions are declared; the current location is still shown in that case.
+
+> **Google Play policy:** `ACCESS_FINE_LOCATION` is considered a sensitive permission. Apps that declare it must submit a declaration in the Play Console justifying why precise location is needed. If your app doesn't strictly need precise location, declare only `ACCESS_COARSE_LOCATION`. See [Google Play's location permissions policy](https://support.google.com/googleplay/android-developer/answer/16909972#location-permissions).
+
+If neither permission is declared, `enableCurrentLocation` rejects with a "location permission was denied" error.
 
 ### Variables
 
