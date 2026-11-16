@@ -10,6 +10,7 @@ import com.getcapacitor.*
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import com.getcapacitor.util.PermissionHelper
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.model.LatLng
@@ -25,8 +26,16 @@ import org.json.JSONObject
         permissions =
                 [
                         Permission(
-                                strings = [Manifest.permission.ACCESS_FINE_LOCATION],
+                                strings =
+                                        [
+                                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                                Manifest.permission.ACCESS_FINE_LOCATION
+                                        ],
                                 alias = CapacitorGoogleMapsPlugin.LOCATION
+                        ),
+                        Permission(
+                                strings = [Manifest.permission.ACCESS_COARSE_LOCATION],
+                                alias = CapacitorGoogleMapsPlugin.COARSE_LOCATION
                         ),
                 ],
 )
@@ -38,6 +47,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
     companion object {
         const val LOCATION = "location"
+        const val COARSE_LOCATION = "coarseLocation"
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -817,20 +827,50 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
     @PluginMethod
     fun enableCurrentLocation(call: PluginCall) {
-        if (getPermissionState(LOCATION) != PermissionState.GRANTED) {
-            requestAllPermissions(call, "enableCurrentLocationCallback")
-        } else {
-            internalEnableCurrentLocation(call)
+        val coarseDeclared =
+                PermissionHelper.hasDefinedPermission(
+                        context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+        val fineDeclared =
+                PermissionHelper.hasDefinedPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                )
+
+        if (!coarseDeclared && !fineDeclared) {
+            call.reject(
+                    "location permission was denied: neither ACCESS_COARSE_LOCATION nor ACCESS_FINE_LOCATION is declared in the AndroidManifest.xml"
+            )
+            return
         }
+
+        // Request every location permission the app declared (like @capacitor/geolocation), even if
+        // coarse is already granted. If ACCESS_FINE_LOCATION is declared and not granted yet, the
+        // `location` alias (coarse + fine) is requested; otherwise only coarse is requested.
+        val alias = if (fineDeclared) LOCATION else COARSE_LOCATION
+        if (getPermissionState(alias) != PermissionState.GRANTED) {
+            requestPermissionForAlias(alias, call, "enableCurrentLocationCallback")
+            return
+        }
+
+        internalEnableCurrentLocation(call)
     }
 
     @PermissionCallback
     fun enableCurrentLocationCallback(call: PluginCall) {
-        if (getPermissionState(LOCATION) == PermissionState.GRANTED) {
+        // Google Maps only needs ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION to show the
+        // current location, and precise location also grants coarse. So coarse being granted is
+        // enough, even if the user declined (or kept approximate instead of) precise location.
+        if (hasLocationPermission()) {
             internalEnableCurrentLocation(call)
         } else {
             call.reject("location permission was denied")
         }
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return getPermissionState(COARSE_LOCATION) == PermissionState.GRANTED
     }
 
     @PluginMethod
