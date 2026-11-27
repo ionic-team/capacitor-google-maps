@@ -11,18 +11,18 @@ let package = Package(
             targets: ["CapApp-SPM"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor", exact: "9.0.0-alpha.8"),
-        .package(name: "CapacitorApp", path: "../../../../node_modules/.pnpm/@capacitor+app@9.0.0-alpha.2_@capacitor+core@9.0.0-alpha.8/node_modules/@capacitor/app"),
+        .package(name: "capacitor-ios", path: "../../../node_modules/@capacitor/ios"),
+        .package(name: "CapacitorApp", path: "../../../../node_modules/.pnpm/@capacitor+app@9.0.0-alpha.2_@capacitor+core@9.0.0-rc.1/node_modules/@capacitor/app"),
         .package(name: "CapacitorGoogleMaps", path: "../../../../plugin"),
-        .package(name: "CapacitorHaptics", path: "../../../../node_modules/.pnpm/@capacitor+haptics@9.0.0-next.1_@capacitor+core@9.0.0-alpha.8/node_modules/@capacitor/haptics"),
-        .package(name: "CapacitorKeyboard", path: "../../../../node_modules/.pnpm/@capacitor+keyboard@9.0.0-next.1_@capacitor+core@9.0.0-alpha.8/node_modules/@capacitor/keyboard"),
-        .package(name: "CapacitorStatusBar", path: "../../../../node_modules/.pnpm/@capacitor+status-bar@9.0.0-alpha.2_@capacitor+core@9.0.0-alpha.8/node_modules/@capacitor/status-bar")
+        .package(name: "CapacitorHaptics", path: "../../../../node_modules/.pnpm/@capacitor+haptics@9.0.0-next.3_@capacitor+core@9.0.0-rc.1/node_modules/@capacitor/haptics"),
+        .package(name: "CapacitorKeyboard", path: "../../../../node_modules/.pnpm/@capacitor+keyboard@9.0.0-next.3_@capacitor+core@9.0.0-rc.1/node_modules/@capacitor/keyboard"),
+        .package(name: "CapacitorStatusBar", path: "../../../../node_modules/.pnpm/@capacitor+status-bar@9.0.0-alpha.2_@capacitor+core@9.0.0-rc.1/node_modules/@capacitor/status-bar")
     ],
     targets: [
         .target(
             name: "CapApp-SPM",
             dependencies: [
-                .product(name: "Capacitor", package: "capacitor"),
+                .product(name: "Capacitor", package: "capacitor-ios"),
                 .product(name: "CapacitorApp", package: "CapacitorApp"),
                 .product(name: "CapacitorGoogleMaps", package: "CapacitorGoogleMaps"),
                 .product(name: "CapacitorHaptics", package: "CapacitorHaptics"),
